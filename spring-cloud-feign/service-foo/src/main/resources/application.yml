@@ -1,0 +1,12 @@
+feign:
+  hystrix:
+    enabled: true
+
+ribbon:
+  eager-load:
+    enabled: true
+    clients: service-bar
+
+spring:
+  application:
+    name: service-foo
