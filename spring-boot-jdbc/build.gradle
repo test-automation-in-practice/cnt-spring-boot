@@ -18,8 +18,6 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 compileKotlin {
 	kotlinOptions {
@@ -38,7 +36,6 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('org.springframework.boot:spring-boot-starter-web')
@@ -52,4 +49,9 @@ dependencies {
 	testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
 	testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
 	testRuntime('com.h2database:h2')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging { events "passed", "skipped", "failed" }
 }

@@ -5,20 +5,18 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
 @JdbcTest
 @ExtendWith(SpringExtension::class)
-internal class FooRepositoryTest(
-        @Autowired private val jdbcTemplate: NamedParameterJdbcTemplate
-) {
+internal class FooRepositoryTest {
 
-    private val idGenerator = mock(IdGenerator::class.java)
-    private val cut = FooRepository(jdbcTemplate, idGenerator)
+    @MockBean lateinit var idGenerator: IdGenerator
+    @SpyBean lateinit var cut: FooRepository
 
     @Test fun `creating a foo returns a persisted instance`() {
         val fixedId = UUID.randomUUID()

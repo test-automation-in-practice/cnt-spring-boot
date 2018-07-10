@@ -13,11 +13,12 @@ import org.springframework.cache.Cache
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.stream.IntStream
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [CacheFibonacciCalculatorTest.TestConfiguration::class])
+@ContextConfiguration(classes = [CacheFibonacciCalculatorTest.TestConfiguration::class])
 internal class CacheFibonacciCalculatorTest {
 
     @EnableCaching

@@ -2,6 +2,7 @@ buildscript {
 	ext {
 		kotlinVersion = '1.2.41'
 		springBootVersion = '2.0.3.RELEASE'
+		springCloudVersion = 'Finchley.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -18,8 +19,6 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 compileKotlin {
 	kotlinOptions {
@@ -36,11 +35,6 @@ compileTestKotlin {
 
 repositories {
 	mavenCentral()
-}
-
-
-ext {
-	springCloudVersion = 'Finchley.RELEASE'
 }
 
 dependencies {

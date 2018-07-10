@@ -6,10 +6,11 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Service
+@Repository
 class FooRepository(
         private val jdbcTemplate: NamedParameterJdbcTemplate,
         private val idGenerator: IdGenerator
