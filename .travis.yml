@@ -4,32 +4,44 @@ install: skip
 
 jobs:
   include:
+
     - stage: build
       jdk: openjdk8
       env: SPRING_BOOT_CACHE
       script:
         - cd spring-boot-cache
         - ./gradlew build
+
     - jdk: openjdk8
       env: SPRING_BOOT_JDBC
       script:
         - cd spring-boot-jdbc
         - ./gradlew build
+
     - jdk: openjdk8
       env: SPRING_BOOT_JPA
       script:
         - cd spring-boot-jpa
         - ./gradlew build
+
+    - jdk: openjdk8
+      env: SPRING_BOOT_WEB
+      script:
+        - cd spring-boot-web
+        - ./gradlew build
+
     - jdk: openjdk8
       env: SPRING_CLOUD_FEIGN__EUREKA_SERVER
       script:
         - cd spring-cloud-feign/eureka-server
         - ./gradlew build
+
     - jdk: openjdk8
       env: SPRING_CLOUD_FEIGN__SERVICE_BAR
       script:
         - cd spring-cloud-feign/service-bar
         - ./gradlew build
+        
     - jdk: openjdk8
       env: SPRING_CLOUD_FEIGN__SERVICE_FOO
       script:
