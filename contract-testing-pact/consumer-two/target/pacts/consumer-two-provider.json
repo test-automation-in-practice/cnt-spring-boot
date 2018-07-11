@@ -1,0 +1,82 @@
+{
+    "provider": {
+        "name": "provider"
+    },
+    "consumer": {
+        "name": "consumer-two"
+    },
+    "interactions": [
+        {
+            "description": "get single movie",
+            "request": {
+                "method": "GET",
+                "path": "/movies/b3fc0be8-463e-4875-9629-67921a1e00f4"
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/hal+json"
+                },
+                "body": {
+                    "metacriticScore": 0.79,
+                    "_links": {
+                        "self": {
+                            "href": "http:some-url/resource"
+                        }
+                    },
+                    "title": "Iron Man",
+                    "releaseYear": 2008
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.title": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.releaseYear": {
+                            "matchers": [
+                                {
+                                    "match": "number"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.metacriticScore": {
+                            "matchers": [
+                                {
+                                    "match": "number"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$._links.self.href": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "Getting movie with any ID returns Iron Man"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.19"
+        }
+    }
+}

@@ -1,0 +1,60 @@
+{
+    "provider": {
+        "name": "provider"
+    },
+    "consumer": {
+        "name": "consumer-one"
+    },
+    "interactions": [
+        {
+            "description": "get single movie",
+            "request": {
+                "method": "GET",
+                "path": "/movies/b3fc0be8-463e-4875-9629-67921a1e00f4"
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/hal+json"
+                },
+                "body": {
+                    "title": "Iron Man",
+                    "imdbScore": 7.9
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.title": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.imdbScore": {
+                            "matchers": [
+                                {
+                                    "match": "number"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "Getting movie with any ID returns Iron Man"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.19"
+        }
+    }
+}

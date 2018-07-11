@@ -35,15 +35,29 @@ jobs:
       script:
         - cd spring-cloud-feign/eureka-server
         - ./gradlew build
-
     - jdk: openjdk8
       env: SPRING_CLOUD_FEIGN__SERVICE_BAR
       script:
         - cd spring-cloud-feign/service-bar
         - ./gradlew build
-        
     - jdk: openjdk8
       env: SPRING_CLOUD_FEIGN__SERVICE_FOO
       script:
         - cd spring-cloud-feign/service-foo
+        - ./gradlew build
+
+    - jdk: openjdk8
+      env: CONTRACT_TESTING_PACT__CONSUMER_ONE
+      script:
+        - cd contract-testing-pact/consumer-one
+        - ./gradlew build
+    - jdk: openjdk8
+      env: CONTRACT_TESTING_PACT__CONSUMER_TWO
+      script:
+        - cd contract-testing-pact/consumer-two
+        - ./gradlew build
+    - jdk: openjdk8
+      env: CONTRACT_TESTING_PACT__CONSUMER_PROVIDER
+      script:
+        - cd contract-testing-pact/provider
         - ./gradlew build
