@@ -22,6 +22,8 @@ Further Reading:
 - [TestContainers GitHub](https://github.com/testcontainers/testcontainers-java)
 - [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
 - [JUnit 5 GitHub](https://github.com/junit-team/junit5)
+- [RestAssured](http://rest-assured.io)
+- [RestAssured GitHub](https://github.com/rest-assured/rest-assured)
 - [WireMock Documentation](http://wiremock.org/docs/)
 - [WireMock GitHub](https://github.com/tomakehurst/wiremock)
 - [The Practical Test Pyramid Article](https://martinfowler.com/articles/practical-test-pyramid.html)
