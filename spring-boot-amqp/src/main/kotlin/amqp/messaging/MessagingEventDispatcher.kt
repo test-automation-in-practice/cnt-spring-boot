@@ -1,10 +1,10 @@
-package springbootamqp.messaging
+package amqp.messaging
 
 import org.springframework.amqp.core.TopicExchange
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
-import springbootamqp.foo.FooEvent
-import springbootamqp.foo.FooEventDispatcher
+import amqp.foo.FooEvent
+import amqp.foo.FooEventDispatcher
 
 @Component
 class MessagingEventDispatcher(

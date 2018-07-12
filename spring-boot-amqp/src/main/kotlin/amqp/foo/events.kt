@@ -1,4 +1,4 @@
-package springbootamqp.foo
+package amqp.foo
 
 import java.util.*
 

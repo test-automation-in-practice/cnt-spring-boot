@@ -1,4 +1,4 @@
-package springbootamqp.foo
+package amqp.foo
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

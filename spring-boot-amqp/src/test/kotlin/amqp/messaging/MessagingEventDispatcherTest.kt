@@ -1,4 +1,4 @@
-package springbootamqp.messaging
+package amqp.messaging
 
 import com.nhaarman.mockitokotlin2.timeout
 import com.nhaarman.mockitokotlin2.verify
@@ -17,9 +17,9 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
-import springbootamqp.foo.EventHandler
-import springbootamqp.foo.FooCreated
-import springbootamqp.foo.FooDeleted
+import amqp.foo.EventHandler
+import amqp.foo.FooCreated
+import amqp.foo.FooDeleted
 import java.time.Duration
 import java.util.*
 

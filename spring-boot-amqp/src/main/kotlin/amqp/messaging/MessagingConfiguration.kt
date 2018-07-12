@@ -1,4 +1,4 @@
-package springbootamqp.messaging
+package amqp.messaging
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.amqp.core.Binding
@@ -15,7 +15,7 @@ import org.springframework.amqp.support.converter.MessageConverter
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import springbootamqp.foo.EventHandler
+import amqp.foo.EventHandler
 
 private const val EXCHANGE_NAME = "foo-events"
 private const val CREATED_ROUTING_KEY = "created"

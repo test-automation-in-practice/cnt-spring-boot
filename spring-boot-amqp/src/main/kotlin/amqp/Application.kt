@@ -1,12 +1,12 @@
-package springbootamqp
+package amqp
 
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
-import springbootamqp.foo.FooCreated
-import springbootamqp.foo.FooDeleted
-import springbootamqp.foo.FooEventDispatcher
+import amqp.foo.FooCreated
+import amqp.foo.FooDeleted
+import amqp.foo.FooEventDispatcher
 import java.util.*
 
 @SpringBootApplication
