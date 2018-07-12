@@ -1,7 +1,4 @@
-> I collect more resources about the general topic of contract testing
-[here](https://github.com/slu-it/learning-contract-testing).
-
-# Showcase: PACT JVM-Consumers with JVM-Provider
+# Showcase: Contract Tests with PACT, JUnit 5 and Spring Boot
 Showcase demonstrating how PACT can be used to decouple a JVM consumer /
 provider pairs during testing.
 
