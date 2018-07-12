@@ -28,4 +28,14 @@ internal class FooRepositoryTest {
         assertThat(foundEntity).hasValue(savedEntity)
     }
 
+    @Test fun `entity can be found by bar`() {
+        val e1 = cut.save(FooEntity(UUID.randomUUID(), "bar#1", 42))
+        val e2 = cut.save(FooEntity(UUID.randomUUID(), "bar#1", 43))
+        val e3 = cut.save(FooEntity(UUID.randomUUID(), "bar#2", 44))
+        val foundEntities = cut.findByBar("bar#1")
+        assertThat(foundEntities)
+                .contains(e1, e2)
+                .doesNotContain(e3)
+    }
+
 }
