@@ -56,6 +56,13 @@ jobs:
 
     - stage: build
       jdk: openjdk8
+      env: SPRING_BOOT_MONGODB
+      script:
+        - cd spring-boot-mongodb
+        - ./gradlew build
+
+    - stage: build
+      jdk: openjdk8
       env: SPRING_BOOT_WEB
       script:
         - cd spring-boot-web
