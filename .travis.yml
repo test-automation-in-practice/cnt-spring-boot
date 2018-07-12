@@ -42,6 +42,13 @@ jobs:
 
     - stage: build
       jdk: openjdk8
+      env: SPRING_BOOT_FEIGN
+      script:
+        - cd spring-boot-feign
+        - ./gradlew build
+
+    - stage: build
+      jdk: openjdk8
       env: SPRING_BOOT_JDBC
       script:
         - cd spring-boot-jdbc
