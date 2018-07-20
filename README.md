@@ -27,3 +27,9 @@ Further Reading:
 - [WireMock Documentation](http://wiremock.org/docs/)
 - [WireMock GitHub](https://github.com/tomakehurst/wiremock)
 - [The Practical Test Pyramid Article](https://martinfowler.com/articles/practical-test-pyramid.html)
+
+Further Watching:
+
+- [Spring Tips (Playlist)](https://www.youtube.com/playlist?list=PLgGXSWYM2FpPw8rV0tZoMiJYSCiLhPnOc)
+- [Spring Tips: Bootiful Testing](https://youtu.be/lTSJCr7xdbM)
+- [Spring Tips: Demystifying Bootiful Magic](https://youtu.be/Sw7I70vjN0E)
