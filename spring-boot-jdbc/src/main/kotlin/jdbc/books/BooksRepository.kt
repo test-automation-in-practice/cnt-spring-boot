@@ -1,61 +1,59 @@
-package jdbc.foo
+package jdbc.books
 
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
-import org.springframework.stereotype.Service
 import java.util.*
 
 @Repository
-class FooRepository(
+class BooksRepository(
         private val jdbcTemplate: NamedParameterJdbcTemplate,
         private val idGenerator: IdGenerator
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun create(foo: Foo): PersistedFoo {
+    fun create(book: Book): BookRecord {
         val id = idGenerator.generateId()
         return try {
-            val query = "INSERT INTO foo (id, bar, xur) VALUES (:id, :bar, :xur)"
+            val query = "INSERT INTO book_records (id, title, isbn) VALUES (:id, :title, :isbn)"
             val parameters = mutableMapOf(
                     "id" to id.toString(),
-                    "bar" to foo.bar,
-                    "xur" to foo.xur
+                    "title" to book.title,
+                    "isbn" to book.isbn
             )
             jdbcTemplate.update(query, parameters)
-            PersistedFoo(id, foo)
+            BookRecord(id, book)
         } catch (e: DuplicateKeyException) {
             log.warn("ID collision occurred for ID [{}] - retrying with new ID", id)
-            create(foo)
+            create(book)
         }
     }
 
-    fun update(persistedFoo: PersistedFoo) {
-        val query = "UPDATE foo SET bar = :bar, xur = :xur WHERE id = :id"
+    fun update(bookRecord: BookRecord) {
+        val query = "UPDATE book_records SET title = :title, isbn = :isbn WHERE id = :id"
         val parameters = mutableMapOf(
-                "id" to persistedFoo.id.toString(),
-                "bar" to persistedFoo.foo.bar,
-                "xur" to persistedFoo.foo.xur
+                "id" to bookRecord.id.toString(),
+                "title" to bookRecord.book.title,
+                "isbn" to bookRecord.book.isbn
         )
 
         if (jdbcTemplate.update(query, parameters) == 0) {
-            throw FooNotFoundException(persistedFoo.id)
+            throw BookRecordNotFoundException(bookRecord.id)
         }
     }
 
-    fun findBy(id: UUID): PersistedFoo? {
-        val query = "SELECT * FROM foo WHERE id = :id"
+    fun findBy(id: UUID): BookRecord? {
+        val query = "SELECT * FROM book_records WHERE id = :id"
         val parameters = mapOf("id" to id.toString())
 
         val rowMapper = RowMapper { rs, _ ->
-            val bar = rs.getString("bar")!!
-            val xur = rs.getInt("xur")
-            PersistedFoo(id, Foo(bar, xur))
+            val title = rs.getString("title")!!
+            val isbn = rs.getString("isbn")
+            BookRecord(id, Book(title, isbn))
         }
 
         return try {
@@ -66,21 +64,12 @@ class FooRepository(
     }
 
     fun deleteBy(id: UUID) {
-        val query = "DELETE FROM foo WHERE id = :id"
+        val query = "DELETE FROM book_records WHERE id = :id"
         val parameters = mapOf("id" to id.toString())
 
         if (jdbcTemplate.update(query, parameters) == 0) {
-            throw FooNotFoundException(id)
+            throw BookRecordNotFoundException(id)
         }
-    }
-
-}
-
-@Component
-class IdGenerator {
-
-    fun generateId(): UUID {
-        return UUID.randomUUID()
     }
 
 }
