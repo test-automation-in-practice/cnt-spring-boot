@@ -1,7 +1,5 @@
-package feign.gateways.bar
+package feign.gateways.library
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import feign.Feign
 import feign.Request
 import feign.RequestTemplate
@@ -17,18 +15,15 @@ import kotlin.reflect.KClass
 
 @Configuration
 @ComponentScan
-@EnableConfigurationProperties(BarSettings::class)
-internal class BarClientConfiguration {
+@EnableConfigurationProperties(LibrarySettings::class)
+internal class LibraryConfiguration {
 
-    @Bean fun barClient(settings: BarSettings): BarClient {
-        val target = DynamicUrlTarget("bar", BarClient::class) { settings.url }
-        val objectMapper = ObjectMapper().apply {
-            registerModule(KotlinModule())
-        }
+    @Bean fun libraryClient(settings: LibrarySettings): LibraryClient {
+        val target = DynamicUrlTarget("library", LibraryClient::class) { settings.url }
         return Feign.builder()
                 .encoder(JacksonEncoder())
-                .decoder(JacksonDecoder(objectMapper))
-                .logger(Slf4jLogger("utils.feign.bar"))
+                .decoder(JacksonDecoder())
+                .logger(Slf4jLogger("utils.feign.library"))
                 .logLevel(settings.logLevel)
                 .target(target)
     }

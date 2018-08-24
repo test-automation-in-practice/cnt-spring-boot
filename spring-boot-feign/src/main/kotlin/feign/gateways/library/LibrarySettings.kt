@@ -1,11 +1,11 @@
-package feign.gateways.bar
+package feign.gateways.library
 
 import feign.Logger
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 
-@ConfigurationProperties("bar-service")
-internal class BarSettings {
+@ConfigurationProperties("library-service")
+internal class LibrarySettings {
     lateinit var url: String
     lateinit var logLevel: Logger.Level
 }
