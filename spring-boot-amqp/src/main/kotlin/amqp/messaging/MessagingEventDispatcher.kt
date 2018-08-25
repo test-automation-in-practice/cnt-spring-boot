@@ -2,17 +2,17 @@ package amqp.messaging
 
 import org.springframework.amqp.core.TopicExchange
 import org.springframework.stereotype.Component
-import amqp.foo.FooEvent
-import amqp.foo.FooEventDispatcher
+import amqp.books.BookEvent
+import amqp.books.BookEventDispatcher
 import org.springframework.amqp.core.AmqpTemplate
 
 @Component
 class MessagingEventDispatcher(
         private val amqpTemplate: AmqpTemplate,
-        @FooEvents private val exchange: TopicExchange
-) : FooEventDispatcher {
+        @BookEvents private val exchange: TopicExchange
+) : BookEventDispatcher {
 
-    override fun dispatch(event: FooEvent) {
+    override fun dispatch(event: BookEvent) {
         amqpTemplate.convertAndSend(exchange.name, event.type, event)
     }
 

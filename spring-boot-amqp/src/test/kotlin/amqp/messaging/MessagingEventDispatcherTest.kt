@@ -17,9 +17,9 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
-import amqp.foo.EventHandler
-import amqp.foo.FooCreated
-import amqp.foo.FooDeleted
+import amqp.books.EventHandler
+import amqp.books.BookCreated
+import amqp.books.BookDeleted
 import java.time.Duration
 import java.util.*
 
@@ -40,14 +40,14 @@ internal class MessagingEventDispatcherTest {
     @SpyBean lateinit var eventHandler: EventHandler
     @Autowired lateinit var cut: MessagingEventDispatcher
 
-    @Test fun `foo created events are dispatched and received`() {
-        val event = FooCreated(UUID.randomUUID())
+    @Test fun `book created events are dispatched and received`() {
+        val event = BookCreated(UUID.randomUUID(), "Clean Code")
         cut.dispatch(event)
         verify(eventHandler, timeout(1_000)).handleCreatedEvent(event)
     }
 
-    @Test fun `foo deleted events are dispatched and received`() {
-        val event = FooDeleted(UUID.randomUUID())
+    @Test fun `book deleted events are dispatched and received`() {
+        val event = BookDeleted(UUID.randomUUID(), "Clean Architecture")
         cut.dispatch(event)
         verify(eventHandler, timeout(1_000)).handleDeletedEvent(event)
     }
