@@ -13,12 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.OffsetDateTime.now
-import java.time.OffsetDateTime.parse
 import javax.validation.Validation.*
 import javax.validation.Validator
 
 
-internal class CreateFooRequestTest {
+internal class CreateBookRequestTest {
 
     @JsonTest
     @ExtendWith(SpringExtension::class)
@@ -29,29 +28,29 @@ internal class CreateFooRequestTest {
         @Test fun `can be deserialized from JSON`() {
             val json = """
                 {
-                    "bar": "Hello World!",
-                    "xur": "2018-07-12T12:34:56.789Z"
+                    "title": "Clean Code",
+                    "isbn": "9780132350884"
                 }
                 """
-            assertThat(read(json)).isEqualTo(CreateFooRequest(
-                    bar = "Hello World!",
-                    xur = parse("2018-07-12T12:34:56.789Z")
+            assertThat(read(json)).isEqualTo(CreateBookRequest(
+                    title = "Clean Code",
+                    isbn = "9780132350884"
             ))
         }
 
-        @Test fun `'bar' property is required when deserializing`() {
+        @Test fun `'title' property is required when deserializing`() {
             assertThrows<JsonProcessingException> {
-                read("""{ "xur": "2018-07-12T12:34:56.789Z" }""")
+                read("""{ "isbn": "9780132350884" }""")
             }
         }
 
-        @Test fun `'xur' property is required when deserializing`() {
+        @Test fun `'isbn' property is required when deserializing`() {
             assertThrows<JsonProcessingException> {
-                read("""{ "bar": "Hello World!" }""")
+                read("""{ "title": "Clean Code" }""")
             }
         }
 
-        private fun read(json: String) = objectMapper.readValue(json, CreateFooRequest::class.java)
+        private fun read(json: String) = objectMapper.readValue(json, CreateBookRequest::class.java)
 
     }
 
@@ -59,18 +58,16 @@ internal class CreateFooRequestTest {
 
         val validator: Validator = buildDefaultValidatorFactory().validator
 
-        @ValueSource(strings = ["Hello World!", "Hello Kotlin!", "Hello Universe!"])
-        @ParameterizedTest fun `'bar' property allows 'Hello {}!' messages`(bar: String) {
-            val request = CreateFooRequest(bar, now())
-            val problems = validator.validate(request)
-            assertThat(problems).isEmpty()
+        @Test fun `'isbn' property allows 13 character ISBN`() {
+            val request = CreateBookRequest("Clean Code", "9780132350884")
+            assertThat(validator.validate(request)).isEmpty()
         }
 
-        @ValueSource(strings = ["Hello World", "Hello !", "Hello!"])
-        @ParameterizedTest fun `'bar' property allows only 'Hello {}!' messages`(bar: String) {
-            val request = CreateFooRequest(bar, now())
+        @ValueSource(strings = ["1234567890", "123456789012", "12345678901234"])
+        @ParameterizedTest fun `'isbn' property allows only 13 character ISBN`(isbn: String) {
+            val request = CreateBookRequest("My Book", isbn)
             val problems = validator.validate(request).map { it.message }
-            assertThat(problems).containsOnly("""must match "Hello .+!"""")
+            assertThat(problems).containsOnly("""must match "[0-9]{13}"""")
         }
 
     }

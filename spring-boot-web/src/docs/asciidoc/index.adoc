@@ -55,17 +55,16 @@ to navigate
 
 == Resources
 
-=== Foos
+=== Books
 
-==== Creating a new Foo
+==== Creating a new Book
 
-In order to create a foo, the consumer needs to provide an `bar` string matching
-the `Hello .+!` pattern, a `xur` ISO-8601 compliant timestamp and `POST` them to
-`/api/foos`:
+In order to create a book, the consumer needs to provide a `title` string,
+an 13 digit `isbn` and `POST` them to `/api/books`:
 
-include::{snippets}/foos/postFoo-created/http-request.adoc[]
+include::{snippets}/books/postBook-added/http-request.adoc[]
 
-This will create a new foo in the database. The response to this request will
+This will create a new book in the database. The response to this request will
 contain the stored data and links to available other resources.
 
-include::{snippets}/foos/postFoo-created/http-response.adoc[]
+include::{snippets}/books/postBook-added/http-response.adoc[]

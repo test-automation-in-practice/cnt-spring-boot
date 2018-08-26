@@ -1,14 +1,21 @@
 package web.business
 
-import java.time.OffsetDateTime
 import java.util.*
 
-data class Foo(
-        val bar: String,
-        val xur: OffsetDateTime
+data class BookRecord(
+        val id: UUID,
+        val book: Book
 )
 
-data class PersistedFoo(
-        val id: UUID,
-        val data: Foo
+data class Book(
+        val title: Title,
+        val isbn: Isbn
 )
+
+data class Title(val value: String) {
+    override fun toString() = value
+}
+
+data class Isbn(val value: String) {
+    override fun toString() = value
+}

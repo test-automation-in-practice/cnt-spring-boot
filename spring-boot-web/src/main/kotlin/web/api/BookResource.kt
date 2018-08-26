@@ -5,10 +5,10 @@ import org.springframework.hateoas.core.Relation
 import java.time.OffsetDateTime
 
 @Relation(
-        value = "foo",
-        collectionRelation = "foos"
+        value = "book",
+        collectionRelation = "books"
 )
-data class FooResource(
-        val bar: String,
-        val xur: OffsetDateTime
+data class BookResource(
+        val title: String,
+        val isbn: String
 ) : ResourceSupport()
