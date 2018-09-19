@@ -8,7 +8,6 @@ import au.com.dius.pact.provider.junit5.HttpTestTarget
 import au.com.dius.pact.provider.junit5.PactVerificationContext
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.willReturn
 import org.junit.jupiter.api.BeforeEach
@@ -19,11 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDO
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import provider.core.Movie
-import provider.core.MovieDataStore
-import provider.core.MovieRecord
+import provider.books.Book
+import provider.books.BookDataStore
+import provider.books.BookRecord
 import java.util.*
-
 
 @Provider("provider")
 @PactFolder("src/test/pacts")
@@ -32,7 +30,7 @@ import java.util.*
 @ExtendWith(SpringExtension::class, PactVerificationInvocationContextProvider::class)
 internal class ContractTest {
 
-    @MockBean lateinit var dataStore: MovieDataStore
+    @MockBean lateinit var dataStore: BookDataStore
 
     @BeforeEach fun setTarget(context: PactVerificationContext, @LocalServerPort port: Int) {
         context.target = HttpTestTarget("localhost", port)
@@ -42,16 +40,16 @@ internal class ContractTest {
         context.verifyInteraction()
     }
 
-    @State("Getting movie with any ID returns Iron Man")
-    fun anyMovieByIdRequestReturnsIronMan() {
-        val ironManRecord = MovieRecord(UUID.randomUUID(), Movie(
-                title = "Iron Man",
+    @State("Getting book with any ID returns Clean Code")
+    fun anyBookByIdRequestReturnsCleanCode() {
+        val cleanCodeRecord = BookRecord(UUID.randomUUID(), Book(
+                isbn = "9780132350884",
+                title = "Clean Code",
                 description = "Lorem Ipsum ...",
-                releaseYear = 2008,
-                imdbScore = 7.9f,
-                metacriticScore = 0.79f
+                authors = listOf("Robert C. Martin", "Dean Wampler"),
+                numberOfPages = 464
         ))
-        given { dataStore.getById(any()) } willReturn { ironManRecord }
+        given { dataStore.getById(any()) } willReturn { cleanCodeRecord }
     }
 
 }

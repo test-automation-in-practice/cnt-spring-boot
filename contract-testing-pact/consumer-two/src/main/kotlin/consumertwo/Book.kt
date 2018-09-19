@@ -3,8 +3,8 @@ package consumertwo
 import org.springframework.hateoas.ResourceSupport
 
 
-class Movie(
+data class Book(
+        val isbn: String,
         val title: String,
-        val releaseYear: Int,
-        val metacriticScore: Float
+        val numberOfPages: Int?
 ) : ResourceSupport()

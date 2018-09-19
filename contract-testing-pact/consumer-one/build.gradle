@@ -43,8 +43,8 @@ dependencies {
     compile('org.jetbrains.kotlin:kotlin-stdlib-jdk8')
     compile('org.jetbrains.kotlin:kotlin-reflect')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-		testCompile('au.com.dius:pact-jvm-consumer-junit_2.12:3.5.19')
-		testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
+    testCompile('au.com.dius:pact-jvm-consumer-junit5_2.12:3.5.22')
+    testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
     testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
 }

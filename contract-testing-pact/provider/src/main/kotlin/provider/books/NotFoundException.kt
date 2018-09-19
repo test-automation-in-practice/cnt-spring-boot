@@ -1,3 +1,3 @@
-package provider.core
+package provider.books
 
 class NotFoundException : RuntimeException()

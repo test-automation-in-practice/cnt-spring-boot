@@ -7,10 +7,10 @@
     },
     "interactions": [
         {
-            "description": "get single movie",
+            "description": "get single book",
             "request": {
                 "method": "GET",
-                "path": "/movies/b3fc0be8-463e-4875-9629-67921a1e00f4"
+                "path": "/books/b3fc0be8-463e-4875-9629-67921a1e00f4"
             },
             "response": {
                 "status": 200,
@@ -18,27 +18,63 @@
                     "Content-Type": "application/hal+json"
                 },
                 "body": {
-                    "title": "Iron Man",
-                    "imdbScore": 7.9
+                    "isbn": "9780132350884",
+                    "title": "Clean Code",
+                    "authors": [
+                        "Robert C. Martin",
+                        "Dean Wampler"
+                    ]
                 },
                 "matchingRules": {
-                    "$.body.title": {
-                        "match": "type"
-                    },
-                    "$.body.imdbScore": {
-                        "match": "number"
+                    "body": {
+                        "$.isbn": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.title": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.authors[0]": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.authors[1]": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
                     }
                 }
             },
-            "providerState": "Getting movie with any ID returns Iron Man"
+            "providerStates": [
+                {
+                    "name": "Getting book with any ID returns Clean Code"
+                }
+            ]
         }
     ],
     "metadata": {
-        "pact-specification": {
-            "version": "2.0.0"
+        "pactSpecification": {
+            "version": "3.0.0"
         },
         "pact-jvm": {
-            "version": "3.5.11"
+            "version": "3.5.22"
         }
     }
 }

@@ -7,10 +7,10 @@
     },
     "interactions": [
         {
-            "description": "get single movie",
+            "description": "get single book",
             "request": {
                 "method": "GET",
-                "path": "/movies/b3fc0be8-463e-4875-9629-67921a1e00f4"
+                "path": "/books/b3fc0be8-463e-4875-9629-67921a1e00f4"
             },
             "response": {
                 "status": 200,
@@ -18,17 +18,20 @@
                     "Content-Type": "application/hal+json"
                 },
                 "body": {
-                    "metacriticScore": 0.79,
-                    "_links": {
-                        "self": {
-                            "href": "http:some-url/resource"
-                        }
-                    },
-                    "title": "Iron Man",
-                    "releaseYear": 2008
+                    "numberOfPages": 464,
+                    "isbn": "9780132350884",
+                    "title": "Clean Code"
                 },
                 "matchingRules": {
                     "body": {
+                        "$.isbn": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
                         "$.title": {
                             "matchers": [
                                 {
@@ -37,26 +40,10 @@
                             ],
                             "combine": "AND"
                         },
-                        "$.releaseYear": {
+                        "$.numberOfPages": {
                             "matchers": [
                                 {
-                                    "match": "number"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.metacriticScore": {
-                            "matchers": [
-                                {
-                                    "match": "number"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$._links.self.href": {
-                            "matchers": [
-                                {
-                                    "match": "type"
+                                    "match": "integer"
                                 }
                             ],
                             "combine": "AND"
@@ -66,7 +53,7 @@
             },
             "providerStates": [
                 {
-                    "name": "Getting movie with any ID returns Iron Man"
+                    "name": "Getting book with any ID returns Clean Code"
                 }
             ]
         }
@@ -76,7 +63,7 @@
             "version": "3.0.0"
         },
         "pact-jvm": {
-            "version": "3.5.19"
+            "version": "3.5.22"
         }
     }
 }
