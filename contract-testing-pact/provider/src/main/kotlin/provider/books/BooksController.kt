@@ -19,10 +19,10 @@ class BooksController(
     @GetMapping("/{id}")
     operator fun get(@PathVariable id: UUID): Resource<Book> {
         val record = library.findById(id)
-        return toMovieResource(record)
+        return toBookResource(record)
     }
 
-    private fun toMovieResource(record: BookRecord): Resource<Book> {
+    private fun toBookResource(record: BookRecord): Resource<Book> {
         val selfLink = linkTo(methodOn(BooksController::class.java).get(record.id)).withSelfRel()
         return Resource(record.book, selfLink)
     }

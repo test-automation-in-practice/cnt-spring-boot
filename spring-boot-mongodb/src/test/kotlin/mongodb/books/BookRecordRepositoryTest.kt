@@ -14,6 +14,8 @@ internal class BookRecordRepositoryTest {
 
     @Autowired lateinit var cut: BookRecordRepository
 
+    // TODO: datenbank aufräumen!
+
     @Test fun `document can be saved`() {
         val id = UUID.randomUUID()
         val document = BookRecordDocument(id, "Clean Code", "9780132350884")

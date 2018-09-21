@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@EnableCaching
 @Import(Application.CacheConfiguration::class)
 internal class OpenLibraryTestConfiguration {
     @Bean fun openLibraryAccessor(client: OpenLibraryClient) = OpenLibraryAccessor(client)
@@ -45,11 +44,11 @@ internal class OpenLibraryAccessorTest(
 
         @Test fun `OpenLibrary service is only called once per ISBN - results are cached`() {
             given(client.getNumberOfPages("9780132350884")).willReturn(464)
-            given(client.getNumberOfPages("9780134494166")).willReturn(428)
+            given(client.getNumberOfPages("9780134494166")).willReturn(null)
 
             (1..10).forEach {
                 assertThat(cut.getNumberOfPages("9780132350884")).isEqualTo(464)
-                assertThat(cut.getNumberOfPages("9780134494166")).isEqualTo(428)
+                assertThat(cut.getNumberOfPages("9780134494166")).isNull()
             }
 
             verify(client, times(1)).getNumberOfPages("9780132350884")

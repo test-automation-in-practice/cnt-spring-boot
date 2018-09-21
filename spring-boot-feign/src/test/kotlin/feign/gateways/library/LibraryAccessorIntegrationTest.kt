@@ -28,7 +28,8 @@ internal class LibraryAccessorIntegrationTest(
         wireMock.givenThat(post(urlEqualTo("/api/books"))
                 .withHeader(CONTENT_TYPE, equalTo(APPLICATION_JSON_VALUE))
                 .withRequestBody(equalToJson("""{ "title": "Clean Code", "isbn": "9780132350884" }"""))
-                .willReturn(aResponse().withStatus(200)))
+                .willReturn(aResponse()
+                        .withStatus(200)))
 
         assertThat(cut.addBook("Clean Code", "9780132350884")).isTrue()
     }

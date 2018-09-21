@@ -1,6 +1,5 @@
 package web.api
 
-import java.time.OffsetDateTime
 import javax.validation.constraints.Pattern
 
 data class CreateBookRequest(

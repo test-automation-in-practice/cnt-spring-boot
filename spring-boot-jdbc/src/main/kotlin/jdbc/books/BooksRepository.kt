@@ -19,13 +19,13 @@ class BooksRepository(
     fun create(book: Book): BookRecord {
         val id = idGenerator.generateId()
         return try {
-            val query = "INSERT INTO book_records (id, title, isbn) VALUES (:id, :title, :isbn)"
+            val statement = "INSERT INTO book_records (id, title, isbn) VALUES (:id, :title, :isbn)"
             val parameters = mutableMapOf(
                     "id" to id.toString(),
                     "title" to book.title,
                     "isbn" to book.isbn
             )
-            jdbcTemplate.update(query, parameters)
+            jdbcTemplate.update(statement, parameters)
             BookRecord(id, book)
         } catch (e: DuplicateKeyException) {
             log.warn("ID collision occurred for ID [{}] - retrying with new ID", id)
