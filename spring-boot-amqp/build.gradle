@@ -43,7 +43,7 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.testcontainers:testcontainers:1.11.1')
+    testCompile('org.testcontainers:testcontainers:1.11.3')
     testCompile('com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1')
     testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
     testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')

@@ -28,11 +28,9 @@ jobs:
 
   ci-spring-boot-amqp:
     working_directory: ~/work
-    docker:
-      - image: circleci/openjdk:8-jdk
+    machine: true
     steps:
       - checkout
-      - setup_remote_docker
       - run: cd spring-boot-amqp && ./gradlew build
       - store_test_results:
           path: spring-boot-amqp/build/test-results
