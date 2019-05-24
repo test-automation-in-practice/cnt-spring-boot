@@ -1,0 +1,122 @@
+version: 2
+
+jobs:
+  ci-contract-testing-pact:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd contract-testing-pact/consumer-one && ./gradlew build
+      - run: cd contract-testing-pact/consumer-two && ./gradlew build
+      - run:
+          name: delete existing PACTs
+          command: rm contract-testing-pact/provider/src/test/pact/*.json
+      - run:
+          name: copy PACT from consumer-one
+          command: cp contract-testing-pact/consumer-one/target/pacts/*.json contract-testing-pact/provider/src/test/pact/
+      - run:
+          name: copy PACT from consumer-two
+          command: cp contract-testing-pact/consumer-two/target/pacts/*.json contract-testing-pact/provider/src/test/pact/
+      - run: cd contract-testing-pact/provider && ./gradlew build
+      - store_test_results:
+          path: contract-testing-pact/consumer-one/build/test-results
+      - store_test_results:
+          path: contract-testing-pact/consumer-two/build/test-results
+      - store_test_results:
+          path: contract-testing-pact/provider/build/test-results
+
+  ci-spring-boot-amqp:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: cd spring-boot-amqp && ./gradlew build
+      - store_test_results:
+          path: spring-boot-amqp/build/test-results
+
+  ci-spring-boot-cache:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-boot-cache && ./gradlew build
+      - store_test_results:
+          path: spring-boot-cache/build/test-results
+
+  ci-spring-boot-feign:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-boot-feign && ./gradlew build
+      - store_test_results:
+          path: spring-boot-feign/build/test-results
+
+  ci-spring-boot-jdbc:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-boot-jdbc && ./gradlew build
+      - store_test_results:
+          path: spring-boot-jdbc/build/test-results
+
+  ci-spring-boot-jpa:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-boot-jpa && ./gradlew build
+      - store_test_results:
+          path: spring-boot-jpa/build/test-results
+
+  ci-spring-boot-mongodb:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-boot-mongodb && ./gradlew build
+      - store_test_results:
+          path: spring-boot-mongodb/build/test-results
+
+  ci-spring-boot-web:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-boot-web && ./gradlew build
+      - store_test_results:
+          path: spring-boot-web/build/test-results
+
+  ci-spring-cloud-feign:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-cloud-feign && ./gradlew build
+      - store_test_results:
+          path: spring-cloud-feign/build/test-results
+
+workflows:
+  version: 2
+  jdk8:
+    jobs:
+    - ci-contract-testing-pact
+    - ci-spring-boot-amqp
+    - ci-spring-boot-cache
+    - ci-spring-boot-feign
+    - ci-spring-boot-jdbc
+    - ci-spring-boot-jpa
+    - ci-spring-boot-mongodb
+    - ci-spring-boot-web
+    - ci-spring-cloud-feign
