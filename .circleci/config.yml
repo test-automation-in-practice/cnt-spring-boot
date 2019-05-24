@@ -11,13 +11,13 @@ jobs:
       - run: cd contract-testing-pact/consumer-two && ./gradlew build
       - run:
           name: delete existing PACTs
-          command: rm contract-testing-pact/provider/src/test/pact/*.json
+          command: rm contract-testing-pact/provider/src/test/pacts/*.json
       - run:
           name: copy PACT from consumer-one
-          command: cp contract-testing-pact/consumer-one/target/pacts/*.json contract-testing-pact/provider/src/test/pact/
+          command: cp contract-testing-pact/consumer-one/target/pacts/*.json contract-testing-pact/provider/src/test/pacts/
       - run:
           name: copy PACT from consumer-two
-          command: cp contract-testing-pact/consumer-two/target/pacts/*.json contract-testing-pact/provider/src/test/pact/
+          command: cp contract-testing-pact/consumer-two/target/pacts/*.json contract-testing-pact/provider/src/test/pacts/
       - run: cd contract-testing-pact/provider && ./gradlew build
       - store_test_results:
           path: contract-testing-pact/consumer-one/build/test-results
