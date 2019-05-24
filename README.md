@@ -1,3 +1,5 @@
+[![Build Status](https://circleci.com/gh/nt-ca-aqe/ws-cloud-native-testing/tree/master.svg?style=svg)][1]
+
 # Workshop: Cloud Native Testing
 
 This repository contains example code for the `Cloud Native Testing` workshop.
@@ -33,3 +35,5 @@ Further Watching:
 - [Spring Tips (Playlist)](https://www.youtube.com/playlist?list=PLgGXSWYM2FpPw8rV0tZoMiJYSCiLhPnOc)
 - [Spring Tips: Bootiful Testing](https://youtu.be/lTSJCr7xdbM)
 - [Spring Tips: Demystifying Bootiful Magic](https://youtu.be/Sw7I70vjN0E)
+
+[1]:https://circleci.com/gh/nt-ca-aqe/ws-cloud-native-testing/tree/master
