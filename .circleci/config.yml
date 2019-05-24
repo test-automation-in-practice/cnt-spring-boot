@@ -103,13 +103,19 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
-      - run: cd spring-cloud-feign && ./gradlew build
+      - run: cd spring-cloud-feign/eureka-server && ./gradlew build
+      - run: cd spring-cloud-feign/service-bar && ./gradlew build
+      - run: cd spring-cloud-feign/service-foo && ./gradlew build
       - store_test_results:
-          path: spring-cloud-feign/build/test-results
+          path: spring-cloud-feign/eureka-server/build/test-results
+      - store_test_results:
+          path: spring-cloud-feign/service-bar/build/test-results
+      - store_test_results:
+          path: spring-cloud-feign/service-foo/build/test-results
 
 workflows:
   version: 2
-  jdk8:
+  ci-build:
     jobs:
     - ci-contract-testing-pact
     - ci-spring-boot-amqp
