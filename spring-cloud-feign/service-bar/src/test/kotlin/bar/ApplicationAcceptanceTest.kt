@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDO
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@ExtendWith(SpringExtension::class)
 internal class ApplicationAcceptanceTest {
 
     @Test fun contextLoads() = Unit

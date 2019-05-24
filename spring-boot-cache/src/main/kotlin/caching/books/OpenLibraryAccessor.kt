@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class OpenLibraryAccessor(
-        private val client: OpenLibraryClient
+    private val client: OpenLibraryClient
 ) {
 
     @Cacheable("getNumberOfPagesByIsbn")

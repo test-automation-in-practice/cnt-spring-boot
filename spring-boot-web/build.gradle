@@ -1,27 +1,11 @@
-buildscript {
-    ext {
-        kotlinVersion = '1.2.41'
-        springBootVersion = '2.0.3.RELEASE'
-        asciidoctorVersion = '1.5.7'
-        snippetsDir = file('build/generated-snippets')
-    }
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-        classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorVersion}")
-    }
+plugins {
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.31'
+    id 'org.asciidoctor.convert' version '1.5.9.2'
 }
 
-apply plugin: 'kotlin'
-apply plugin: 'kotlin-spring'
-apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: "org.asciidoctor.convert"
 
 sourceCompatibility = 1.8
 compileKotlin {
@@ -42,18 +26,19 @@ repositories {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-hateoas')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('com.fasterxml.jackson.module:jackson-module-kotlin')
-    compile('org.jetbrains.kotlin:kotlin-stdlib-jdk8')
-    compile('org.jetbrains.kotlin:kotlin-reflect')
+    implementation('org.springframework.boot:spring-boot-starter-hateoas')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('com.fasterxml.jackson.module:jackson-module-kotlin')
+    implementation('org.jetbrains.kotlin:kotlin-stdlib-jdk8')
+    implementation('org.jetbrains.kotlin:kotlin-reflect')
+
     asciidoctor('org.springframework.restdocs:spring-restdocs-asciidoctor')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
-    testCompile('io.rest-assured:rest-assured')
-    testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
-    testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+    testImplementation('io.rest-assured:rest-assured')
+    testImplementation("io.mockk:mockk:1.9")
+    testImplementation('org.junit.jupiter:junit-jupiter:5.4.2')
 }
 
 test {
@@ -68,7 +53,7 @@ asciidoctor {
             'backend': 'html5'
     ])
     setAttributes([
-            'snippets'          : snippetsDir,
+            'snippets'          : file('build/generated-snippets'),
             'source-highlighter': 'coderay',
             'toc'               : 'left',
             'toclevels'         : '3',

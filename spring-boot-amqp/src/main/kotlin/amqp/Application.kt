@@ -1,12 +1,12 @@
 package amqp
 
+import amqp.books.BookCreated
+import amqp.books.BookDeleted
+import amqp.books.BookEventDispatcher
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
-import amqp.books.BookCreated
-import amqp.books.BookDeleted
-import amqp.books.BookEventDispatcher
 import java.util.*
 
 @SpringBootApplication
@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 
 @Component
 class ApplicationDemo(
-        private val eventDispatcher: BookEventDispatcher
+    private val eventDispatcher: BookEventDispatcher
 ) : CommandLineRunner {
 
     override fun run(vararg args: String) {

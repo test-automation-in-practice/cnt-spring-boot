@@ -3,7 +3,6 @@ package feign.gateways.library
 import feign.Headers
 import feign.RequestLine
 
-
 @Headers("Content-Type: application/json")
 internal interface LibraryClient {
 

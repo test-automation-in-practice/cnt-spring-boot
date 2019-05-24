@@ -10,8 +10,8 @@ import java.util.*
 
 @Repository
 class BooksRepository(
-        private val jdbcTemplate: NamedParameterJdbcTemplate,
-        private val idGenerator: IdGenerator
+    private val jdbcTemplate: NamedParameterJdbcTemplate,
+    private val idGenerator: IdGenerator
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -21,9 +21,9 @@ class BooksRepository(
         return try {
             val statement = "INSERT INTO book_records (id, title, isbn) VALUES (:id, :title, :isbn)"
             val parameters = mutableMapOf(
-                    "id" to id.toString(),
-                    "title" to book.title,
-                    "isbn" to book.isbn
+                "id" to id.toString(),
+                "title" to book.title,
+                "isbn" to book.isbn
             )
             jdbcTemplate.update(statement, parameters)
             BookRecord(id, book)
@@ -36,9 +36,9 @@ class BooksRepository(
     fun update(bookRecord: BookRecord) {
         val query = "UPDATE book_records SET title = :title, isbn = :isbn WHERE id = :id"
         val parameters = mutableMapOf(
-                "id" to bookRecord.id.toString(),
-                "title" to bookRecord.book.title,
-                "isbn" to bookRecord.book.isbn
+            "id" to bookRecord.id.toString(),
+            "title" to bookRecord.book.title,
+            "isbn" to bookRecord.book.isbn
         )
 
         if (jdbcTemplate.update(query, parameters) == 0) {

@@ -11,8 +11,8 @@ class BookResourceAssembler
     override fun toResource(bookRecord: BookRecord): BookResource = createResourceWithId(bookRecord.id, bookRecord)
 
     override fun instantiateResource(bookRecord: BookRecord) = BookResource(
-            title = bookRecord.book.title.toString(),
-            isbn = bookRecord.book.isbn.toString()
+        title = bookRecord.book.title.toString(),
+        isbn = bookRecord.book.isbn.toString()
     )
 
 }

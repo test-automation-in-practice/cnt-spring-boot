@@ -2,7 +2,8 @@ package web.api
 
 import org.slf4j.LoggerFactory
 import org.springframework.hateoas.Resources
-import org.springframework.hateoas.mvc.ControllerLinkBuilder.*
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
+import org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import web.business.*
@@ -12,8 +13,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/books")
 class BooksController(
-        private val library: Library,
-        private val resourceAssembler: BookResourceAssembler
+    private val library: Library,
+    private val resourceAssembler: BookResourceAssembler
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -30,8 +31,8 @@ class BooksController(
     @ResponseStatus(HttpStatus.CREATED)
     fun post(@Valid @RequestBody request: CreateBookRequest): BookResource {
         val book = Book(
-                title = Title(request.title),
-                isbn = Isbn(request.isbn)
+            title = Title(request.title),
+            isbn = Isbn(request.isbn)
         )
         val bookRecord = library.add(book)
         return resourceAssembler.toResource(bookRecord)

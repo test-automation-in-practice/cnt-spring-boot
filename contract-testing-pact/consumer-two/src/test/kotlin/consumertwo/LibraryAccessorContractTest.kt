@@ -1,13 +1,11 @@
 package consumertwo
 
-import au.com.dius.pact.consumer.*
+import au.com.dius.pact.consumer.MockServer
+import au.com.dius.pact.consumer.Pact
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider
-import au.com.dius.pact.consumer.dsl.PactDslWithState
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt
 import au.com.dius.pact.consumer.junit5.PactTestFor
-import au.com.dius.pact.model.MockProviderConfig
-import au.com.dius.pact.model.RequestResponsePact
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -22,19 +20,20 @@ internal class LibraryAccessorContractTest {
 
     @Pact(provider = "provider", consumer = "consumer-two")
     fun getExistingBookPact(pact: PactDslWithProvider) = pact
-            .given("Getting book with any ID returns Clean Code")
-            .uponReceiving("get single book")
-            .path("/books/b3fc0be8-463e-4875-9629-67921a1e00f4")
-            .method("GET")
-            .willRespondWith()
-            .status(200)
-            .headers(mapOf("Content-Type" to MediaTypes.HAL_JSON_VALUE))
-            .body(PactDslJsonBody()
-                    .stringType("isbn", "9780132350884")
-                    .stringType("title", "Clean Code")
-                    .integerType("numberOfPages", 464)
-            )
-            .toPact()
+        .given("Getting book with any ID returns Clean Code")
+        .uponReceiving("get single book")
+        .path("/books/b3fc0be8-463e-4875-9629-67921a1e00f4")
+        .method("GET")
+        .willRespondWith()
+        .status(200)
+        .headers(mapOf("Content-Type" to MediaTypes.HAL_JSON_VALUE))
+        .body(
+            PactDslJsonBody()
+                .stringType("isbn", "9780132350884")
+                .stringType("title", "Clean Code")
+                .integerType("numberOfPages", 464)
+        )
+        .toPact()
 
     @Test
     @PactTestFor(pactMethod = "getExistingBookPact")

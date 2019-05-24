@@ -4,13 +4,10 @@ import io.restassured.RestAssured
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.startsWith
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 internal class ApplicationAcceptanceTest {
 
@@ -25,22 +22,24 @@ internal class ApplicationAcceptanceTest {
 
     @Test fun `creating a book responds with resource representation including self link`() {
         RestAssured.given()
-                .header("Content-Type", "application/json")
-                .body("""
+            .header("Content-Type", "application/json")
+            .body(
+                """
                     {
                       "title": "Clean Code",
                       "isbn": "9780132350884"
                     }
-                    """)
+                    """
+            )
 
-                .`when`().post("/api/books")
+            .`when`().post("/api/books")
 
-                .then()
-                .statusCode(201)
-                .contentType("application/hal+json;charset=UTF-8")
-                .content("title", equalTo("Clean Code"))
-                .content("isbn", equalTo("9780132350884"))
-                .content("_links.self.href", startsWith("http://localhost:$port/api/books/"))
+            .then()
+            .statusCode(201)
+            .contentType("application/hal+json;charset=UTF-8")
+            .content("title", equalTo("Clean Code"))
+            .content("isbn", equalTo("9780132350884"))
+            .content("_links.self.href", startsWith("http://localhost:$port/api/books/"))
     }
 
 }

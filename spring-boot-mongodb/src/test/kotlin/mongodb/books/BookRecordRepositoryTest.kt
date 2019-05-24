@@ -1,20 +1,18 @@
 package mongodb.books
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
 @DataMongoTest
-@ExtendWith(SpringExtension::class)
-internal class BookRecordRepositoryTest {
+internal class BookRecordRepositoryTest(
+    @Autowired val cut: BookRecordRepository
+) {
 
-    @Autowired lateinit var cut: BookRecordRepository
-
-    // TODO: datenbank aufräumen!
+    @BeforeEach fun clearDatabase() = cut.deleteAll()
 
     @Test fun `document can be saved`() {
         val id = UUID.randomUUID()
@@ -36,8 +34,8 @@ internal class BookRecordRepositoryTest {
         val d3 = cut.save(BookRecordDocument(UUID.randomUUID(), "Clean Code", "9780132350884"))
         val foundDocuments = cut.findByTitle("Clean Code")
         assertThat(foundDocuments)
-                .contains(d1, d3)
-                .doesNotContain(d2)
+            .contains(d1, d3)
+            .doesNotContain(d2)
     }
 
 }

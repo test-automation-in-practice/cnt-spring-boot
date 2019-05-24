@@ -1,18 +1,18 @@
 package jpa.books
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 
 @DataJpaTest
-@ExtendWith(SpringExtension::class)
-internal class BookRecordRepositoryTest {
+internal class BookRecordRepositoryTest(
+    @Autowired val cut: BookRecordRepository
+) {
 
-    @Autowired lateinit var cut: BookRecordRepository
+    @BeforeEach fun clearDatabase() = cut.deleteAll()
 
     @Test fun `entity can be saved`() {
         val id = UUID.randomUUID()
@@ -34,8 +34,8 @@ internal class BookRecordRepositoryTest {
         val e3 = cut.save(BookRecordEntity(UUID.randomUUID(), "Clean Code", "9780132350884"))
         val foundEntities = cut.findByTitle("Clean Code")
         assertThat(foundEntities)
-                .contains(e1, e3)
-                .doesNotContain(e2)
+            .contains(e1, e3)
+            .doesNotContain(e2)
     }
 
 }

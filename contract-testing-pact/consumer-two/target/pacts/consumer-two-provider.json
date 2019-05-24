@@ -1,69 +1,69 @@
 {
-    "provider": {
-        "name": "provider"
-    },
-    "consumer": {
-        "name": "consumer-two"
-    },
-    "interactions": [
-        {
-            "description": "get single book",
-            "request": {
-                "method": "GET",
-                "path": "/books/b3fc0be8-463e-4875-9629-67921a1e00f4"
-            },
-            "response": {
-                "status": 200,
-                "headers": {
-                    "Content-Type": "application/hal+json"
-                },
-                "body": {
-                    "numberOfPages": 464,
-                    "isbn": "9780132350884",
-                    "title": "Clean Code"
-                },
-                "matchingRules": {
-                    "body": {
-                        "$.isbn": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.title": {
-                            "matchers": [
-                                {
-                                    "match": "type"
-                                }
-                            ],
-                            "combine": "AND"
-                        },
-                        "$.numberOfPages": {
-                            "matchers": [
-                                {
-                                    "match": "integer"
-                                }
-                            ],
-                            "combine": "AND"
-                        }
-                    }
-                }
-            },
-            "providerStates": [
-                {
-                    "name": "Getting book with any ID returns Clean Code"
-                }
-            ]
-        }
-    ],
-    "metadata": {
-        "pactSpecification": {
-            "version": "3.0.0"
+  "provider": {
+    "name": "provider"
+  },
+  "consumer": {
+    "name": "consumer-two"
+  },
+  "interactions": [
+    {
+      "description": "get single book",
+      "request": {
+        "method": "GET",
+        "path": "/books/b3fc0be8-463e-4875-9629-67921a1e00f4"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/hal+json"
         },
-        "pact-jvm": {
-            "version": "3.5.22"
+        "body": {
+          "numberOfPages": 464,
+          "isbn": "9780132350884",
+          "title": "Clean Code"
+        },
+        "matchingRules": {
+          "body": {
+            "$.isbn": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.title": {
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.numberOfPages": {
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
         }
+      },
+      "providerStates": [
+        {
+          "name": "Getting book with any ID returns Clean Code"
+        }
+      ]
     }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.6.7"
+    }
+  }
 }

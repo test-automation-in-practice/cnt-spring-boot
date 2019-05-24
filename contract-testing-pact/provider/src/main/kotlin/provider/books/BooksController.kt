@@ -13,7 +13,7 @@ import java.util.*
 @RestController
 @RequestMapping("/books")
 class BooksController(
-        private val library: Library
+    private val library: Library
 ) {
 
     @GetMapping("/{id}")

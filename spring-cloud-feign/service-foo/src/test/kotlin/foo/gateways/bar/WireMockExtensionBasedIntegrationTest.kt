@@ -12,23 +12,34 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.any
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration
+import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration
+import org.springframework.cloud.openfeign.FeignAutoConfiguration
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import utils.FeignClientTestConfiguration
 import utils.SimpleWireMockExtension
 
 @ComponentScan
-class WireMockExtensionBasedIntegrationTestConfiguration : FeignClientTestConfiguration()
-
-@SpringBootTest(
-        classes = [WireMockExtensionBasedIntegrationTestConfiguration::class],
-        properties = ["eureka.client.enabled=false"]
+@ImportAutoConfiguration(
+    FeignAutoConfiguration::class,
+    FeignRibbonClientAutoConfiguration::class,
+    RibbonAutoConfiguration::class,
+    HttpMessageConvertersAutoConfiguration::class,
+    JacksonAutoConfiguration::class
 )
-@ExtendWith(SimpleWireMockExtension::class, SpringExtension::class)
+class WireMockExtensionBasedIntegrationTestConfiguration
+
+@ExtendWith(SimpleWireMockExtension::class)
+@SpringBootTest(
+    classes = [WireMockExtensionBasedIntegrationTestConfiguration::class],
+    properties = ["eureka.client.enabled=false"]
+)
 internal class WireMockExtensionBasedIntegrationTest(
-        @Autowired val cut: BarClient
+    @Autowired val cut: BarClient
 ) {
 
     @MockBean lateinit var loadBalancer: ILoadBalancer
@@ -39,18 +50,22 @@ internal class WireMockExtensionBasedIntegrationTest(
     }
 
     @RepeatedTest(10)
-    fun `if no server is available, the fallback is invoked`() {
+    fun `if exception occurs, the fallback is invoked`() {
         val result = cut.get()
         assertThat(result["msg"]).isEqualTo("Hello Fallback!")
     }
 
     @RepeatedTest(10)
-    fun `if a server is available, it will be used`(wireMock: WireMockServer) {
-        wireMock.givenThat(get(urlEqualTo("/bar"))
-                .willReturn(aResponse()
+    fun `if server responds, it will be used`(wireMock: WireMockServer) {
+        wireMock.givenThat(
+            get(urlEqualTo("/bar"))
+                .willReturn(
+                    aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("""{"msg": "Hello WireMock!"}""")))
+                        .withBody("""{"msg": "Hello WireMock!"}""")
+                )
+        )
 
         val result = cut.get()
         assertThat(result["msg"]).isEqualTo("Hello WireMock!")

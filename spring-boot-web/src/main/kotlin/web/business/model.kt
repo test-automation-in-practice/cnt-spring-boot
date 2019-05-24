@@ -3,13 +3,13 @@ package web.business
 import java.util.*
 
 data class BookRecord(
-        val id: UUID,
-        val book: Book
+    val id: UUID,
+    val book: Book
 )
 
 data class Book(
-        val title: Title,
-        val isbn: Isbn
+    val title: Title,
+    val isbn: Isbn
 )
 
 data class Title(val value: String) {

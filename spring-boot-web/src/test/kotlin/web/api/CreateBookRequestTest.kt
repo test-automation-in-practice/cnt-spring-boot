@@ -6,24 +6,20 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.time.OffsetDateTime.now
-import javax.validation.Validation.*
+import javax.validation.Validation.buildDefaultValidatorFactory
 import javax.validation.Validator
 
 
 internal class CreateBookRequestTest {
 
     @JsonTest
-    @ExtendWith(SpringExtension::class)
-    @Nested inner class JsonSerialization {
-
-        @Autowired lateinit var objectMapper: ObjectMapper
+    @Nested inner class JsonSerialization(
+        @Autowired val objectMapper: ObjectMapper
+    ) {
 
         @Test fun `can be deserialized from JSON`() {
             val json = """
@@ -32,10 +28,12 @@ internal class CreateBookRequestTest {
                     "isbn": "9780132350884"
                 }
                 """
-            assertThat(read(json)).isEqualTo(CreateBookRequest(
+            assertThat(read(json)).isEqualTo(
+                CreateBookRequest(
                     title = "Clean Code",
                     isbn = "9780132350884"
-            ))
+                )
+            )
         }
 
         @Test fun `'title' property is required when deserializing`() {

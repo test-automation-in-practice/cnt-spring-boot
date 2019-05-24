@@ -5,7 +5,7 @@ import java.util.*
 
 @Service
 class Library(
-        private val openLibrary: OpenLibraryAccessor
+    private val openLibrary: OpenLibraryAccessor
 ) {
 
     fun addBook(book: Book): BookRecord {

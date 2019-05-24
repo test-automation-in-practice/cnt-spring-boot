@@ -6,8 +6,8 @@ import java.util.*
 
 @Document(collection = "book_records")
 data class BookRecordDocument(
-        @Id
-        val id: UUID,
-        val title: String,
-        val isbn: String
+    @Id
+    val id: UUID,
+    val title: String,
+    val isbn: String
 )

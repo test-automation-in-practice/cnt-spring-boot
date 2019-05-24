@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class LibraryAccessor internal constructor(
-        private val client: LibraryClient
+    private val client: LibraryClient
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)

@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/foo")
 class FooController(
-        private val barClient: BarClient
+    private val barClient: BarClient
 ) {
 
     @GetMapping
     fun get(): Map<String, Any?> {
         val barData = barClient.get()
         return mapOf(
-                "msg" to barData["msg"],
-                "answer" to 42
+            "msg" to barData["msg"],
+            "answer" to 42
         )
     }
 

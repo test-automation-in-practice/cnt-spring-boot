@@ -1,32 +1,40 @@
 package jdbc.books
 
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.*
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.boot.test.mock.mockito.SpyBean
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import java.util.*
 
+private class BookRepositoryTestConfiguration {
+    @Bean fun idGenerator(): IdGenerator = mockk()
+    @Bean fun repository(jdbcTemplate: NamedParameterJdbcTemplate, idGenerator: IdGenerator) =
+        BooksRepository(jdbcTemplate, idGenerator)
+}
+
 @JdbcTest
-@ExtendWith(SpringExtension::class)
-internal class BookRepositoryTest {
+@Import(BookRepositoryTestConfiguration::class)
+internal class BookRepositoryTest(
+    @Autowired val idGenerator: IdGenerator,
+    @Autowired val cut: BooksRepository
+) {
 
     companion object {
         val cleanCode = Book("Clean Code", "9780132350884")
         val cleanArchitecture = Book("Clean Architecture", "9780134494166")
     }
 
-    @MockBean lateinit var idGenerator: IdGenerator
-    @SpyBean lateinit var cut: BooksRepository
+    @BeforeEach fun resetMocks() = clearAllMocks()
 
     @Test fun `creating a book returns a book record`() {
         val fixedId = UUID.randomUUID()
-
-        given(idGenerator.generateId()).willReturn(fixedId)
+        every { idGenerator.generateId() } returns fixedId
 
         val bookRecord = cut.create(cleanCode)
         with(bookRecord) {
@@ -36,12 +44,11 @@ internal class BookRepositoryTest {
         }
     }
 
-
     @Test fun `duplicated keys during creation are handled`() {
         val fixedId1 = UUID.randomUUID()
         val fixedId2 = UUID.randomUUID()
 
-        given(idGenerator.generateId()).willReturn(fixedId1, fixedId1, fixedId2)
+        every { idGenerator.generateId() } returnsMany listOf(fixedId1, fixedId1, fixedId2)
 
         with(cut.create(cleanCode)) {
             assertThat(id).isEqualTo(fixedId1)
@@ -51,12 +58,12 @@ internal class BookRepositoryTest {
             assertThat(id).isEqualTo(fixedId2)
         }
 
-        verify(idGenerator, times(3)).generateId()
+        verify(exactly = 3) { idGenerator.generateId() }
     }
 
     @Test fun `updating an existing book record changes all its data except the id`() {
         val fixedId = UUID.randomUUID()
-        given(idGenerator.generateId()).willReturn(fixedId)
+        every { idGenerator.generateId() } returns fixedId
 
         val bookRecord = cut.create(cleanCode)
 
@@ -84,7 +91,7 @@ internal class BookRepositoryTest {
     }
 
     @Test fun `existing book records can be found by id`() {
-        given(idGenerator.generateId()).willReturn(UUID.randomUUID())
+        every { idGenerator.generateId() } returns UUID.randomUUID()
 
         val bookRecord = cut.create(cleanCode)
         val foundBookRecord = cut.findBy(bookRecord.id)
@@ -97,7 +104,7 @@ internal class BookRepositoryTest {
     }
 
     @Test fun `existing book records can be deleted by id`() {
-        given(idGenerator.generateId()).willReturn(UUID.randomUUID())
+        every { idGenerator.generateId() } returns UUID.randomUUID()
 
         val bookRecord = cut.create(cleanCode)
         assertThat(cut.findBy(bookRecord.id)).isNotNull()

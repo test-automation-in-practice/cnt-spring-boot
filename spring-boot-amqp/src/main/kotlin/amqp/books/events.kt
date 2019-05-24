@@ -9,15 +9,15 @@ sealed class BookEvent {
 }
 
 data class BookCreated(
-        override val id: UUID,
-        override val title: String
+    override val id: UUID,
+    override val title: String
 ) : BookEvent() {
     override val type: String = "book-created"
 }
 
 data class BookDeleted(
-        override val id: UUID,
-        override val title: String
+    override val id: UUID,
+    override val title: String
 ) : BookEvent() {
     override val type: String = "book-deleted"
 }
