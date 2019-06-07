@@ -1,35 +1,30 @@
 package amqp.messaging
 
-import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL
+import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import java.time.Duration
 
-class RabbitMQExtension : BeforeAllCallback,
-    AfterAllCallback {
-
-    private val container = RabbitMqContainer()
+class RabbitMQExtension : BeforeAllCallback {
 
     override fun beforeAll(context: ExtensionContext) {
-        if (isTopClassContext(context) && !container.isRunning) {
-            container.start()
+        if (context.container == null) {
+            val container = RabbitMqContainer().apply { start() }
+            context.container = container
             System.setProperty("RABBIT_MQ_PORT", "${container.getMappedPort(5672)}")
         }
     }
 
-    override fun afterAll(context: ExtensionContext) {
-        if (isTopClassContext(context) && container.isRunning) {
-            container.stop()
-        }
-    }
-
-    private fun isTopClassContext(context: ExtensionContext) = context.parent.orElse(null) == context.root
+    private var ExtensionContext.container: RabbitMqContainer?
+        get() = getStore(GLOBAL).get("RABBIT_MQ_CONTAINER", RabbitMqContainer::class.java)
+        set(value) = getStore(GLOBAL).put("RABBIT_MQ_CONTAINER", value)
 
 }
 
-private class RabbitMqContainer : GenericContainer<RabbitMqContainer>("rabbitmq:3.6") {
+private class RabbitMqContainer : GenericContainer<RabbitMqContainer>("rabbitmq:3.6"), CloseableResource {
 
     init {
         setWaitStrategy(
