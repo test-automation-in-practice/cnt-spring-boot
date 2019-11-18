@@ -85,6 +85,16 @@ jobs:
       - store_test_results:
           path: spring-boot-mongodb/build/test-results
 
+  ci-spring-boot-security:
+    working_directory: ~/work
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: cd spring-boot-security && ./gradlew build
+      - store_test_results:
+          path: spring-boot-security/build/test-results
+
   ci-spring-boot-web:
     working_directory: ~/work
     docker:
@@ -122,5 +132,6 @@ workflows:
     - ci-spring-boot-jdbc
     - ci-spring-boot-jpa
     - ci-spring-boot-mongodb
+    - ci-spring-boot-security
     - ci-spring-boot-web
     - ci-spring-cloud-feign

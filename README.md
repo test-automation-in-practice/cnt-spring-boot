@@ -13,6 +13,7 @@ What you can find:
 - [`spring-boot-jdbc`](spring-boot-jdbc)
 - [`spring-boot-jpa`](spring-boot-jpa)
 - [`spring-boot-mongodb`](spring-boot-mongodb)
+- [`spring-boot-security`](spring-boot-security)
 - [`spring-boot-web`](spring-boot-web)
 - [`spring-cloud-feign`](spring-cloud-feign)
 
