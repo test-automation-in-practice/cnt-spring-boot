@@ -7,15 +7,17 @@ This repository contains example code for the `Cloud Native Testing` workshop.
 What you can find:
 
 - [`contract-testing-pact`](contract-testing-pact)
-- [`spring-boot-amqp`](spring-boot-amqp)
-- [`spring-boot-cache`](spring-boot-cache)
-- [`spring-boot-feign`](spring-boot-feign)
-- [`spring-boot-jdbc`](spring-boot-jdbc)
-- [`spring-boot-jpa`](spring-boot-jpa)
-- [`spring-boot-mongodb`](spring-boot-mongodb)
-- [`spring-boot-security`](spring-boot-security)
-- [`spring-boot-web`](spring-boot-web)
-- [`spring-cloud-feign`](spring-cloud-feign)
+- [`spring-boot`](spring-boot)
+  - [`spring-boot-amqp`](spring-boot/spring-boot-amqp)
+  - [`spring-boot-cache`](spring-boot/spring-boot-cache)
+  - [`spring-boot-feign`](spring-boot/spring-boot-feign)
+  - [`spring-boot-jdbc`](spring-boot/spring-boot-jdbc)
+  - [`spring-boot-jpa`](spring-boot/spring-boot-jpa)
+  - [`spring-boot-mongodb`](spring-boot/spring-boot-mongodb)
+  - [`spring-boot-security`](spring-boot/spring-boot-security)
+  - [`spring-boot-web`](spring-boot/spring-boot-web)
+- [`spring-cloud`](spring-cloud)
+  - [`spring-cloud-feign`](spring-cloud/spring-cloud-feign)
 
 Further Reading:
 
