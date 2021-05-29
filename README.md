@@ -6,7 +6,8 @@ This repository contains example code for the `Cloud Native Testing` workshop.
 
 What you can find:
 
-- [`contract-testing-pact`](contract-testing-pact)
+- [`contract-testing`](contract-testing)
+  - [`pact`](contract-testing/pact)
 - [`spring-boot`](spring-boot)
   - [`spring-boot-amqp`](spring-boot/spring-boot-amqp)
   - [`spring-boot-cache`](spring-boot/spring-boot-cache)
