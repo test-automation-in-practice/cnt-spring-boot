@@ -14,7 +14,7 @@ With most HTTP-based APIs the consumer - provider relationship is based on a req
 image::../../assets/images/ct_request-response.svg[]
 
 Each _request_ with its corresponding _response_ can be viewed as a single _interaction_.
-Each kind of interaction with all its relevant permutations is the basis for the test that need to be executed when validating functionality.
+Each kind of interaction with all its relevant permutations is the basis for the tests that need to be executed when validating functionality.
 
 == "Classic" Approaches
 
