@@ -2,7 +2,7 @@ package jpa.books
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import java.util.*
+import java.util.UUID
 
 interface BookRecordRepository : JpaRepository<BookRecordEntity, UUID> {
 

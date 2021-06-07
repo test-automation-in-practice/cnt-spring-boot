@@ -1,9 +1,13 @@
 package utils
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import org.junit.jupiter.api.extension.*
+import org.junit.jupiter.api.extension.BeforeAllCallback
+import org.junit.jupiter.api.extension.BeforeEachCallback
+import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL
 import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
+import org.junit.jupiter.api.extension.ParameterContext
+import org.junit.jupiter.api.extension.ParameterResolver
 
 class SimpleWireMockExtension : BeforeAllCallback, BeforeEachCallback, ParameterResolver {
 

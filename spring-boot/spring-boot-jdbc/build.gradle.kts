@@ -17,6 +17,6 @@ dependencies {
 	runtime("mysql:mysql-connector-java")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("io.mockk:mockk:1.11.0")
+  testImplementation("io.mockk:mockk:${property("mockkVersion")}")
 	testImplementation("com.h2database:h2")
 }

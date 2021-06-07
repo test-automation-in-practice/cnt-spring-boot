@@ -1,6 +1,9 @@
 package feign.gateways.library
 
-import feign.*
+import feign.Feign
+import feign.Request
+import feign.RequestTemplate
+import feign.Retryer
 import feign.Target
 import feign.jackson.JacksonDecoder
 import feign.jackson.JacksonEncoder

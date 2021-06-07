@@ -2,7 +2,11 @@ package amqp.messaging
 
 import amqp.books.EventHandler
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.amqp.core.*
+import org.springframework.amqp.core.Binding
+import org.springframework.amqp.core.BindingBuilder
+import org.springframework.amqp.core.MessageListener
+import org.springframework.amqp.core.Queue
+import org.springframework.amqp.core.TopicExchange
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.amqp.rabbit.listener.MessageListenerContainer

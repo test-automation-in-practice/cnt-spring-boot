@@ -11,16 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
-import org.springframework.hateoas.MediaTypes
 import org.springframework.hateoas.MediaTypes.HAL_JSON
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import web.business.*
-import java.util.*
+import web.business.Book
+import web.business.BookRecord
+import web.business.BookRecordNotFoundException
+import web.business.Isbn
+import web.business.Library
+import web.business.Title
+import java.util.UUID
 
 private class BooksControllerTestConfiguration {
     @Bean fun resourceAssembler() = BookResourceAssembler()

@@ -1,6 +1,5 @@
 package springsecurity.domain
 
-import io.mockk.Called
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -20,7 +19,6 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.test.context.support.WithMockUser
 import springsecurity.IntegrationTest
 import springsecurity.UnitTest
-import springsecurity.persistence.InMemoryBookRepository
 import springsecurity.security.MethodSecurityConfiguration
 import springsecurity.security.ROLE_ADMIN
 import springsecurity.security.ROLE_CURATOR

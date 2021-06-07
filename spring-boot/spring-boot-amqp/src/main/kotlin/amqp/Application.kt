@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.UUID
 
 @SpringBootApplication
 class Application

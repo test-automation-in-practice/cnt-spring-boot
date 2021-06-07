@@ -3,7 +3,7 @@ package springsecurity.persistence
 import org.springframework.stereotype.Component
 import springsecurity.domain.BookRecord
 import springsecurity.domain.BookRepository
-import java.util.*
+import java.util.UUID
 
 @Component
 class InMemoryBookRepository : BookRepository {

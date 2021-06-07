@@ -1,6 +1,6 @@
 package web.business
 
-import java.util.*
+import java.util.UUID
 
 data class BookRecord(
     val id: UUID,

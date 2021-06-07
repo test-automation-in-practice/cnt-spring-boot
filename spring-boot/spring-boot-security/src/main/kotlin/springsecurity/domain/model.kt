@@ -1,6 +1,6 @@
 package springsecurity.domain
 
-import java.util.*
+import java.util.UUID
 
 data class Book(
     val isbn: String,

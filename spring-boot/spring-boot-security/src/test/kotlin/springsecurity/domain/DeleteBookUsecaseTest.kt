@@ -1,6 +1,5 @@
 package springsecurity.domain
 
-import io.mockk.Called
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -20,13 +19,13 @@ import org.springframework.context.annotation.Import
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.test.context.support.WithMockUser
-import springsecurity.persistence.InMemoryBookRepository
 import springsecurity.IntegrationTest
+import springsecurity.UnitTest
+import springsecurity.persistence.InMemoryBookRepository
 import springsecurity.security.MethodSecurityConfiguration
 import springsecurity.security.ROLE_ADMIN
 import springsecurity.security.ROLE_CURATOR
 import springsecurity.security.ROLE_USER
-import springsecurity.UnitTest
 import java.util.UUID
 
 internal class DeleteBookUsecaseTest {
