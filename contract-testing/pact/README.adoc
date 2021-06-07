@@ -34,11 +34,11 @@ image::../../assets/images/ct_full_integration_tests.svg[]
 These tests are not based on anyone's assumptions.
 Instead, the "real" provider is used by the "real" consumer in some kind of staging environment.
 On the one hand, these kinds of tests are generally the closest we can come to verifying the "real" behaviour of the consumer - provider relationship.
-On the other hand, maintaining test data, current versions of the provider, configuration, etc. of these staging environments requires an enormous effort of time and money for a comparable small return of investment.
+On the other hand, maintaining test data, current versions of the provider, configuration, etc. of these staging environments requires an enormous amount of time and money for a comparably small return on investment.
 
 == PACT Contracts
 
-Combining both approaches by moving most testing effort from _full_ integration tests on a staging environment to the much faster, and cheaper service-simulator approach is generally a good idea.
+Combining both approaches by moving most testing effort from _full_ integration tests on a staging environment to the much faster and cheaper service-simulator approach is generally a good idea.
 As an example, the integration test could be limited to one or two _happy path_ min/max cases while most of the error handling is done using the simulation approach.
 Without some way of validating the consumer's assumptions against the actual provider, there will always be unmanaged risk and a need for some kind of integration testing.
 
@@ -62,14 +62,14 @@ image::../../assets/images/ct_multi-consumer-contracts.svg[]
 
 With multiple consumers providing contracts to the same provider, another - more social - benefit comes into play:
 The provider now knows about each and every consumer of its API and has knowledge about the data that is actually consumed by someone.
-This makes it possible for the API to be changed and know exactly which consumer will be negatively affected by the change.
-The provider can than initiate communication with the affected consumer's team and plan the change in a much more effective way than having to start a global deprecation process or whatever other mechanism is used for implementing changes.
+This makes it possible to change the API and know exactly which consumer will be negatively affected by the change.
+The provider can then talk to the team responsible for the affected consumer and plan the change in a much more effective way than having to start a global deprecation process or whatever other mechanism is used for implementing changes.
 
 == Benefits
 
 1. Cheap and fast tests on the consumer-side.
 2. Cheap and fast tests on the provider-side.
-3. Involve the provider in the testing efforts without needing to relay on a deployed environment.
+3. Involve the provider in the testing efforts without needing to rely on a deployed environment.
 4. Give the provider an overview of its consumers.
 5. Open communication channels between consumer and provider teams.
 6. Focus the needed communication of the provider team on those consumers that actually need to be talked to. (e.g. when upcoming changes to the API would break one or more contracts)
