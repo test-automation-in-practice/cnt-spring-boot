@@ -12,7 +12,3 @@ include("spring-boot:spring-boot-jpa")
 include("spring-boot:spring-boot-mongodb")
 include("spring-boot:spring-boot-security")
 include("spring-boot:spring-boot-web")
-
-include("spring-cloud:spring-cloud-feign:eureka-server")
-include("spring-cloud:spring-cloud-feign:service-bar")
-include("spring-cloud:spring-cloud-feign:service-foo")
