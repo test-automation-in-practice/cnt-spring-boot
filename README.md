@@ -1,5 +1,3 @@
-[![Build Status](https://circleci.com/gh/nt-ca-aqe/ws-cloud-native-testing/tree/master.svg?style=svg)][1]
-
 # Workshop: Cloud Native Testing
 
 This repository contains example code for the `Cloud Native Testing` workshop.
