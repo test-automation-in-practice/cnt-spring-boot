@@ -1,80 +1,80 @@
 {
-  "provider": {
-    "name": "provider"
-  },
   "consumer": {
     "name": "consumer-one"
   },
   "interactions": [
     {
       "description": "get single book",
+      "providerStates": [
+        {
+          "name": "Getting book with any ID returns Clean Code"
+        }
+      ],
       "request": {
         "method": "GET",
         "path": "/books/b3fc0be8-463e-4875-9629-67921a1e00f4"
       },
       "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/hal+json"
-        },
         "body": {
-          "isbn": "9780132350884",
-          "title": "Clean Code",
           "authors": [
             "Robert C. Martin",
             "Dean Wampler"
-          ]
+          ],
+          "isbn": "9780132350884",
+          "title": "Clean Code"
+        },
+        "headers": {
+          "Content-Type": "application/json"
         },
         "matchingRules": {
           "body": {
-            "$.isbn": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
-            "$.title": {
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ],
-              "combine": "AND"
-            },
             "$.authors[0]": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
                 }
-              ],
-              "combine": "AND"
+              ]
             },
             "$.authors[1]": {
+              "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
                 }
-              ],
-              "combine": "AND"
+              ]
+            },
+            "$.isbn": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.title": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
             }
           }
-        }
-      },
-      "providerStates": [
-        {
-          "name": "Getting book with any ID returns Clean Code"
-        }
-      ]
+        },
+        "status": 200
+      }
     }
   ],
   "metadata": {
+    "pact-jvm": {
+      "version": "4.2.5"
+    },
     "pactSpecification": {
       "version": "3.0.0"
-    },
-    "pact-jvm": {
-      "version": "3.6.7"
     }
+  },
+  "provider": {
+    "name": "provider"
   }
 }

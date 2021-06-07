@@ -1,25 +1,10 @@
 package provider.books
 
-import org.springframework.stereotype.Service
-import java.util.*
+import java.util.UUID
 
-@Service
-class Library(
-    private val dataStore: BookDataStore
-) {
+// This is just an interface because we don't need an actual implementation for demonstrating the provider-side of
+// PACT-based contract testing.
 
-    fun findById(id: UUID): BookRecord {
-        return dataStore.getById(id) ?: throw NotFoundException()
-    }
-
+interface Library {
+    fun findById(id: UUID): BookRecord?
 }
-
-data class Book(
-    val isbn: String,
-    val title: String,
-    val description: String?,
-    val authors: List<String>?,
-    val numberOfPages: Int?
-)
-
-data class BookRecord(val id: UUID, val book: Book)
