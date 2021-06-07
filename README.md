@@ -17,8 +17,6 @@ What you can find:
   - [`spring-boot-mongodb`](spring-boot/spring-boot-mongodb)
   - [`spring-boot-security`](spring-boot/spring-boot-security)
   - [`spring-boot-web`](spring-boot/spring-boot-web)
-- [`spring-cloud`](spring-cloud)
-  - [`spring-cloud-feign`](spring-cloud/spring-cloud-feign)
 
 Further Reading:
 
