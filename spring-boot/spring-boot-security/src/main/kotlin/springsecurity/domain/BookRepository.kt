@@ -1,9 +1,13 @@
 package springsecurity.domain
 
+import springsecurity.domain.model.BookRecord
 import java.util.UUID
 
+// We don't need an actual implementation for this showcase.
+// Instances needed for testing will be mocks.
+
 interface BookRepository {
-    fun create(record: BookRecord): BookRecord
+    fun save(record: BookRecord): BookRecord
     fun findById(id: UUID): BookRecord?
-    fun delete(id: UUID): Boolean
+    fun deleteById(id: UUID): Boolean
 }
