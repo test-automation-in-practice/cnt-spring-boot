@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  pact:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,24 +18,200 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew build
 
-      - name: Upload Dokumentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: documentation
-          path: "**/build/docs/asciidoc/*.html"
+      - name: Delete Contracts from Provider
+        run: rm ./contract-testing/pact/provider/src/test/pacts/*.json
+      - name: Build Consumer One
+        run: ./gradlew :contract-testing:pact:consumer-one:build
+      - name: Copy Contracts of Consumer One to Provider
+        run: cp ./contract-testing/pact/consumer-one/build/pacts/*.json ./contract-testing/pact/provider/src/test/pacts
+      - name: Build Consumer Two
+        run: ./gradlew :contract-testing:pact:consumer-two:build
+      - name: Copy Contracts of Consumer Two to Provider
+        run: cp ./contract-testing/pact/consumer-two/build/pacts/*.json ./contract-testing/pact/provider/src/test/pacts
+      - name: Build Provider
+        run: ./gradlew :contract-testing:pact:provider:build
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: test-results
+          name: test-results_pact
           path: "**/build/reports/tests"
 
-      - name: Upload Detekt Report
-        uses: actions/upload-artifact@v2
+  spring-cloud-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
         with:
-          name: detekt-reports
-          path: "**/build/reports/detekt/*.html"
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build Provider & Publish Stubs
+        run: ./gradlew :contract-testing:spring-cloud-contract:provider:build :contract-testing:spring-cloud-contract:provider:publishToMavenLocal
+      - name: Build Consumer One
+        run: ./gradlew :contract-testing:spring-cloud-contract:consumer-one:build
+      - name: Build Consumer Two
+        run: ./gradlew :contract-testing:spring-cloud-contract:consumer-two:build
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-cloud-contract
+          path: "**/build/reports/tests"
+
+  spring-boot-amqp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-amqp:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-amqp
+          path: "**/build/reports/tests"
+
+  spring-boot-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-cache:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-cache
+          path: "**/build/reports/tests"
+
+  spring-boot-feign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-feign:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-feign
+          path: "**/build/reports/tests"
+
+  spring-boot-jdbc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-jdbc:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-jdbc
+          path: "**/build/reports/tests"
+
+  spring-boot-jpa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-jpa:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-jpa
+          path: "**/build/reports/tests"
+
+  spring-boot-mongodb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-mongodb:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-mongodb
+          path: "**/build/reports/tests"
+
+  spring-boot-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-security:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-security
+          path: "**/build/reports/tests"
+
+  spring-boot-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:spring-boot-web:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot-web
+          path: "**/build/reports/tests"
