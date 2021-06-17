@@ -1,12 +1,10 @@
-package consumer.one.gateway.library
+package consumer.two.gateway.library
 
-import consumer.one.model.Book
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders.ACCEPT
+import consumer.two.model.Book
+import org.springframework.http.HttpEntity.EMPTY
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
@@ -22,8 +20,8 @@ class LibraryAccessor(
     private val restTemplate = RestTemplate()
 
     fun getBook(id: String): Book? {
-        val requestEntity = HttpEntity(mapOf(ACCEPT to listOf(APPLICATION_JSON_VALUE)))
-        val response = restTemplate.exchange("${settings.url}/books/$id", GET, requestEntity, LibraryBook::class.java)
+        val response =
+            restTemplate.exchange("${settings.url}/books/$id", GET, EMPTY, LibraryBook::class.java)
         return when (response.statusCode) {
             OK -> response.body?.toBook() ?: error("missing body")
             NOT_FOUND -> null
@@ -34,12 +32,12 @@ class LibraryAccessor(
     private data class LibraryBook(
         val isbn: String,
         val title: String,
-        val authors: List<String>?
+        val numberOfPages: Int?
     ) {
         fun toBook() = Book(
             isbn = isbn,
             title = title,
-            authors = authors ?: emptyList()
+            numberOfPages = numberOfPages
         )
     }
 

@@ -1,0 +1,87 @@
+[{
+  "id" : "b139a49a-f587-4dc0-8a6c-9a288d9227ad",
+  "request" : {
+    "urlPath" : "/books/b3fc0be8-463e-4875-9629-67921a1e00f4",
+    "method" : "GET",
+    "headers" : {
+      "Accept" : {
+        "matches" : "application/json.*"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"isbn\":\"9780132350884\",\"title\":\"Clean Code\",\"authors\":[\"Robert C. Martin\",\"Dean Wampler\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "b139a49a-f587-4dc0-8a6c-9a288d9227ad"
+},
+{
+  "id" : "031cf8a1-4d3c-4dee-9c89-5039ae392142",
+  "request" : {
+    "urlPath" : "/books/b3fc0be8-463e-4875-9629-67921a1e00f4",
+    "method" : "GET",
+    "headers" : {
+      "Accept" : {
+        "matches" : "application/json.*"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"isbn\":\"9780132350884\",\"title\":\"Clean Code\",\"authors\":[\"Robert C. Martin\",\"Dean Wampler\"]}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "031cf8a1-4d3c-4dee-9c89-5039ae392142"
+},
+{
+  "id" : "daabd94b-cc3e-4640-a6f9-5a5db373086f",
+  "request" : {
+    "url" : "/books/b3fc0be8-463e-4875-9629-67921a1e00f4",
+    "method" : "GET",
+    "headers" : {
+      "Accept" : {
+        "equalTo" : "application/*+json"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"authors\":[\"Robert C. Martin\",\"Dean Wampler\"],\"isbn\":\"9780132350884\",\"title\":\"Clean Code\"}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    },
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "daabd94b-cc3e-4640-a6f9-5a5db373086f"
+},
+{
+  "id" : "693b755c-65c8-4b7e-892d-e1e03ddaac2f",
+  "request" : {
+    "url" : "/health",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "OK"
+  },
+  "uuid" : "693b755c-65c8-4b7e-892d-e1e03ddaac2f"
+},
+{
+  "id" : "b5479db8-222a-4c39-8f40-54e49ca09b6d",
+  "request" : {
+    "url" : "/ping",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "OK"
+  },
+  "uuid" : "b5479db8-222a-4c39-8f40-54e49ca09b6d"
+}]

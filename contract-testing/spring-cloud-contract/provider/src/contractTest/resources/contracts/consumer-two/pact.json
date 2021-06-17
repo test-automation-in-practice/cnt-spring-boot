@@ -1,29 +1,26 @@
 {
   "consumer": {
-    "name": "consumer-one"
+    "name": "consumer-two"
   },
   "interactions": [
     {
       "description": "get single book",
       "providerStates": [
         {
-          "name": "Getting book with any ID returns Clean Code"
+          "name": "Getting book with ID [{id}] returns Clean Code",
+          "params": {
+            "id": "b3fc0be8-463e-4875-9629-67921a1e00f4"
+          }
         }
       ],
       "request": {
-        "headers": {
-          "Accept": "application/json, application/*+json"
-        },
         "method": "GET",
         "path": "/books/b3fc0be8-463e-4875-9629-67921a1e00f4"
       },
       "response": {
         "body": {
-          "authors": [
-            "Robert C. Martin",
-            "Dean Wampler"
-          ],
           "isbn": "9780132350884",
+          "numberOfPages": 464,
           "title": "Clean Code"
         },
         "headers": {
@@ -31,27 +28,19 @@
         },
         "matchingRules": {
           "body": {
-            "$.authors[0]": {
-              "combine": "AND",
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ]
-            },
-            "$.authors[1]": {
-              "combine": "AND",
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ]
-            },
             "$.isbn": {
               "combine": "AND",
               "matchers": [
                 {
                   "match": "type"
+                }
+              ]
+            },
+            "$.numberOfPages": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
                 }
               ]
             },

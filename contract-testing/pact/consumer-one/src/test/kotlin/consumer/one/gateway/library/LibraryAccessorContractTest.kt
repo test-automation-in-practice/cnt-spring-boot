@@ -25,6 +25,7 @@ internal class LibraryAccessorContractTest {
         .uponReceiving("get single book")
         .path("/books/b3fc0be8-463e-4875-9629-67921a1e00f4")
         .method("GET")
+        .headers(mapOf("Accept" to "application/json, application/*+json"))
         .willRespondWith()
         .status(200)
         .headers(mapOf("Content-Type" to "application/json"))
