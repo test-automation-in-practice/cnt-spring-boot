@@ -1,0 +1,3 @@
+services:
+  library:
+    url: "http://localhost:${stubrunner.runningstubs.provider.port}"

@@ -1,5 +1,3 @@
-package contracts.two
-
 import org.springframework.cloud.contract.spec.ContractDsl.Companion.contract
 
 arrayOf(

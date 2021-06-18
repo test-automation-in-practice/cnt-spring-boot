@@ -1,32 +1,29 @@
 package consumer.two.gateway.library
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.junit.jupiter.api.extension.RegisterExtension
-import org.springframework.cloud.contract.stubrunner.junit.StubRunnerExtension
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties.StubsMode
+import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
 
 @TestInstance(PER_CLASS)
-internal class LibraryAccessorContractTest {
-
-    val settings = LibraryAccessorSettings(url = "http://localhost")
-    val cut = LibraryAccessor(settings)
-
-    @JvmField
-    @RegisterExtension
-    val stubRunnerExtension: StubRunnerExtension = StubRunnerExtension()
-        .downloadLatestStub("ws.cnt.ct.scc", "provider", "stubs")
-        .withStubPerConsumer(true) // needed because both consumers use similar requests
-        .withConsumerName("consumer-two")
-        .stubsMode(StubsMode.LOCAL)
-
-    @BeforeEach
-    fun setup() {
-        settings.url = "${stubRunnerExtension.findStubUrl("ws.cnt.ct.scc", "provider")}"
-    }
+@AutoConfigureStubRunner(
+    ids = ["ws.cnt.ct.scc:provider"],
+    stubsPerConsumer = true,
+    consumerName = "consumer-two",
+    stubsMode = StubsMode.LOCAL
+)
+@ActiveProfiles("contract-test")
+@SpringBootTest(classes = [LibraryAccessorContractTestConfiguration::class])
+internal class LibraryAccessorContractTest(
+    @Autowired private val cut: LibraryAccessor
+) {
 
     @Test
     fun `get single existing book interaction`() {
@@ -38,3 +35,7 @@ internal class LibraryAccessorContractTest {
     }
 
 }
+
+@Import(LibraryAccessor::class)
+@EnableConfigurationProperties(LibraryAccessorSettings::class)
+private class LibraryAccessorContractTestConfiguration

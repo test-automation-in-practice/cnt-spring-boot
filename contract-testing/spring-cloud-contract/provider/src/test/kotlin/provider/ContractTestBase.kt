@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.web.context.WebApplicationContext
-import provider.ContractTestData.allBooksRecords
 import provider.books.Book
 import provider.books.BookRecord
 import provider.books.Library
@@ -29,7 +28,7 @@ class ContractTestBase {
 
     @BeforeAll
     fun initMocks(@Autowired library: Library) {
-        allBooksRecords
+        ContractTestData.allBooksRecords
             .forEach { bookRecord ->
                 every { library.findById(bookRecord.id) } returns bookRecord
             }
