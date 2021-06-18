@@ -2,7 +2,7 @@ package provider
 
 import io.mockk.every
 import io.mockk.mockk
-import io.restassured.module.mockmvc.RestAssuredMockMvc
+import io.restassured.module.mockmvc.RestAssuredMockMvc.standaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
@@ -11,19 +11,22 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup
 import org.springframework.web.context.WebApplicationContext
 import provider.books.Book
 import provider.books.BookRecord
 import provider.books.Library
 import java.util.UUID
 
+@WithMockUser
 @TestInstance(PER_CLASS)
 @SpringBootTest(classes = [ContractTestConfiguration::class])
 class ContractTestBase {
 
     @BeforeAll
     fun bindContractsToApplicationContext(@Autowired context: WebApplicationContext) {
-        RestAssuredMockMvc.webAppContextSetup(context)
+        standaloneSetup(webAppContextSetup(context))
     }
 
     @BeforeAll
