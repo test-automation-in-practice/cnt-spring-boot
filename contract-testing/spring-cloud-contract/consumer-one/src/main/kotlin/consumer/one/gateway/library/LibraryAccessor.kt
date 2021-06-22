@@ -2,7 +2,9 @@ package consumer.one.gateway.library
 
 import consumer.one.model.Book
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpHeaders.ACCEPT
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.OK
@@ -14,6 +16,8 @@ import org.springframework.web.client.RestTemplate
 // Uses a simple RestTemplate to make the HTTP calls and transforms the provider's response model into this
 // service's internal model.
 
+private val BASIC_AUTH_CREDENTIALS = "Basic dXNlcjpyZXN1"
+
 @Service
 class LibraryAccessor(
     private val settings: LibraryAccessorSettings
@@ -22,14 +26,19 @@ class LibraryAccessor(
     private val restTemplate = RestTemplate()
 
     fun getBook(id: String): Book? {
-        val requestEntity = HttpEntity(mapOf(ACCEPT to listOf(APPLICATION_JSON_VALUE)))
-        val response = restTemplate.exchange("${settings.url}/books/$id", GET, requestEntity, LibraryBook::class.java)
+        val headers = HttpHeaders().apply {
+            set(ACCEPT, APPLICATION_JSON_VALUE)
+            set(AUTHORIZATION, BASIC_AUTH_CREDENTIALS)
+        }
+        val response = restTemplate.exchange(url(id), GET, HttpEntity(null, headers), LibraryBook::class.java)
         return when (response.statusCode) {
             OK -> response.body?.toBook() ?: error("missing body")
             NOT_FOUND -> null
             else -> error("server responded with: $response")
         }
     }
+
+    private fun url(id: String) = "${settings.url}/books/$id"
 
     private data class LibraryBook(
         val isbn: String,

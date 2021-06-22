@@ -12,6 +12,11 @@ import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 
+// These tests are executed against the stubs generated and published by the provider
+// In this consumer:
+//    - the stubs are initialized using annotations
+//    - the tests is setup as a Spring Boot integration test
+
 @TestInstance(PER_CLASS)
 @AutoConfigureStubRunner(
     ids = ["ws.cnt.ct.scc:provider"],

@@ -30,12 +30,22 @@ dependencies {
 }
 
 contracts {
+    // generate JUnit 5 test classes
     setTestFramework(TestFramework.JUNIT5)
+    // sets a fallback for any mapping misses and defines base package of generated tests
     setBaseClassForTests("provider.ContractTestBase")
+    // mapping of base classes for different contracts
+    baseClassMappings {
+        // any Spring Cloud Contract DSL-based tests should use a base class with callback methods
+        baseClassMapping(""".*\.scc""", "provider.SpringCloudContractTestBase")
+        // any PACT-based tests should use a base class with default users for security
+        baseClassMapping(""".*\.pact""", "provider.PactContractTestBase")
+    }
 }
 
 publishing {
     publications {
+        // define a publication for generated stubs to be used by the consumers
         create<MavenPublication>("stubs") {
             artifact(tasks.verifierStubsJar)
         }

@@ -12,7 +12,7 @@
       ],
       "request": {
         "headers": {
-          "Accept": "application/json, application/*+json"
+          "Accept": "application/json"
         },
         "method": "GET",
         "path": "/books/b3fc0be8-463e-4875-9629-67921a1e00f4"

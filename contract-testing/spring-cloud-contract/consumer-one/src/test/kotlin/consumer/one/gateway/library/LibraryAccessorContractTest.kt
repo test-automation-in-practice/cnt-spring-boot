@@ -9,6 +9,11 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.cloud.contract.stubrunner.junit.StubRunnerExtension
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties.StubsMode
 
+// These tests are executed against the stubs generated and published by the provider
+// In this consumer:
+//    - the stubs are initialized using a programmatic approach
+//    - the tests is setup as a unit test
+
 @TestInstance(PER_CLASS)
 internal class LibraryAccessorContractTest {
 
