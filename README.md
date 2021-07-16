@@ -15,6 +15,7 @@ What you can find:
   - [`spring-boot-jpa`](spring-boot/spring-boot-jpa)
   - [`spring-boot-mongodb`](spring-boot/spring-boot-mongodb)
   - [`spring-boot-security`](spring-boot/spring-boot-security)
+  - [`spring-boot-starter`](spring-boot/spring-boot-starter)
   - [`spring-boot-web`](spring-boot/spring-boot-web)
 
 Further Reading:
