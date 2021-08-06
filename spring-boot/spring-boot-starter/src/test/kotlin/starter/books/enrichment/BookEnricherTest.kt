@@ -1,12 +1,12 @@
 package starter.books.enrichment
 
+import com.ninjasquad.springmockk.MockkBean
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,6 +23,7 @@ import starter.Examples.record_cleanCode_enriched
 import starter.books.core.BookRecordCreatedEvent
 import starter.books.core.BookRecordDeletedEvent
 import starter.books.core.BookRepository
+import java.lang.Thread.sleep
 
 // This test class actually contains a couple of different kinds of test classes.
 // It is mainly a container to run all relevant tests for the BooksEnricher component.
@@ -130,9 +131,10 @@ internal class BookEnricherTest {
         }
 
         @Test
-        @Disabled("cant (efficiently) proof an async negative")
         fun `book record deleted events will not trigger anything`() {
-            // ...
+            eventPublisher.publishEvent(deletedEvent)
+            sleep(1_000)
+            verify { bookInformationSource wasNot called }
         }
 
     }
@@ -149,5 +151,36 @@ internal class BookEnricherTest {
         @Bean
         fun bookRepository(): BookRepository = mockk()
     }
+
+    @Nested
+    @SpringBootTest(classes = [TechnologyIntegrationTestConfigurationVariant3::class])
+    inner class TechnologyIntegrationTestVariant3(
+        @Autowired private val eventPublisher: ApplicationEventPublisher
+    ) {
+
+        // Technology integration tests that verify that Spring's event listener mechanism is used correctly.
+
+        // Uses https://github.com/Ninja-Squad/springmockk in order to NOT run into the previously mentioned problems.
+
+        @MockkBean(relaxUnitFun = true)
+        lateinit var cut: BookEnricher
+
+        @Test
+        fun `book record created events will trigger enrichment`() {
+            eventPublisher.publishEvent(createdEvent)
+            verify(timeout = 1_000) { cut.handle(createdEvent) }
+        }
+
+        @Test
+        fun `book record deleted events will not trigger anything`() {
+            eventPublisher.publishEvent(deletedEvent)
+            sleep(1_000)
+            verify { cut wasNot called }
+        }
+
+    }
+
+    @EnableAsync
+    private class TechnologyIntegrationTestConfigurationVariant3
 
 }

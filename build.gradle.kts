@@ -18,6 +18,7 @@ extra["springCloudVersion"] = "2020.0.3"
 extra["mockkVersion"] = "1.11.0"
 extra["pactVersion"] = "4.2.5"
 extra["kotlinVersion"] = "1.4.32"
+extra["springmockkVersion"] = "3.0.1"
 
 allprojects {
     repositories { mavenCentral() }
