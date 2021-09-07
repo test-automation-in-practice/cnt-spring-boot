@@ -1,47 +1,45 @@
 = Testing Basics with JUnit 5 and Spring Boot
 
-This showcase demonstrates the basics of writing unit and technology-integration tests for Spring Boot applications.
+This showcase demonstrates the basics of writing efficient automated tests for Spring Boot applications.
 
 *Basic principles:*
 
 - Write isolated unit tests for your own code.
-- Write small specific technology-integration tests for your usage of Spring Boot mechanics and other used technologies like databases, message brokers, HTTP clients etc.
-- Write a few very high level application end2end tests to verify that everything fits together.
+- Write small specific technology-integration tests for _your_ usage of Spring Boot features and other used technologies like databases, message brokers, HTTP clients etc.
+- Write a few very high level application end-to-end smoke tests to verify that everything fits together.
 
 == Test Automation Pyramid
 
 The "Test Pyramid" is a simplified model describing how software testing should be done in different levels of granularity and how many tests should be on which level.
 A very good article about that topic was written by _Ham Vocke_ in 2018 and published on _Martin Fowler's_ Blog titled link:https://martinfowler.com/articles/practical-test-pyramid.html[The Practical Test Pyramid].
 
-Based on that generalized model, a test-automation focused pyramid could look something like this:
+Based on that generalized model, a _test-automation focused_ pyramid could look something like this:
 
 image::../../assets/images/pyramide.svg[align="center"]
 
-Let's go through this model bottom up based on a very simplified slice of an application:
+Let's look deeper into this model with the help of a simplified application slice:
 
 image::../../assets/images/starter_app_slice.svg[align="center"]
 
 This application manages book of a library.
-It offers a HTTP API for consumers to interact with it.
-Data is stored in an SQL database.
+It offers an HTTP API for consumers and data is stored in an SQL database.
 
 === Functional Unit Tests
 
-Unit tests are testing exclusively your own code.
-They are used to verify that what you have written in order to implement a functional-requirement / feature, does work as intended.
-
-Depending on what the unit of code that you are testing actually does, unit tests can be separated into several groups:
+Unit tests are written to make sure that the code _you_ have written does exactly what it is supposed to do.
+Depending on what the code under test actually does, unit tests can be divided into several groups:
 
 - link:https://en.wikipedia.org/wiki/Pure_function[Pure Functions]: Tests will vary different input parameter combinations and check that the result is equal to what is expected.
-Completely stateless and usually very simple test setup.
 - Stateful Functions: For these functions, the result of their invocation is dependent on the state of their parent component (e.g. objects).
 Tests usually involve setting up a new instance for each test.
-Other thatn that the tests themselves are pretty similar to thos of pure functions.
+Other than that the tests themselves are pretty similar to those of pure functions.
 - Orchestration Components: These components "orchestrate" the invocation and data transfer of multiple dependency components in order to achieve an overarching functionality.
 Their tests usually involve mocking the behaviour of the different dependencies and focus on verifying that concerns like error handling, invocation order, correct data transfer etc. are handled as intended.
 
-Since unit tests only involve your own code and everything else is mocked, they are extremely fast and thousands of them can be executed in a very short amount of time.
-Making them the best kind of tests you can write in order to get fast feedback about whether your code actually works as intended.
+Because unit tests only refer to your own code and everything else is mocked, they are extremely fast and can be run by the thousands in a very short time.
+This makes them the best tests to get quick feedback on the core components, e.g. the business logic, of your application.
+
+In our example application, unit tests would be used mainly in the _BookCollection_ component.
 
 image::../../assets/images/starter_app_slice_unit.svg[align="center"]
 
@@ -52,7 +50,7 @@ image::../../assets/images/starter_app_slice_unit.svg[align="center"]
 
 === Technology Integration Tests
 
-Technology integration tests are testing the code you write in order to use a given technology.
+Technology integration tests are used to verify code that _you have written to use_ a particular technology.
 Examples include, but are not limited to:
 
 - HTTP endpoints (`@Controller`, `@RestController`)
@@ -65,14 +63,17 @@ Examples include, but are not limited to:
 - database access (`JpaRepository`, `MongoRepository`, `JdbcTemplate` etc.)
 - HTTP client calls (`RestTemplate`, `HttpClient`, `WebClient` etc.)
 
-The goal is not to test that all of these technologies function correctly, rather if _your_ code is using them correctly to achieve _your_ intended outcome.
+The goal is not to check if a given technology works.
+Instead, it is to check if _you_ are using the technology correctly to achieve _your goal_.
 
-As an example, let's assume you are using JDBC to query a database, and you wrote some SQL to specify what you want to read.
-You don't need to test that the JDBC driver or the database server is working correctly.
-What you do need to test, is if you wrote an SQL query that actually does what you want it to do given a specific database.
+As an example, let's assume that you are connecting to a SQL database using JDBC and have written a SQL query to read some data.
+You don't need to test that the JDBC driver or the database works.
+What you need to test is whether you have written valid SQL that will return the desired result when used with a particular database.
 
 Since technology integration tests involve bootstrapping some kind of technology (external services, framework features etc.), they are a lot slower that unit tests.
-At least the initial setup will usually take a couple of seconds, while each single test will usually take only a couple of milliseconds.
+At least the initial setup will usually take a couple of seconds, while each single test will most likely take only a couple of milliseconds.
+
+In our example application, technology integration tests would be used to test the in the _BookRestController_ and _BookRepository_ components.
 
 image::../../assets/images/starter_app_slice_ti.svg[align="center"]
 
@@ -84,13 +85,11 @@ image::../../assets/images/starter_app_slice_ti.svg[align="center"]
 
 === End-to-End Tests
 
-End-to-end tests are written from a user's point of view and especially considering their means of interaction with the component under test.
-Frontend single page applications, as an example, are generally end-to-end tested using a browser and a simulated backend.
-While backend applications, which are our primary focus here, are tested through their APIs with simulated dependency backends and test databases.
-
-The scope of an end-to-end test starts with the input channels of the component under test as they would be used in production and ends where the component's responsibility ends.
-
-image::../../assets/images/starter_app_slice_e2e.svg[align="center"]
+End-to-end tests are written from the perspective of a user of our software.
+Particularly crucial here is which options the user has for interacting with the application under test.
+Frontend single-page applications are usually tested end-to-end using a browser and the backend is simulated.
+Meanwhile, backend applications, which are our focus here, are tested using their API.
+Any Dependencies, like other services or databases, are either simulated or replaced by test instances.
 
 Questions that end-to-end tests can answer, and a combination of just unit and technology integration tests can't:
 
@@ -105,6 +104,12 @@ So the same logic as for global error handlers applies here.
 In addition to questions like this, it is generally useful to include a couple of _smoke_ tests.
 These kinds of tests execute one or two happy path scenarios per endpoint, just to see that the whole control flow from request to response works.
 Basically if "everything fits and works together".
+
+In our example application, the end-to-end tests would use the _BooksRestController's_ HTTP endpoints and the _BooksRepository's_ database would be a test instance.
+
+image::../../assets/images/starter_app_slice_e2e.svg[align="center"]
+
+The scope of an end-to-end test starts with the available input channels of the application under test as they would be used in production and ends where the application's responsibility ends.
 
 == Testability & Design
 
