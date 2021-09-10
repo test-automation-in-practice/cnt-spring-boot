@@ -15,11 +15,11 @@ A very good article about that topic was written by _Ham Vocke_ in 2018 and publ
 
 Based on that generalized model, a _test-automation focused_ pyramid could look something like this:
 
-image::../../assets/images/pyramide.svg[align="center"]
+image::../assets/images/pyramide.svg[align="center"]
 
 Let's look deeper into this model with the help of a simplified application slice:
 
-image::../../assets/images/starter_app_slice.svg[align="center"]
+image::../assets/images/starter_app_slice.svg[align="center"]
 
 This application manages book of a library.
 It offers an HTTP API for consumers and data is stored in an SQL database.
@@ -41,7 +41,7 @@ This makes them the best tests to get quick feedback on the core components, e.g
 
 In our example application, unit tests would be used mainly in the _BookCollection_ component.
 
-image::../../assets/images/starter_app_slice_unit.svg[align="center"]
+image::../assets/images/starter_app_slice_unit.svg[align="center"]
 
 **Important Methods and Technologies:**
 
@@ -75,7 +75,7 @@ At least the initial setup will usually take a couple of seconds, while each sin
 
 In our example application, technology integration tests would be used to test the in the _BookRestController_ and _BookRepository_ components.
 
-image::../../assets/images/starter_app_slice_ti.svg[align="center"]
+image::../assets/images/starter_app_slice_ti.svg[align="center"]
 
 **Important Methods and Technologies:**
 
@@ -107,7 +107,7 @@ Basically if "everything fits and works together".
 
 In our example application, the end-to-end tests would use the _BooksRestController's_ HTTP endpoints and the _BooksRepository's_ database would be a test instance.
 
-image::../../assets/images/starter_app_slice_e2e.svg[align="center"]
+image::../assets/images/starter_app_slice_e2e.svg[align="center"]
 
 The scope of an end-to-end test starts with the available input channels of the application under test as they would be used in production and ends where the application's responsibility ends.
 
@@ -123,7 +123,7 @@ Design #1 is basically the classical 3 layer architecture:
 2. The _BooksCollection_ handles all core business logic and acts exclusively on the internal domain model.
 3. The _BooksRepository_ is responsible for the persistence of the state of the internal domain model in some kind of database.
 
-image::../../assets/images/starter_design1.svg[align="center"]
+image::../assets/images/starter_design1.svg[align="center"]
 
 ==== Unit Tests
 
@@ -134,7 +134,7 @@ What one might call _business logic_.
 The dependency to the _BooksRepository_ is mocked and therefore completely under the tests control.
 So in this design our feedback loop for the most important parts of our application is very fast.
 
-image::../../assets/images/starter_design1_unit.svg[align="center"]
+image::../assets/images/starter_design1_unit.svg[align="center"]
 
 Both the _BooksRestController_ and _BooksRepository_ are such small components, who's only task is to translate business calls from and to a specific technology, that their technology integration will cover everything a unit tests would cover.
 Therefore, unit tests for these components are not necessary.
@@ -143,7 +143,7 @@ Therefore, unit tests for these components are not necessary.
 
 Both the _BooksRestController_ and _BooksRepository_ components handle integration with different technologies.
 
-image::../../assets/images/starter_design1_ti.svg[align="center"]
+image::../assets/images/starter_design1_ti.svg[align="center"]
 
 _BooksRestController_ handles HTTP communication and translates our _public language_ into our internal domain model.
 Tests for this component should therefore involve HTTP and focus on whether requests are understood and responses are created correctly.
@@ -160,7 +160,7 @@ In this design, since everything else is already tested either by unit or by tec
 - Global security rules.
 - Happy path _smoke_ tests.
 
-image::../../assets/images/starter_design1_e2e.svg[align="center"]
+image::../assets/images/starter_design1_e2e.svg[align="center"]
 
 With those, our little application is thoroughly tested and ready to be delpoyed.
 
@@ -169,7 +169,7 @@ With those, our little application is thoroughly tested and ready to be delpoyed
 Design #2 removes the "business" layer, or more general the technology-independent components.
 Leaving the _BooksRestController_ to interact directly with the _BooksRepository_.
 
-image::../../assets/images/starter_design2.svg[align="center"]
+image::../assets/images/starter_design2.svg[align="center"]
 
 ==== Unit Tests
 
@@ -180,7 +180,7 @@ But because the _business logic_ has to go somewhere, it is more than likely tha
 This makes _BooksRestController_ the one component that now does two things: Translating our _public language_ from HTTP and executing _business logic_ upon these requests.
 Therefore, it could be useful to write both unit and technology integration tests for this component.
 
-image::../../assets/images/starter_design2_unit.svg[align="center"]
+image::../assets/images/starter_design2_unit.svg[align="center"]
 
 Because of the mixture of translation and _business logic_, these unit tests are harder to write.
 Depending on what the _BooksRestController_ actually does, we might need to mock HTTP components like requests, responses and consider headers as concrete objects, instead of relying on a more HTTP focused abstraction like `MockMvc` or a `TestWebClient`.
@@ -190,7 +190,7 @@ Depending on what the _BooksRestController_ actually does, we might need to mock
 Basically the same setup as in design #1, but with larger components and less clear separation of concerns.
 Making it necessary to write more complex tests to verify their behaviour.
 
-image::../../assets/images/starter_design2_ti.svg[align="center"]
+image::../assets/images/starter_design2_ti.svg[align="center"]
 
 As just one example, for the _BooksRestController_:
 
@@ -206,7 +206,7 @@ In this design, since everything else is already tested either by unit or by tec
 - Global security rules.
 - Happy path _smoke_ tests.
 
-image::../../assets/images/starter_design2_e2e.svg[align="center"]
+image::../assets/images/starter_design2_e2e.svg[align="center"]
 
 With those, our little application is thoroughly tested and ready to be delpoyed.
 
@@ -215,7 +215,7 @@ With those, our little application is thoroughly tested and ready to be delpoyed
 Design #3 removes all concepts of separation of concern / layers and puts the _BooksRestController_ in charge of everything.
 From translating the _public language_ to interacting directly with the database, all while also containing any _business logic_.
 
-image::../../assets/images/starter_design3.svg[align="center"]
+image::../assets/images/starter_design3.svg[align="center"]
 
 ==== Unit Tests
 
@@ -223,7 +223,7 @@ More sharply than with design #2, this design diminishes the usefulness of unit 
 Each tests setup has to consider which database state to set up based on which logical path will be traversed based on a specific HTTP request.
 This makes the tests fragile, complex to write and hard to understand.
 
-image::../../assets/images/starter_design3_unit.svg[align="center"]
+image::../assets/images/starter_design3_unit.svg[align="center"]
 
 Writing unit tests for this kind of design is most likely not worth the effort.
 The only reason might be to test some kind of exceptional behaviour for cases that cannot be easily provoked in higher level tests.
@@ -232,7 +232,7 @@ The only reason might be to test some kind of exceptional behaviour for cases th
 
 Similar to why unit tests are not really an option, it would be easier to just use end-to-end tests.
 
-image::../../assets/images/starter_design3_ti.svg[align="center"]
+image::../assets/images/starter_design3_ti.svg[align="center"]
 
 The performance will be basically the same.
 
@@ -240,7 +240,7 @@ The performance will be basically the same.
 
 Without production code abstractions, like separation of concerns, everything is an end-to-end test.
 
-image::../../assets/images/starter_design3_e2e.svg[align="center"]
+image::../assets/images/starter_design3_e2e.svg[align="center"]
 
 === Conclusion
 
