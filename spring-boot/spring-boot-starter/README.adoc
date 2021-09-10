@@ -113,7 +113,7 @@ The scope of an end-to-end test starts with the available input channels of the 
 
 == Testability & Design
 
-The impact of an application's design on its testability can be shown with the following 3 designs, in descending order of abstractions:
+The impact that the design of the production code has on overall testability can be demonstrated using the following three examples:
 
 === Design #1
 
@@ -241,3 +241,9 @@ The performance will be basically the same.
 Without production code abstractions, like separation of concerns, everything is an end-to-end test.
 
 image::../../assets/images/starter_design3_e2e.svg[align="center"]
+
+=== Conclusion
+
+With fewer abstractions in the production code, the ability to write efficient unit tests also decreases.
+From design #1 to #2 the difference is not yet as serious as from #2 to #3, so there is a point at which not all aspects of the application are testable without excessive effort.
+The basic principle is: The more abstract (smaller parts) the production code is structured, the more of it can be verified purely with unit and individual technology integration tests.
