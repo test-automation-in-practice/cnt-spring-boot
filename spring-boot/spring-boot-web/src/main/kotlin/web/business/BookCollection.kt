@@ -1,10 +1,10 @@
 package web.business
 
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
-class Library {
+class BookCollection {
 
     private val database = mutableMapOf<UUID, BookRecord>()
 
@@ -16,9 +16,12 @@ class Library {
     }
 
     fun delete(id: UUID) {
-        database.remove(id) ?: throw BookRecordNotFoundException(id)
+        database.remove(id)
     }
 
+    // throws only to demonstrate exception handling in controller / tests
+    // would normally simply return `BookRecord?`
+    @Throws(BookRecordNotFoundException::class)
     fun get(id: UUID): BookRecord {
         return database[id] ?: throw BookRecordNotFoundException(id)
     }

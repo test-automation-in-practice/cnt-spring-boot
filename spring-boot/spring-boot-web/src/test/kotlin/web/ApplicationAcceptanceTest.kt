@@ -20,26 +20,19 @@ internal class ApplicationAcceptanceTest {
         RestAssured.port = port
     }
 
-    @Test fun `creating a book responds with resource representation including self link`() {
+    @Test
+    fun `creating a book responds with resource representation including self link`() {
         RestAssured.given()
             .header("Content-Type", "application/json")
-            .body(
-                """
-                    {
-                      "title": "Clean Code",
-                      "isbn": "9780132350884"
-                    }
-                    """
-            )
-
-            .`when`().post("/api/books")
-
+            .body("""{ "title": "Clean Code", "isbn": "9780132350884" }""")
+            .`when`()
+            .post("/hateoas-api/books")
             .then()
             .statusCode(201)
             .contentType("application/hal+json")
             .content("title", equalTo("Clean Code"))
             .content("isbn", equalTo("9780132350884"))
-            .content("_links.self.href", startsWith("http://localhost:$port/api/books/"))
+            .content("_links.self.href", startsWith("http://localhost:$port/hateoas-api/books/"))
     }
 
 }

@@ -2,8 +2,7 @@
 
 == HTTP Verbs
 
-This application tries to adhere as closely as possible to standard HTTP and
-REST conventions in its use of HTTP verbs.
+This application tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP verbs.
 
 |===
 | Verb | Usage
@@ -20,8 +19,7 @@ REST conventions in its use of HTTP verbs.
 
 == HTTP Status Codes
 
-This application tries to adhere as closely as possible to standard HTTP and
-REST conventions in its use of HTTP status codes.
+This application tries to adhere as closely as possible to standard HTTP and REST conventions in its use of HTTP status codes.
 
 |===
 | Status code | Usage
@@ -33,12 +31,11 @@ REST conventions in its use of HTTP status codes.
 | A new resource has been created successfully..
 
 | `204 No Content`
-| The request completed successfully, but there is no content included in the
-response.
+| The request completed successfully, but there is no content included in the response.
 
 | `400 Bad Request`
-| The request was malformed. The response body will include an error providing
-further information.
+| The request was malformed.
+The response body will include an error providing further information.
 
 | `404 Not Found`
 | The requested resource did not exist.
@@ -46,12 +43,12 @@ further information.
 
 == Hypermedia
 
-This application uses hypermedia and resources include links to other resources
-in their responses. Responses are in
+This application uses hypermedia and resources include links to other resources in their responses.
+Responses are in
 http://stateless.co/hal_specification.html[Hypertext Application from resource to resource. Language (HAL)]
-format. Links can be found beneath the `_links` key. Users of the API should
-not create URIs themselves, instead they should use the above-described links
-to navigate
+format.
+Links can be found beneath the `_links` key.
+Users of the API should not create URIs themselves, instead they should use the above-described links to navigate
 
 == Resources
 
@@ -59,12 +56,11 @@ to navigate
 
 ==== Creating a new Book
 
-In order to create a book, the consumer needs to provide a `title` string,
-an 13 digit `isbn` and `POST` them to `/api/books`:
+In order to create a book, the consumer needs to provide a `title` string, an 13 digit `isbn` and `POST` them to `/default-api/books`:
 
-include::{snippets}/books/postBook-added/http-request.adoc[]
+include::{snippets}/hateoas/books/post/created/http-request.adoc[]
 
-This will create a new book in the database. The response to this request will
-contain the stored data and links to available other resources.
+This will create a new book in the database.
+The response to this request will contain the stored data and links to available other resources.
 
-include::{snippets}/books/postBook-added/http-response.adoc[]
+include::{snippets}/hateoas/books/post/created/http-response.adoc[]
