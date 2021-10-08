@@ -21,7 +21,7 @@ Let's dive deeper into this model with the help of a simplified application slic
 
 image::../assets/images/starter_app_slice.svg[align="center"]
 
-This application manages book of a library.
+This application manages a library of books.
 It offers an HTTP API for consumers and data is stored in an SQL database.
 
 === Functional Unit Tests
@@ -34,7 +34,7 @@ Depending on what the code under test actually does, unit tests can be divided i
 Tests usually involve setting up a new instance for each test.
 Other than that the tests themselves are pretty similar to those of pure functions.
 - Orchestration Components: These components "orchestrate" the invocation and data transfer of multiple dependency components in order to achieve an overarching functionality.
-Their tests usually involve mocking the behaviour of the different dependencies and focus on verifying that concerns like error handling, invocation order, correct data transfer etc. are handled as intended.
+Their tests usually involve mocking the behaviour of the different dependencies and are focused on verifying that concerns like error handling, invocation order, correct data transfer etc. are handled as intended.
 
 Because unit tests only refer to your own code and everything else is mocked, they are extremely fast and can be run by the thousands in a very short time.
 This makes them the best tests to get quick feedback on the core components, e.g. the business logic, of your application.
@@ -231,6 +231,6 @@ Simply writing everything as end-to-end tests is usually the only option left.
 
 === Conclusion
 
-With fewer abstractions in the production code, the ability to write efficient unit tests also decreases.
-From architecture #1 to #2 the difference is not yet as serious as from #2 to #3, so there is a point at which not all aspects of the application are testable without excessive effort.
-The basic principle is: The more abstract (smaller parts) the production code is structured, the more of it can be verified purely with unit and individual technology integration tests.
+With less design (e.g. fewer abstractions, bigger multi-use components etc.) in the production code, the ability to write efficient unit tests decreases.
+From example #1 to #2 the difference is not yet as serious as from #2 to #3, so there is a point at which not all aspects of the application are testable without excessive effort.
+The basic principle is: The better the production code is decomposed / structured, the more of it can be verified purely with unit and individual technology integration tests.
