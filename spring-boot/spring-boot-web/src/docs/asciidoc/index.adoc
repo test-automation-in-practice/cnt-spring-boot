@@ -56,7 +56,7 @@ Users of the API should not create URIs themselves, instead they should use the 
 
 ==== Creating a new Book
 
-In order to create a book, the consumer needs to provide a `title` string, an 13 digit `isbn` and `POST` them to `/default-api/books`:
+In order to create a book, the consumer needs to provide a `title` string, an 13 digit `isbn` and `POST` them to the `books` resource:
 
 include::{snippets}/hateoas/books/post/created/http-request.adoc[]
 
