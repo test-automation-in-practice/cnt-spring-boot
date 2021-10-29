@@ -18,7 +18,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+    testImplementation("io.mockk:mockk")
 }
 
 tasks {

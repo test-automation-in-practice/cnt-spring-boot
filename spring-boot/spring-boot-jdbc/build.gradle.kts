@@ -17,6 +17,6 @@ dependencies {
     implementation("mysql:mysql-connector-java")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+    testImplementation("io.mockk:mockk")
     testImplementation("com.h2database:h2")
 }

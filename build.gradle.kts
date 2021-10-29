@@ -1,3 +1,4 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -14,14 +15,31 @@ plugins {
     kotlin("plugin.noarg") version "1.5.31" apply false
 }
 
-extra["springCloudVersion"] = "2020.0.4"
-extra["mockkVersion"] = "1.12.0"
-extra["pactVersion"] = "4.2.14"
 extra["kotlinVersion"] = "1.5.31"
-extra["springmockkVersion"] = "3.0.1"
 
 allprojects {
     repositories { mavenCentral() }
+
+    if (project.childProjects.isEmpty()) {
+        apply {
+            plugin("io.spring.dependency-management")
+        }
+        the<DependencyManagementExtension>().apply {
+            imports {
+                mavenBom("io.github.openfeign:feign-bom:10.2.3")
+                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2020.0.4")
+                mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+            }
+            dependencies {
+                dependency("io.mockk:mockk:1.12.0")
+                dependency("org.testcontainers:testcontainers:1.15.3")
+                dependency("au.com.dius.pact.consumer:junit5:4.2.14")
+                dependency("au.com.dius.pact.provider:junit5:4.2.14")
+                dependency("com.github.tomakehurst:wiremock-standalone:2.23.2")
+                dependency("com.ninja-squad:springmockk:3.0.1")
+            }
+        }
+    }
 
     tasks {
         withType<JavaCompile> {

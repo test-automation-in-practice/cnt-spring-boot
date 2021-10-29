@@ -12,6 +12,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
-    testImplementation("com.ninja-squad:springmockk:${property("springmockkVersion")}")
+    testImplementation("io.mockk:mockk")
+    testImplementation("com.ninja-squad:springmockk")
 }

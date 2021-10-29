@@ -2,8 +2,8 @@ import org.springframework.cloud.contract.verifier.config.TestFramework
 
 plugins {
     id("org.springframework.boot")
-    id("io.spring.dependency-management")
     id("org.springframework.cloud.contract")
+    id("io.spring.dependency-management")
 
     id("maven-publish")
 
@@ -21,7 +21,7 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
-    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+    testImplementation("io.mockk:mockk")
 
     contractTestImplementation("org.springframework.cloud:spring-cloud-contract-spec-kotlin")
     contractTestImplementation("org.springframework.cloud:spring-cloud-contract-pact")

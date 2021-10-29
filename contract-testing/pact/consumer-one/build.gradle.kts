@@ -13,5 +13,5 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("au.com.dius.pact.consumer:junit5:${property("pactVersion")}")
+    testImplementation("au.com.dius.pact.consumer:junit5")
 }
