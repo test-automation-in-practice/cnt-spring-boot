@@ -30,9 +30,9 @@ internal class ApplicationAcceptanceTest {
             .then()
             .statusCode(201)
             .contentType("application/hal+json")
-            .content("title", equalTo("Clean Code"))
-            .content("isbn", equalTo("9780132350884"))
-            .content("_links.self.href", startsWith("http://localhost:$port/hateoas-api/books/"))
+            .body("title", equalTo("Clean Code"))
+            .body("isbn", equalTo("9780132350884"))
+            .body("_links.self.href", startsWith("http://localhost:$port/hateoas-api/books/"))
     }
 
 }

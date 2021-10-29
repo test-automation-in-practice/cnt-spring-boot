@@ -50,7 +50,7 @@ arrayOf(
             body = body(
                 "isbn" to v(c("9780132350884"), p(regex("""\d{10}|\d{13}"""))),
                 "title" to v(c("Clean Code"), p(anyNonBlankString)),
-                "numberOfPages" to v(c(464), p(anyNumber))
+                "numberOfPages" to v(c(464), p(regex("""\d+""")))
             )
         }
     }
