@@ -1,3 +1,0 @@
-library-service:
-  url: "http://localhost:8081"
-  logLevel: "FULL"

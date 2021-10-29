@@ -35,4 +35,8 @@ private class RabbitMqContainer : GenericContainer<RabbitMqContainer>("rabbitmq:
         addExposedPort(5672)
     }
 
+    override fun close() {
+        stop()
+    }
+
 }

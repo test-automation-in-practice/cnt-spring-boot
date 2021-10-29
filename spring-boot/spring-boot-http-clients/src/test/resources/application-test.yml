@@ -1,0 +1,2 @@
+library-service:
+  base-url: "http://localhost:${wiremock.server.port:8081}"

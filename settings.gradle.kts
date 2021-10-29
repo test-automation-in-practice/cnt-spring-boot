@@ -10,7 +10,7 @@ include("contract-testing:spring-cloud-contract:provider")
 
 include("spring-boot:spring-boot-amqp")
 include("spring-boot:spring-boot-cache")
-include("spring-boot:spring-boot-feign")
+include("spring-boot:spring-boot-http-clients")
 include("spring-boot:spring-boot-jdbc")
 include("spring-boot:spring-boot-jpa")
 include("spring-boot:spring-boot-mongodb")

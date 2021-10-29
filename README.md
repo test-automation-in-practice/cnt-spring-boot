@@ -10,7 +10,7 @@ What you can find:
 - [`spring-boot`](spring-boot)
   - [`spring-boot-amqp`](spring-boot/spring-boot-amqp)
   - [`spring-boot-cache`](spring-boot/spring-boot-cache)
-  - [`spring-boot-feign`](spring-boot/spring-boot-feign)
+  - [`spring-boot-http-clients`](spring-boot/spring-boot-http-clients)
   - [`spring-boot-jdbc`](spring-boot/spring-boot-jdbc)
   - [`spring-boot-jpa`](spring-boot/spring-boot-jpa)
   - [`spring-boot-mongodb`](spring-boot/spring-boot-mongodb)
