@@ -4,7 +4,7 @@ import starter.books.core.Book
 import starter.books.core.BookRecord
 import starter.books.enrichment.BookInformation
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 object Examples {
 
@@ -40,5 +40,7 @@ object Examples {
         book = book_cleanCode_enriched,
         timestamp = Instant.parse("2021-06-25T12:34:56.789Z")
     )
+
+    val id_cleanArchitecture = UUID.fromString("aadfe61a-4bbd-44c4-85ba-6bddbe7d10a2")
 
 }

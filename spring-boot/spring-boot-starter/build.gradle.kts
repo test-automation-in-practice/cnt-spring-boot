@@ -12,6 +12,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("info.novatec.testit:logrecorder-logback")
     testImplementation("io.mockk:mockk")
     testImplementation("com.ninja-squad:springmockk")
 }

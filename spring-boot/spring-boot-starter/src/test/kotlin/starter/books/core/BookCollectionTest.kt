@@ -1,10 +1,10 @@
 package starter.books.core
 
-import io.mockk.called
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import info.novatec.testit.logrecorder.api.LogRecord
+import info.novatec.testit.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
+import info.novatec.testit.logrecorder.assertion.containsExactly
+import info.novatec.testit.logrecorder.logback.junit5.RecordLoggers
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.util.IdGenerator
 import starter.Examples.book_cleanCode
+import starter.Examples.id_cleanArchitecture
 import starter.Examples.id_cleanCode
 import starter.Examples.record_cleanCode
 import java.time.Instant
@@ -126,6 +127,25 @@ internal class BookCollectionTest {
             every { repository.deleteById(id_cleanCode) } returns false
             cut.delete(id_cleanCode)
             verify { eventPublisher wasNot called }
+        }
+
+        @Test
+        @RecordLoggers(BookCollection::class)
+        fun `logs whether a book was actually deleted`(log: LogRecord) {
+            every { repository.deleteById(id_cleanCode) } returns true
+            every { repository.deleteById(id_cleanArchitecture) } returns false
+
+            cut.delete(id_cleanCode)
+            cut.delete(id_cleanArchitecture)
+
+            assertThat(log) {
+                containsExactly {
+                    info("trying to delete book with ID '$id_cleanCode'")
+                    debug("book with ID '$id_cleanCode' was deleted")
+                    info("trying to delete book with ID '$id_cleanArchitecture'")
+                    debug("book with ID '$id_cleanArchitecture' was not deleted")
+                }
+            }
         }
 
     }
