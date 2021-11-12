@@ -11,6 +11,18 @@ import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import java.io.IOException
 
+/**
+ * When testing HTTP interaction, in this case calling another service's API, the tests should be written as
+ * block-box tests. The tests only need to verify that correct requests are sent and responses are processed
+ * correctly. It does not matter which client technology is actually used to make those calls, as long as
+ * all relevant cases are handled as they should be.
+ *
+ * Using Wiremock is essential here, because it allows us to simulate the other service in every aspect without
+ * having to mock our actually used client technology.
+ *
+ * Trying to write these tests as unit tests using mocking to simulate the underlying client technology only
+ * makes them harder to write, understand and maintain in case we want to change which client we use.
+ */
 internal interface LibraryServiceContract {
 
     val wireMock: WireMock
@@ -69,7 +81,7 @@ internal interface LibraryServiceContract {
             title = "Clean Architecture",
             isbn = "9780134494166"
         )
-        assertThrows<IOException> { println(cut.addBook(book)) }
+        assertThrows<IOException> { cut.addBook(book) }
     }
 
     private fun stub(supplier: () -> MappingBuilder) {

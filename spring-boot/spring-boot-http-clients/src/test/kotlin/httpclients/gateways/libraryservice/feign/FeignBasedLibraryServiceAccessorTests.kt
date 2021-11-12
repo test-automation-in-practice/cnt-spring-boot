@@ -6,6 +6,10 @@ import httpclients.gateways.libraryservice.LibraryServiceContract
 import httpclients.gateways.libraryservice.LibraryServiceProperties
 import okhttp3.OkHttpClient
 
+/**
+ * Since this is a block-box integration test, it can be implemented using a
+ * contract interface [LibraryServiceContract].
+ */
 @WireMockTest
 internal class FeignBasedLibraryServiceAccessorTests(
     wireMockInfo: WireMockRuntimeInfo
