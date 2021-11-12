@@ -31,7 +31,7 @@ allprojects {
                 mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
             }
             dependencies {
-                dependency("info.novatec.testit:logrecorder-logback:1.3.0")
+                dependency("info.novatec.testit:logrecorder-logback:1.4.0")
                 dependency("io.mockk:mockk:1.12.0")
                 dependency("org.testcontainers:testcontainers:1.16.2")
                 dependency("au.com.dius.pact.consumer:junit5:4.2.14")
