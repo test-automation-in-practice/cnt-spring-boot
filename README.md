@@ -10,12 +10,12 @@ What you can find:
 - [`spring-boot`](spring-boot)
   - [`basics`](spring-boot/basics)
   - [`caching`](spring-boot/caching)
+  - [`data-jpa`](spring-boot/data-jpa)
   - [`http-clients`](spring-boot/http-clients)
   - [`jdbc`](spring-boot/jdbc)
   - [`security`](spring-boot/security)
   - [`webmvc`](spring-boot/webmvc)
   - [`spring-boot-amqp`](spring-boot/spring-boot-amqp)
-  - [`spring-boot-jpa`](spring-boot/spring-boot-jpa)
   - [`spring-boot-mongodb`](spring-boot/spring-boot-mongodb)
 
 Further Reading:
