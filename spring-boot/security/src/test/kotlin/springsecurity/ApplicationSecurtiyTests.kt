@@ -14,10 +14,7 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.FORBIDDEN
-import org.springframework.http.HttpStatus.NO_CONTENT
-import org.springframework.http.HttpStatus.OK
-import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.http.HttpStatus.*
 import springsecurity.domain.BookRepository
 import java.util.UUID.randomUUID
 

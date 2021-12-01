@@ -9,7 +9,7 @@ import springsecurity.domain.model.BookRecord
 import springsecurity.security.Authorities.ROLE_CURATOR
 import springsecurity.security.Roles.CURATOR
 import springsecurity.security.Roles.USER
-import java.util.UUID
+import java.util.*
 import javax.annotation.security.RolesAllowed
 
 // Security access rules are defined on the main business classes. Doing so will enforce the same rules

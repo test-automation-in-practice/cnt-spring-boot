@@ -9,13 +9,13 @@ What you can find:
   - [`spring-cloud-contract`](contract-testing/spring-cloud-contract)
 - [`spring-boot`](spring-boot)
   - [`basics`](spring-boot/basics)
+  - [`security`](spring-boot/security)
   - [`spring-boot-amqp`](spring-boot/spring-boot-amqp)
   - [`spring-boot-cache`](spring-boot/spring-boot-cache)
   - [`spring-boot-http-clients`](spring-boot/spring-boot-http-clients)
   - [`spring-boot-jdbc`](spring-boot/spring-boot-jdbc)
   - [`spring-boot-jpa`](spring-boot/spring-boot-jpa)
   - [`spring-boot-mongodb`](spring-boot/spring-boot-mongodb)
-  - [`spring-boot-security`](spring-boot/spring-boot-security)
   - [`spring-boot-web`](spring-boot/spring-boot-web)
 
 Further Reading:

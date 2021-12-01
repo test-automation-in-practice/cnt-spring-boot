@@ -1,7 +1,7 @@
 package springsecurity.domain
 
 import springsecurity.domain.model.BookRecord
-import java.util.UUID
+import java.util.*
 
 object BookRecordExamples {
     val REFACTORING = BookRecord(
