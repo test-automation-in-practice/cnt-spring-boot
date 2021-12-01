@@ -1,6 +1,6 @@
 package amqp.books
 
-import java.util.UUID
+import java.util.*
 
 sealed class BookEvent {
     abstract val type: String

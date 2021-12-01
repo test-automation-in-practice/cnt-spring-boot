@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
-import java.util.UUID
+import java.util.*
 
 @ComponentScan
 @ImportAutoConfiguration(

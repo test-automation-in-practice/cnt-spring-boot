@@ -14,9 +14,9 @@ What you can find:
   - [`data-mongodb`](spring-boot/data-mongodb)
   - [`http-clients`](spring-boot/http-clients)
   - [`jdbc`](spring-boot/jdbc)
+  - [`messaging-rabbitmq`](spring-boot/messaging-rabbitmq)
   - [`security`](spring-boot/security)
   - [`webmvc`](spring-boot/webmvc)
-  - [`spring-boot-amqp`](spring-boot/spring-boot-amqp)
 
 Further Reading:
 
