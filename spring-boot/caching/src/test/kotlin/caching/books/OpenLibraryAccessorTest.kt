@@ -1,11 +1,7 @@
 package caching.books
 
-import caching.Application
-import io.mockk.clearAllMocks
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import caching.CacheConfiguration
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -17,10 +13,15 @@ import org.springframework.cache.Cache
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 
-@Import(Application.CacheConfiguration::class)
+@Import(CacheConfiguration::class)
 private class OpenLibraryTestConfiguration {
-    @Bean fun openLibraryClient(): OpenLibraryClient = mockk()
-    @Bean fun openLibraryAccessor(openLibraryClient: OpenLibraryClient) = OpenLibraryAccessor(openLibraryClient)
+
+    @Bean
+    fun openLibraryClient(): OpenLibraryClient = mockk()
+
+    @Bean
+    fun openLibraryAccessor(openLibraryClient: OpenLibraryClient) = OpenLibraryAccessor(openLibraryClient)
+
 }
 
 @SpringBootTest(classes = [OpenLibraryTestConfiguration::class])
@@ -30,19 +31,25 @@ internal class OpenLibraryAccessorTest(
     @Autowired val cut: OpenLibraryAccessor
 ) {
 
-    @BeforeEach fun clearCaches() = caches.forEach { it.clear() }
-    @BeforeEach fun resetMocks() = clearAllMocks()
+    @BeforeEach
+    fun clearCaches() = caches.forEach { it.clear() }
 
+    @BeforeEach
+    fun resetMocks() = clearAllMocks()
+
+    @Nested
     @DisplayName("getting number of pages for an ISBN")
-    @Nested inner class GetNumberOfPages {
+    inner class GetNumberOfPages {
 
-        @Test fun `returns whatever the OpenLibrary service returned`() {
+        @Test
+        fun `returns whatever the OpenLibrary service returned`() {
             every { client.getNumberOfPages("9780132350884") } returns 464
             val numberOfPages = cut.getNumberOfPages("9780132350884")
             assertThat(numberOfPages).isEqualTo(464)
         }
 
-        @Test fun `OpenLibrary service is only called once per ISBN - results are cached`() {
+        @Test
+        fun `OpenLibrary service is only called once per ISBN - results are cached`() {
             every { client.getNumberOfPages("9780132350884") } returns 464
             every { client.getNumberOfPages("9780134494166") } returns null
 
