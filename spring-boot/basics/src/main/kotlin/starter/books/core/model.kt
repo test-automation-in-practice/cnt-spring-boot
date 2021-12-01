@@ -1,7 +1,7 @@
 package starter.books.core
 
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 // The data of a book.
 

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import starter.books.core.BookRecord
 import starter.books.core.BookRepository
 import java.time.Clock
-import java.util.UUID
+import java.util.*
 
 @Component
 class InMemoryBookRepository(

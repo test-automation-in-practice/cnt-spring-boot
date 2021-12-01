@@ -1,6 +1,6 @@
 package starter.books.core
 
-import java.util.UUID
+import java.util.*
 
 interface BookRepository {
 

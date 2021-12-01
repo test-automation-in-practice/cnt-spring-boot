@@ -1,11 +1,7 @@
 package starter.books.enrichment
 
 import com.ninjasquad.springmockk.MockkBean
-import io.mockk.called
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
