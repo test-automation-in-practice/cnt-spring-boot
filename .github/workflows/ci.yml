@@ -121,7 +121,7 @@ jobs:
           name: test-results_spring-boot_http-clients
           path: "**/build/reports/tests"
 
-  spring-boot-jdbc:
+  spring-boot_jdbc:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -132,12 +132,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:spring-boot-jdbc:build
+        run: ./gradlew :spring-boot:jdbc:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: test-results_spring-boot-jdbc
+          name: test-results_spring-boot_jdbc
           path: "**/build/reports/tests"
 
   spring-boot-jpa:
