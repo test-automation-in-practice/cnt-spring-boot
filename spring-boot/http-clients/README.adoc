@@ -1,0 +1,9 @@
+= Spring Boot: HTTP Clients
+
+This module implements the same HTTP interaction, as a client reading book data, using several technologies:
+
+- Spring `RestTemplate`
+- OpenFeign interface-based clients
+- OkHttp client
+
+It also shows how best to test each technology.
