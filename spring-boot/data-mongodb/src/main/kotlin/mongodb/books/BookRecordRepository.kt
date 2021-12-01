@@ -2,7 +2,7 @@ package mongodb.books
 
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.Query
-import java.util.UUID
+import java.util.*
 
 interface BookRecordRepository : MongoRepository<BookRecordDocument, UUID> {
 

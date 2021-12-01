@@ -159,7 +159,7 @@ jobs:
           name: test-results_spring-boot_data-jpa
           path: "**/build/reports/tests"
 
-  spring-boot-mongodb:
+  spring-boot_data-mongodb:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -170,12 +170,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:spring-boot-mongodb:build
+        run: ./gradlew :spring-boot:data-mongodb:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: test-results_spring-boot-mongodb
+          name: test-results_spring-boot_data-mongodb
           path: "**/build/reports/tests"
 
   spring-boot_security:
