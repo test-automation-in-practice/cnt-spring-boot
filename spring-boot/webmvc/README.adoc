@@ -1,0 +1,7 @@
+= Spring Boot: WebMvc + REST-Docs
+
+This module demonstrates:
+
+- How to test `@RestController` using `@WebMvcTest` and `MockMvc`.
+- How to generate snippets for documenting APIs directly from your test using _Spring REST Docs_.
+- How to unit test specific components related to providing APIs.

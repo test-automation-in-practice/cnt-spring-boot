@@ -216,7 +216,7 @@ jobs:
           name: test-results_spring-boot_basics
           path: "**/build/reports/tests"
 
-  spring-boot-web:
+  spring-boot_webmvc:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -227,10 +227,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:spring-boot-web:build
+        run: ./gradlew :spring-boot:webmvc:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: test-results_spring-boot-web
+          name: test-results_spring-boot_webmvc
           path: "**/build/reports/tests"
