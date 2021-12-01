@@ -1,4 +1,4 @@
-package amqp.messaging
+package rabbitmq.utils
 
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -24,7 +24,7 @@ class RabbitMQExtension : BeforeAllCallback {
 
 }
 
-private class RabbitMqContainer : GenericContainer<RabbitMqContainer>("rabbitmq:3.6"), CloseableResource {
+private class RabbitMqContainer : GenericContainer<RabbitMqContainer>("rabbitmq:3.8"), CloseableResource {
 
     init {
         setWaitStrategy(

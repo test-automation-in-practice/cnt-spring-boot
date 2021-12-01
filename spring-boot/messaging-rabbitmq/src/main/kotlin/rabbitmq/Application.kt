@@ -1,13 +1,13 @@
-package amqp
+package rabbitmq
 
-import amqp.books.BookCreated
-import amqp.books.BookDeleted
-import amqp.books.BookEventDispatcher
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
-import java.util.*
+import rabbitmq.books.Examples
+import rabbitmq.books.createdEvent
+import rabbitmq.books.deletedEvent
+import rabbitmq.events.PublishEventFunction
 
 @SpringBootApplication
 class Application
@@ -18,13 +18,12 @@ fun main(args: Array<String>) {
 
 @Component
 class ApplicationDemo(
-    private val eventDispatcher: BookEventDispatcher
+    private val publishEvent: PublishEventFunction
 ) : CommandLineRunner {
 
     override fun run(vararg args: String) {
-        eventDispatcher.dispatch(BookCreated(UUID.randomUUID(), "abc"))
-        eventDispatcher.dispatch(BookCreated(UUID.randomUUID(), "def"))
-        eventDispatcher.dispatch(BookDeleted(UUID.randomUUID(), "ghi"))
+        publishEvent(Examples.cleanCode.createdEvent())
+        publishEvent(Examples.cleanCode.deletedEvent())
     }
 
 }
