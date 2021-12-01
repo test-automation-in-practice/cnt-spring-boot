@@ -1,125 +1,123 @@
 package jdbc.books
 
-import io.mockk.clearAllMocks
+import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import java.util.UUID
-
-private class BookRepositoryTestConfiguration {
-    @Bean fun idGenerator(): IdGenerator = mockk()
-    @Bean fun repository(jdbcTemplate: NamedParameterJdbcTemplate, idGenerator: IdGenerator) =
-        BooksRepository(jdbcTemplate, idGenerator)
-}
+import org.springframework.util.IdGenerator
+import java.util.UUID.randomUUID
 
 @JdbcTest
-@Import(BookRepositoryTestConfiguration::class)
+@MockkBean(IdGenerator::class)
+@Import(BooksRepository::class)
 internal class BookRepositoryTest(
     @Autowired val idGenerator: IdGenerator,
     @Autowired val cut: BooksRepository
 ) {
 
-    companion object {
-        val cleanCode = Book("Clean Code", "9780132350884")
-        val cleanArchitecture = Book("Clean Architecture", "9780134494166")
-    }
+    val cleanCode = Book("Clean Code", "9780132350884")
+    val cleanArchitecture = Book("Clean Architecture", "9780134494166")
 
-    @BeforeEach fun resetMocks() = clearAllMocks()
+    val id1 = randomUUID()
+    val id2 = randomUUID()
 
-    @Test fun `creating a book returns a book record`() {
-        val fixedId = UUID.randomUUID()
-        every { idGenerator.generateId() } returns fixedId
+    @Nested
+    inner class Creating {
 
-        val bookRecord = cut.create(cleanCode)
-        with(bookRecord) {
-            assertThat(id).isEqualTo(fixedId)
-            assertThat(book.title).isEqualTo("Clean Code")
-            assertThat(book.isbn).isEqualTo("9780132350884")
-        }
-    }
-
-    @Test fun `duplicated keys during creation are handled`() {
-        val fixedId1 = UUID.randomUUID()
-        val fixedId2 = UUID.randomUUID()
-
-        every { idGenerator.generateId() } returnsMany listOf(fixedId1, fixedId1, fixedId2)
-
-        with(cut.create(cleanCode)) {
-            assertThat(id).isEqualTo(fixedId1)
+        @Test
+        fun `creating a book returns a book record`() {
+            every { idGenerator.generateId() } returns id1
+            val bookRecord = cut.create(cleanCode)
+            assertThat(bookRecord).isEqualTo(BookRecord(id1, cleanCode))
         }
 
-        with(cut.create(cleanArchitecture)) {
-            assertThat(id).isEqualTo(fixedId2)
+        @Test
+        fun `duplicated keys during creation are handled`() {
+            every { idGenerator.generateId() } returnsMany listOf(id1, id1, id2)
+
+            val bookRecord1 = cut.create(cleanArchitecture)
+            val bookRecord2 = cut.create(cleanArchitecture)
+
+            assertThat(bookRecord1.id).isEqualTo(id1)
+            assertThat(bookRecord2.id).isEqualTo(id2)
+
+            verify(exactly = 3) { idGenerator.generateId() } // there was a retry
         }
 
-        verify(exactly = 3) { idGenerator.generateId() }
     }
 
-    @Test fun `updating an existing book record changes all its data except the id`() {
-        val fixedId = UUID.randomUUID()
-        every { idGenerator.generateId() } returns fixedId
+    @Nested
+    inner class Getting {
 
-        val bookRecord = cut.create(cleanCode)
+        @Test
+        fun `existing book records can be found by id`() {
+            every { idGenerator.generateId() } returns id1
 
-        with(cut.findBy(bookRecord.id)!!) {
-            assertThat(id).isEqualTo(fixedId)
-            assertThat(book.title).isEqualTo("Clean Code")
-            assertThat(book.isbn).isEqualTo("9780132350884")
+            val bookRecord = cut.create(cleanCode)
+            val foundBookRecord = cut.findBy(bookRecord.id)
+
+            assertThat(foundBookRecord).isEqualTo(bookRecord)
         }
 
-        cut.update(bookRecord.copy(book = cleanArchitecture))
-
-        with(cut.findBy(bookRecord.id)!!) {
-            assertThat(id).isEqualTo(fixedId)
-            assertThat(book.title).isEqualTo("Clean Architecture")
-            assertThat(book.isbn).isEqualTo("9780134494166")
+        @Test
+        fun `non existing book records are returned as null when trying to find them by id`() {
+            assertThat(cut.findBy(id2)).isNull()
         }
+
     }
 
-    @Test fun `updating non existing book record throws exception`() {
-        val bookRecord = BookRecord(UUID.randomUUID(), cleanCode)
+    @Nested
+    inner class Updating {
 
-        assertThrows<BookRecordNotFoundException> {
-            cut.update(bookRecord)
+        @Test
+        fun `updating an existing book record changes all its data except the id`() {
+            every { idGenerator.generateId() } returns id1
+
+            val created = cut.create(cleanCode)
+            assertThat(cut.findBy(id1)).isEqualTo(created)
+
+            val changed = created.copy(book = cleanArchitecture)
+            val wasUpdated = cut.update(changed)
+            assertThat(wasUpdated).isTrue()
+
+            assertThat(cut.findBy(id1)).isEqualTo(changed)
         }
-    }
 
-    @Test fun `existing book records can be found by id`() {
-        every { idGenerator.generateId() } returns UUID.randomUUID()
-
-        val bookRecord = cut.create(cleanCode)
-        val foundBookRecord = cut.findBy(bookRecord.id)
-
-        assertThat(foundBookRecord).isEqualTo(bookRecord)
-    }
-
-    @Test fun `non existing book records are returned as null when trying to find them by id`() {
-        assertThat(cut.findBy(UUID.randomUUID())).isNull()
-    }
-
-    @Test fun `existing book records can be deleted by id`() {
-        every { idGenerator.generateId() } returns UUID.randomUUID()
-
-        val bookRecord = cut.create(cleanCode)
-        assertThat(cut.findBy(bookRecord.id)).isNotNull()
-
-        cut.deleteBy(bookRecord.id)
-        assertThat(cut.findBy(bookRecord.id)).isNull()
-    }
-
-    @Test fun `deleting non existing book record throws exception`() {
-        assertThrows<BookRecordNotFoundException> {
-            cut.deleteBy(UUID.randomUUID())
+        @Test
+        fun `updating non existing book returns false`() {
+            val bookRecord = BookRecord(id2, cleanCode)
+            val wasUpdated = cut.update(bookRecord)
+            assertThat(wasUpdated).isFalse()
         }
+
+    }
+
+    @Nested
+    inner class Deleting {
+
+        @Test
+        fun `existing book records can be deleted by id`() {
+            every { idGenerator.generateId() } returns id1
+
+            val bookRecord = cut.create(cleanCode)
+            assertThat(cut.findBy(id1)).isEqualTo(bookRecord)
+
+            val wasDeleted = cut.deleteBy(id1)
+            assertThat(wasDeleted).isTrue()
+            assertThat(cut.findBy(bookRecord.id)).isNull()
+        }
+
+        @Test
+        fun `deleting non existing book record throws exception`() {
+            val wasDeleted = cut.deleteBy(id2)
+            assertThat(wasDeleted).isFalse()
+        }
+
     }
 
 }

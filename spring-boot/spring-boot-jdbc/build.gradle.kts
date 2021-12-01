@@ -19,4 +19,5 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk")
     testImplementation("com.h2database:h2")
+    testImplementation("com.ninja-squad:springmockk")
 }
