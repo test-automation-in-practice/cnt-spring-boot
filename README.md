@@ -16,6 +16,7 @@ What you can find:
   - [`jdbc`](spring-boot/jdbc)
   - [`messaging-rabbitmq`](spring-boot/messaging-rabbitmq)
   - [`security`](spring-boot/security)
+  - [`webflux`](spring-boot/webflux)
   - [`webmvc`](spring-boot/webmvc)
 
 Further Reading:
