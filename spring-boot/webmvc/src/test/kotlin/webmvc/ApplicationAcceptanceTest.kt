@@ -1,4 +1,4 @@
-package web
+package webmvc
 
 import io.restassured.RestAssured
 import org.hamcrest.CoreMatchers.equalTo

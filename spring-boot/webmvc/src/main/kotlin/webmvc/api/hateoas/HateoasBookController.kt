@@ -1,4 +1,4 @@
-package web.api.hateoas
+package webmvc.api.hateoas
 
 import org.slf4j.LoggerFactory
 import org.springframework.hateoas.CollectionModel
@@ -6,8 +6,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn
 import org.springframework.http.HttpStatus.*
 import org.springframework.web.bind.annotation.*
-import web.api.CreateBookRequest
-import web.business.*
+import webmvc.api.CreateBookRequest
+import webmvc.business.*
 import java.util.*
 import javax.validation.Valid
 

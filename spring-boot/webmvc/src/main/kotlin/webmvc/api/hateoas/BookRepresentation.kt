@@ -1,10 +1,10 @@
-package web.api.hateoas
+package webmvc.api.hateoas
 
 import org.springframework.hateoas.RepresentationModel
 import org.springframework.hateoas.server.core.Relation
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport
 import org.springframework.stereotype.Component
-import web.business.BookRecord
+import webmvc.business.BookRecord
 
 @Relation(value = "book", collectionRelation = "books")
 data class BookRepresentation(

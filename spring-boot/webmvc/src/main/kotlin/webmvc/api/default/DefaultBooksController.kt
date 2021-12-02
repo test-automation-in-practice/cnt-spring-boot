@@ -1,10 +1,10 @@
-package web.api.default
+package webmvc.api.default
 
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus.*
 import org.springframework.web.bind.annotation.*
-import web.api.CreateBookRequest
-import web.business.*
+import webmvc.api.CreateBookRequest
+import webmvc.business.*
 import java.util.*
 import javax.validation.Valid
 

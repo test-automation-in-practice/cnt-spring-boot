@@ -1,4 +1,4 @@
-package web.api.default
+package webmvc.api.hateoas
 
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
@@ -10,28 +10,32 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
+import org.springframework.hateoas.MediaTypes.HAL_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import org.springframework.test.web.servlet.*
 import org.springframework.test.web.servlet.result.ContentResultMatchersDsl
-import web.business.BookCollection
-import web.business.BookRecordNotFoundException
-import web.business.Examples.book_cleanCode
-import web.business.Examples.id_cleanArchitecture
-import web.business.Examples.id_cleanCode
-import web.business.Examples.record_cleanArchitecture
-import web.business.Examples.record_cleanCode
+import webmvc.business.BookCollection
+import webmvc.business.BookRecordNotFoundException
+import webmvc.business.Examples.book_cleanCode
+import webmvc.business.Examples.id_cleanArchitecture
+import webmvc.business.Examples.id_cleanCode
+import webmvc.business.Examples.record_cleanArchitecture
+import webmvc.business.Examples.record_cleanCode
 
-private class DefaultBookControllerTestConfiguration {
+private class HateoasBookControllerTestConfiguration {
+    @Bean
+    fun rookRepresentationAssembler() = BookRepresentationAssembler()
+
     @Bean
     fun bookCollection(): BookCollection = mockk()
 }
 
-@WebMvcTest(DefaultBooksController::class)
-@Import(DefaultBookControllerTestConfiguration::class)
-@AutoConfigureRestDocs("build/generated-snippets/default/books")
-internal class DefaultBookControllerTest(
+@WebMvcTest(HateoasBookController::class)
+@Import(HateoasBookControllerTestConfiguration::class)
+@AutoConfigureRestDocs("build/generated-snippets/hateoas/books")
+internal class HateoasBookControllerTest(
     @Autowired val bookCollection: BookCollection,
     @Autowired val mockMvc: MockMvc
 ) {
@@ -40,26 +44,28 @@ internal class DefaultBookControllerTest(
     fun resetMocks() = clearAllMocks()
 
     @Nested
-    @DisplayName("POST /default-api/books")
+    @DisplayName("POST /hateoas-api/books")
     inner class Post {
 
         @Test
         fun `posting a book adds it to the library and returns resource representation`() {
             every { bookCollection.add(book_cleanCode) } returns record_cleanCode
 
-            mockMvc.post("/default-api/books") {
+            mockMvc.post("/hateoas-api/books") {
                 contentType = APPLICATION_JSON
                 content = """{ "title": "Clean Code", "isbn": "9780132350884" }"""
             }.andExpect {
                 status { isCreated() }
                 content {
-                    contentType(APPLICATION_JSON)
+                    contentType(HAL_JSON)
                     strictJson {
                         """
                         {
-                            "id": "$id_cleanCode",
                             "title": "Clean Code",
-                            "isbn": "9780132350884"
+                            "isbn": "9780132350884",
+                            "_links": {
+                                "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanCode"}
+                            }
                         }
                         """
                     }
@@ -69,7 +75,7 @@ internal class DefaultBookControllerTest(
 
         @Test
         fun `posting a book with a invalid property responds with status 400`() {
-            mockMvc.post("/default-api/books") {
+            mockMvc.post("/hateoas-api/books") {
                 contentType = APPLICATION_JSON
                 content = """{ "title": "Clean Code", "isbn": "0132350884" }""" // isbn malformed
             }.andExpect {
@@ -79,7 +85,7 @@ internal class DefaultBookControllerTest(
 
         @Test
         fun `posting a book with missing property responds with status 400`() {
-            mockMvc.post("/default-api/books") {
+            mockMvc.post("/hateoas-api/books") {
                 contentType = APPLICATION_JSON
                 content = """{ "isbn": "Clean Code" }"""
             }.andExpect {
@@ -90,32 +96,45 @@ internal class DefaultBookControllerTest(
     }
 
     @Nested
-    @DisplayName("GET /default-api/books")
+    @DisplayName("GET /hateoas-api/books")
     inner class Get {
 
         @Test
         fun `getting all books returns their resource representation as a resource list`() {
             every { bookCollection.getAll() } returns listOf(record_cleanCode, record_cleanArchitecture)
 
-            mockMvc.get("/default-api/books")
+            mockMvc.get("/hateoas-api/books")
                 .andExpect {
                     status { isOk() }
                     content {
-                        contentType(APPLICATION_JSON)
+                        contentType(HAL_JSON)
                         strictJson {
                             """
-                            [
-                                {
-                                    "id": "$id_cleanCode",
-                                    "title": "Clean Code",
-                                    "isbn": "9780132350884"
+                            {
+                                "_embedded": {
+                                    "books": [
+                                        {
+                                            "title": "Clean Code",
+                                            "isbn": "9780132350884",
+                                            "_links": {
+                                                "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanCode"}
+                                            }
+                                        },
+                                        {
+                                            "title": "Clean Architecture",
+                                            "isbn": "9780134494166",
+                                            "_links": {
+                                                "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanArchitecture"}
+                                            }
+                                        }
+                                    ]
                                 },
-                                {
-                                    "id": "$id_cleanArchitecture",
-                                    "title": "Clean Architecture",
-                                    "isbn": "9780134494166"
+                                "_links": {
+                                    "self": {
+                                        "href": "http://localhost:8080/hateoas-api/books"
+                                    }
                                 }
-                            ]
+                            }
                             """
                         }
                     }
@@ -127,14 +146,20 @@ internal class DefaultBookControllerTest(
         fun `getting all books when there are none returns empty resource list`() {
             every { bookCollection.getAll() } returns emptyList()
 
-            mockMvc.get("/default-api/books")
+            mockMvc.get("/hateoas-api/books")
                 .andExpect {
                     status { isOk() }
                     content {
-                        contentType(APPLICATION_JSON)
+                        contentType(HAL_JSON)
                         strictJson {
                             """
-                            []
+                            {
+                                "_links": {
+                                    "self": {
+                                        "href": "http://localhost:8080/hateoas-api/books"
+                                    }
+                                }
+                            }
                             """
                         }
                     }
@@ -145,24 +170,26 @@ internal class DefaultBookControllerTest(
     }
 
     @Nested
-    @DisplayName("GET /default-api/books/{id}")
+    @DisplayName("GET /hateoas-api/books/{id}")
     inner class GetById {
 
         @Test
         fun `getting a book by its id returns resource representation`() {
             every { bookCollection.get(id_cleanCode) } returns record_cleanCode
 
-            mockMvc.get("/default-api/books/$id_cleanCode")
+            mockMvc.get("/hateoas-api/books/$id_cleanCode")
                 .andExpect {
                     status { isOk() }
                     content {
-                        contentType(APPLICATION_JSON)
+                        contentType(HAL_JSON)
                         strictJson {
                             """
                             {
-                                "id": "$id_cleanCode",
                                 "title": "Clean Code",
-                                "isbn": "9780132350884"
+                                "isbn": "9780132350884",
+                                "_links": {
+                                    "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanCode"}
+                                }
                             }
                             """
                         }
@@ -175,7 +202,7 @@ internal class DefaultBookControllerTest(
         fun `getting an unknown book by its id responds with status 404`() {
             every { bookCollection.get(id_cleanCode) } throws BookRecordNotFoundException(id_cleanCode)
 
-            mockMvc.get("/default-api/books/$id_cleanCode")
+            mockMvc.get("/hateoas-api/books/$id_cleanCode")
                 .andExpect {
                     status { isNotFound() }
                     content { string("") }
@@ -186,14 +213,14 @@ internal class DefaultBookControllerTest(
     }
 
     @Nested
-    @DisplayName("DELETE /default-api/books/{id}")
+    @DisplayName("DELETE /hateoas-api/books/{id}")
     inner class DeleteById {
 
         @Test
         fun `deleting a book by its id returns status 204`() {
             every { bookCollection.delete(id_cleanCode) } just runs
 
-            mockMvc.delete("/default-api/books/$id_cleanCode")
+            mockMvc.delete("/hateoas-api/books/$id_cleanCode")
                 .andExpect {
                     status { isNoContent() }
                     content { string("") }

@@ -1,4 +1,4 @@
-package web.api
+package webmvc.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat

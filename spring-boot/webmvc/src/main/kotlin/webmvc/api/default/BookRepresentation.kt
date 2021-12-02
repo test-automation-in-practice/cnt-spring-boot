@@ -1,6 +1,6 @@
-package web.api.default
+package webmvc.api.default
 
-import web.business.BookRecord
+import webmvc.business.BookRecord
 import java.util.*
 
 data class BookRepresentation(

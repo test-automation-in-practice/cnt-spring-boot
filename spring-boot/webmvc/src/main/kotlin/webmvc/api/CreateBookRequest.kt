@@ -1,4 +1,4 @@
-package web.api
+package webmvc.api
 
 import javax.validation.constraints.Pattern
 
