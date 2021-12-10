@@ -1,0 +1,299 @@
+= Testautomation Basics
+
+== Why?
+
+Why should we test our code and why should those tests be automated?
+
+> Software Testing is not about finding bugs.
+It's about delivering great software.
+-- Harry Robinson
+
+Software which does not work correctly is at best bad publicity and at worst kills people.
+Any kind of testing, automated or otherwise, is done to mitigate the risk of having written _wrong_ code before letting that code loose on the world.
+
+> Instead of looking for bugs, why not focus on preventing them?
+-- Jeff Morgan
+
+Testing software after it was programmed and is already potentially shippable does not allow for the fast feedback cycles needed to continuously deliver that software to customers.
+Developers are usually busy with the next feature by the time a bug report comes in.
+Which just further delays that version of the software's delivery.
+
+A much better approach is to test as part of programming.
+That's where automated tests come into play.
+
+Developers are very good at two things:
+
+- writing code
+- automating boring tasks
+
+Repeatedly testing the same things manually is very boring.
+That's why developers are generally intrinsically motivated to automate their tests.
+
+Writing automated tests during normal development has several key benefits:
+
+- No need to manually test what has already been automatically tested every time the software is build.
+- Executing huge amounts of tests in minutes, which would take a human tester days.
+- Having to write testable production code usually means that the code is also better structured.
+- If you have a good suite of _efficient_ automated tests, you'll never be afraid of refactoring your code to keep it maintainable for future generations.
+
+Manual testing of the whole software still has its place in the software development life cycle.
+But that place is not with testing for regression (testing everything everytime something changes to see if something unrelated broke).
+Its testing if a feature (e.g. in form of a user story) was implemented as intended.
+What we might call an _Acceptance-Test_.
+
+These kinds of tests should be done by qualified people (e.g. testers, product owners etc.) that were not directly involved in writing the actual code, and therefore should not have blindspots regarding that code.
+Everything that is manually tests to accept a feature should also be reflected in some automated tests.
+If tests are missing, they need to be added.
+
+Having every test automated and only testing manually whenever something is added or changed, makes it possible to ship software faster, in smaller increments and with much more confidence.
+
+== How?
+
+=== Kinds of Automated Tests
+
+_Unit-_, _Component-_, _Integration-_, _System-_, _End-to-End-_, _Acceptance-_, _Behaviour-_, _Property-_, _Contract-_, _Snapshot-_, _Performance-_, _Security-_ and _Architecture-Tests_ as well as things like _Static Code Analysis_.
+
+These are a lot of labels for seemingly complex things, that actually come down to just a handful of properties:
+
+* *scope* - _"Where does the test start, and where does it end?"_
+** pure function
+** class method
+** class
+** package
+** module
+** deployment unit
+** repository
+** system
+
+* *aspect under test*
+** functionality - _"Does my code do, what I want it to?"_
+** integration - _"Does my code integrate with other code, framework features, technologies etc. as I intended it to?"_
+** rules - _"Does my code follow our defined rules? (e.g. architecture, security, style)"_
+** performance - _"Does my code execute as fast as I need it to?"_
+
+The goal of efficient and sustainable automated testing is to keep the following **costs** down, while still covering all relevant risks:
+
+* implementation effort - _"How long does it take me to initially implement the test?"_
+* maintenance effort - _"How often, and how much time, do I need to invest in maintaining the test?"_
+* execution time - _"How much time is needed to execute the test?"_
+
+By far the most important of these, for projects with long life spans, is _execution time_.
+Test suites will be run thousends of times over the life span of a project.
+Wasted minutes will accumulate to a lot of wasted time (= money) very fast.
+
+A good test suit should be executable by developers anytime they need to make sure everything still works.
+Without having to schedule a coffee break or meeting to kill time while waiting for the result.
+
+=== On Labeling Tests
+
+Humans tend to put things into mental boxes in order to easier make sense of them.
+This is also happens when we think about tests, as can be seen by all the different kinds of tests in the previous chapter.
+There is just one problem:
+
+_Things also tend to be more complicated and multi-faceted to just neatly fit into a box._
+
+As an example, despite all attempts to standardise terms like _Integration-Test_.
+Whenever you start to work with new people, you'll soon learn that they have a more or less different understanding of those terms than you.
+Like spaces over tabs and other programming culture wars, this might never be resolved.
+
+The good news is, that labels are effectively worthless.
+It does not matter what you call your tests.
+Whatever they do, they should do efficiently and mitigate some relevant risk.
+The only reason to categorize your tests should be to better communicate with your team when talking about them.
+But this should be done with the conscious knowledge that whatever labels you define, might only be valid in your team's context.
+
+Instead of wasting time arguing about how to name certain kinds of similar tests, invest that time into building common understanding about how your team wants to aproach testing certain similar components.
+(e.g. how to test repositories, controllers, cached method calls, etc.)
+
+==== Examples of Tests
+
+===== I want to make sure that the result of my pure function, given specific inputs, is correct.
+
+* **scope:**
+_function_
+
+* **aspect under test:**
+_functionality_
+
+* **implementation effort:**
+_Low_.
+There are no dependencies to handle.
+Permutation over possible input combinations is easy with most modern test automation frameworks.
+
+* **maintenance effort:**
+_Very low_.
+Pure functions usually don't change a lot over time.
+They are also self-contained and can therefore be tested as blackboxes.
+
+* **execution time:**
+_extremely fast_
+
+The common label for this type of test is _Unit-Test_.
+Which in this case should be rather uncontroversial.
+
+===== I want to make sure that my repository class' SQL statements are syntactically correct and do what I expect them to.
+
+* **scope:**
+_class_
+
+* **aspects under test:**
+_functionality_ ("does what I want it to") & _integration_ ("SQL statements are syntactically correct")
+
+* **implementation effort:**
+Depending on the applied level of abstraction and the complexity of the underlying database, it varies between _low_ and _medium_.
+Most of which usually comes from managing test data and therefore the complexity of the underlying database schema.
+
+* **maintenance effort:**
+Usually _low_, but bad abstraction can lead to unnecessary overhead - keep it simple!
+
+* **execution time:**
+Individual tests will be _very fast_.
+The cost of the initial test setup depends on whether an in-memory database is a suitable replacement for the real thing.
+If it is not, bootstrapping will take a couple of extra seconds (e.g. using Docker containers).
+
+In regard to labeling your tests, this is a rather interesting example.
+Some might label this type of test either as a _Unit-Test_ or an _Integration-Test_.
+
+There are arguments for both sides.
+If you think of _Integration-Test_ on the System-Component or Deployment-Unit level, then this is a _Unit-Test_.
+If you think of _Integration-Test_ as anything that tests the integration of your code with anything else, then this is an _Integration-Test_.
+
+In order to make things more clear, a more precise label would be _Technology Integration-Test_.
+This makes it clear that its goal is to test that we are using a technologie, in this cas a database, correctly.
+
+But as mentioned above, don't waste too much time labeling tests in the first place.
+
+===== I want to make sure that the component responsible for talking to an HTTP API of another service runtime handles all relevant scenarios as intended.
+
+* **scope:**
+_class_ or _package_ (might include some function calls and helper classes as well as the main component)
+
+* **aspects under test:**
+_functionality_ ("handles all relevant scenarios") & _integration_ ("talking to an HTTP API")
+
+* **implementation effort:**
+Depending on the complexity of the API, it varies between _low_ and _medium_.
+Most of which usually comes from managing the expected responses for all relevant scenarios.
+
+* **maintenance effort:**
+_Low_.
+If the API is stable.
+Otherwise, you'll have to change one thing or another every time the API changes.
+
+* **execution time:**
+Individual tests will be _very fast_.
+Bootstrapping a service simulator will add about _another 1 to 2 seconds_ to the overall cost.
+
+The goal is to test that the code is sending valid HTTP requests with the expected content, as well as that expected responses are handled correctly.
+Writing a _Unit-Test_ and using mocks (e.g. for the HTTP client) will not actually test anything other than that the code is invokes as you've written it.
+The most important aspect under test here is, that the actually produced HTTP requests are as expected and that different responses are parsed and handled correctly.
+
+None of which is possible without using an external simulator.
+
+===== I want to make sure that an orchestrating service class behaves like it should even when exceptions occur.
+
+* **scope:**
+_class_
+
+* **aspects under test:**
+_functionality_ ("behaves like it should")
+
+* **implementation effort:**
+Depending on the complexity of the process being orchestrated (e.g. number of other components involved), it will vary between _low_ and _medium_.
+
+* **maintenance effort:**
+_Usually low_ when tests are implemented efficiently.
+Higher if tests were written too close to the production code (white-box tests).
+
+* **execution time:**
+_extremely fast_
+
+The goal is to verify behavioral aspects of the class under test.
+This is done by initializing an instance of the class with most, if not all, dependencies mocked.
+Dependencies include references to local resources (e.g. system clock) and other classes (e.g. event handler, repositories etc.).
+Pure functions and other static calls should _not be mocked_!
+
+Tests usually involve checking that the correct parts of the input data is given to the dependencies and that their results are in turn used correctly in the following steps.
+If there are side effects (e.g. publishing of events) in the components code, their invocation is also tested.
+
+===== I want to make sure that security rules, like the way a user is authenticated, for certain paths of my HTTP-based API are enforced.
+
+* **scope:**
+_deployment unit_
+
+* **aspects under test:**
+_functionality_ ("works as intended"), _rules_ ("security rules") & _integration_ ("user is authenticated", "HTTP-based API")
+
+* **implementation effort:**
+If security is implemented in a test-friendly way, it _can be very low_.
+If not it _might be much higher_.
+
+* **maintenance effort:**
+_Low_.
+Once established, security rules do not change very often.
+
+* **execution time:**
+Individual tests will be _very fast_.
+Bootstrapping the _deployment unit_ to start with the minimum set of components, to make the test meaningful might take a couple of seconds.
+
+The goal is to test that certain security rules are applied for parts of an API using a certain authentication technology.
+The security framework, the authentication protocols and HTTP as a transport layer are all technologies being integrated with your own code.
+
+===== I want to make sure two of my service runtimes can talk to each other over HTTP and messages.
+
+* **scope:**
+_deployment units_
+
+* **aspects under test:**
+_functionality_ ("can talk") & _integration_ ("two of my service runtimes", "HTTP and messages")
+
+* **implementation effort:**
+_High_ if tests are implemented in a way that needs both service runtimes to be involved at the same time.
+_Much lower_ if something like contracts (e.g. PACT, Spring Cloud Contract etc.) are used to decouple both services from each other.
+
+* **maintenance effort:**
+Every time something is changed by either of the deployment units, these tests need to be changed as well.
+Depending on how the tests are set up (full integration vs. contract-based), the actual effort for each change might be _very low_ or _very high_.
+
+* **execution time:**
+Depends heavily on how the tests are set up.
+Bootstrapping two deployment units and having to also set up test data for the target _can take a lot of time_.
+Running against a simulation (e.g. contract-based integration) on the other hand is _very fast_.
+
+This is an excellent example how knowing the scope and different aspects of what you want to test, and choosing the right tools to do so efficiently, makes the difference between tests running for minutes or just a few seconds.
+
+Practices like having contracts for testing the integration of separate deployment units might just mitigate 90% of the risk.
+But they are much more efficient than full integration tests which might mitigate 92% of the risk
+
+===== I want to make sure, that certain architectural principals are followed in our codebase.
+
+* **scope:**
+_modules_ / _deployment unit_ / _repository_
+
+* **aspects under test:**
+following of (architectural) rules
+
+* **implementation effort:**
+_Medium_.
+Tools like ArchUnit for the JVM make defining architectural rules and checking them as part of the regular tests easy.
+Specifying more complex rules might take a while though.
+
+* **maintenance effort:**
+_Low_.
+Architecture, once established, does not tend to change a lot over time.
+
+* **execution time:**
+Depends on the size of the code base.
+Usually just a _couple of seconds_.
+With the initial startup & analysis taking up most of the time.
+
+=== Writing Automated Tests
+
+==== Java Virtual Machine
+
+```
+- JUnit
+- Assertions
+- Mocking
+- AAA
+```
