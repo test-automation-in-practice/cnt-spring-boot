@@ -4,6 +4,9 @@ include("contract-testing:pact:consumer-one")
 include("contract-testing:pact:consumer-two")
 include("contract-testing:pact:provider")
 
+include("contract-testing:pact-messaging:provider")
+include("contract-testing:pact-messaging:consumer")
+
 include("contract-testing:spring-cloud-contract:consumer-one")
 include("contract-testing:spring-cloud-contract:consumer-two")
 include("contract-testing:spring-cloud-contract:provider")

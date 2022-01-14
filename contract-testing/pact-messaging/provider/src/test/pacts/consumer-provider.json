@@ -1,0 +1,70 @@
+{
+  "consumer": {
+    "name": "consumer"
+  },
+  "messages": [
+    {
+      "contents": {
+        "book": {
+          "isbn": "9780132350884",
+          "title": "Clean Code"
+        },
+        "bookId": "d8aebcfe-97a3-441f-93d4-3d83c069eb98",
+        "eventId": "ed161c2f-2c1a-44a3-881c-d077e0b29058"
+      },
+      "description": "a book-created event",
+      "matchingRules": {
+        "body": {
+          "$.book.isbn": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.book.title": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "type"
+              }
+            ]
+          },
+          "$.bookId": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              }
+            ]
+          },
+          "$.eventId": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              }
+            ]
+          }
+        }
+      },
+      "metaData": {
+        "contentType": "application/json"
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.2.14"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "provider"
+  }
+}
