@@ -11,6 +11,9 @@ include("contract-testing:spring-cloud-contract:consumer-one")
 include("contract-testing:spring-cloud-contract:consumer-two")
 include("contract-testing:spring-cloud-contract:provider")
 
+include("contract-testing:spring-cloud-contract-messaging:provider")
+include("contract-testing:spring-cloud-contract-messaging:consumer")
+
 include("spring-boot:basics")
 include("spring-boot:caching")
 include("spring-boot:data-jpa")
