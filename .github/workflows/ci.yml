@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  pact:
+  pact-http:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,23 +20,23 @@ jobs:
         run: chmod +x gradlew
 
       - name: Delete Contracts from Provider
-        run: rm ./contract-testing/pact/provider/src/test/pacts/*.json
+        run: rm ./contract-testing/pact/http/provider/src/test/pacts/*.json
       - name: Build Consumer One
-        run: ./gradlew :contract-testing:pact:consumer-one:build
+        run: ./gradlew :contract-testing:pact:http:consumer-one:build
       - name: Copy Contracts of Consumer One to Provider
-        run: cp ./contract-testing/pact/consumer-one/build/pacts/*.json ./contract-testing/pact/provider/src/test/pacts
+        run: cp ./contract-testing/pact/http/consumer-one/build/pacts/*.json ./contract-testing/pact/http/provider/src/test/pacts
       - name: Build Consumer Two
-        run: ./gradlew :contract-testing:pact:consumer-two:build
+        run: ./gradlew :contract-testing:pact:http:consumer-two:build
       - name: Copy Contracts of Consumer Two to Provider
-        run: cp ./contract-testing/pact/consumer-two/build/pacts/*.json ./contract-testing/pact/provider/src/test/pacts
+        run: cp ./contract-testing/pact/http/consumer-two/build/pacts/*.json ./contract-testing/pact/http/provider/src/test/pacts
       - name: Build Provider
-        run: ./gradlew :contract-testing:pact:provider:build
+        run: ./gradlew :contract-testing:pact:http:provider:build
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: test-results_pact
+          name: test-results_pact-http
           path: "**/build/reports/tests"
 
   pact-messaging:
@@ -52,13 +52,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Delete Contracts from Provider
-        run: rm ./contract-testing/pact-messaging/provider/src/test/pacts/*.json
+        run: rm ./contract-testing/pact/messaging/provider/src/test/pacts/*.json
       - name: Build Consumer
-        run: ./gradlew :contract-testing:pact-messaging:consumer:build
+        run: ./gradlew :contract-testing:pact:messaging:consumer:build
       - name: Copy Contracts of Consumer to Provider
-        run: cp ./contract-testing/pact-messaging/consumer/build/pacts/*.json ./contract-testing/pact-messaging/provider/src/test/pacts
+        run: cp ./contract-testing/pact/messaging/consumer/build/pacts/*.json ./contract-testing/pact/messaging/provider/src/test/pacts
       - name: Build Provider
-        run: ./gradlew :contract-testing:pact-messaging:provider:build
+        run: ./gradlew :contract-testing:pact:messaging:provider:build
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
@@ -67,7 +67,7 @@ jobs:
           name: test-results_pact-messaging
           path: "**/build/reports/tests"
 
-  spring-cloud-contract:
+  spring-cloud-contract-http:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -79,17 +79,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build Provider & Publish Stubs
-        run: ./gradlew :contract-testing:spring-cloud-contract:provider:build :contract-testing:spring-cloud-contract:provider:publishToMavenLocal
+        run: ./gradlew :contract-testing:spring-cloud-contract:http:provider:build :contract-testing:spring-cloud-contract:http:provider:publishToMavenLocal
       - name: Build Consumer One
-        run: ./gradlew :contract-testing:spring-cloud-contract:consumer-one:build
+        run: ./gradlew :contract-testing:spring-cloud-contract:http:consumer-one:build
       - name: Build Consumer Two
-        run: ./gradlew :contract-testing:spring-cloud-contract:consumer-two:build
+        run: ./gradlew :contract-testing:spring-cloud-contract:http:consumer-two:build
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: test-results_spring-cloud-contract
+          name: test-results_spring-cloud-contract-http
           path: "**/build/reports/tests"
 
   spring-cloud-contract-messaging:
@@ -104,9 +104,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build Provider & Publish Stubs
-        run: ./gradlew :contract-testing:spring-cloud-contract-messaging:provider:build :contract-testing:spring-cloud-contract-messaging:provider:publishToMavenLocal
+        run: ./gradlew :contract-testing:spring-cloud-contract:messaging:provider:build :contract-testing:spring-cloud-contract:messaging:provider:publishToMavenLocal
       - name: Build Consumer
-        run: ./gradlew :contract-testing:spring-cloud-contract-messaging:consumer:build
+        run: ./gradlew :contract-testing:spring-cloud-contract:messaging:consumer:build
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
