@@ -1,0 +1,9 @@
+= Spring Boot: Messaging with Kafka
+
+This module implements asynchronous communication through messaging via a Kafka broker, both on the sending and the
+receiving end, using Spring's Kafka integration:
+
+- `KafkaTemplate` to send messages
+- `@KafkaListener` to read messages
+- Error handling and dead-letter topics
+- Testing with a Kafka instance running in a dockerized TestContainer

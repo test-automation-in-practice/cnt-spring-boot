@@ -57,6 +57,7 @@ Examples include, but are not limited to:
 - caching (`@Cachable`)
 - transactions (`@Transactional`)
 - asynchronous invocation (`@Async`)
+- asynchronous messaging (`@KafkaListener`, `@RabbitListener`, `KafkaTemplate`, `@AmqpTemplate`)
 - event handling (`@EventListener`)
 - method-level security (`@RolesAllowed`, `@PreAuthorize`, `@PostAuthorize`, `@Secured`)
 - web security configuration

@@ -2,10 +2,10 @@
 
 This Showcase demonstrates how PACT can be used to decouple _consumer - provider_ relationships during testing.
 
-Most of the manageable / testable risk in consumer to provider (e.g. service to service, frontend to backend etc.) communication over HTTP is semantic in nature.
-No amount of testing will guarantee that the provider will not exhibit unexpected behaviour at runtime.
-What can actually be tested in a reliable and reproducible way is the semantics of the communication - basically "do both parties speak the same language?".
-This is where (consumer-driven) contracts and PACT come into play.
+Most of the manageable / testable risk in consumer to provider (e.g. service to service, frontend to backend etc.) communication over HTTP
+or via a messaging framework is semantic in nature.  No amount of testing will guarantee that the provider will not exhibit unexpected
+behaviour at runtime.  What can actually be tested in a reliable and reproducible way is the semantics of the communication - basically "do
+both parties speak the same language?".  This is where (consumer-driven) contracts and PACT come into play.
 
 == Consumer - Provider Relationship
 
@@ -15,6 +15,10 @@ image::../../assets/images/ct_common_request-response.svg[]
 
 Each _request_ with its corresponding _response_ can be viewed as a single _interaction_.
 Each kind of interaction with all its relevant permutations is the basis for the tests that need to be executed when validating functionality.
+
+The same holds true for asynchronous communication via messaging. It is irrelevant that message-based interactions lack the _response_
+aspect, or that in theory days can pass until a consumer picks up a message that has been sent by a provider. The only thing that matters
+(in the scope of contract testing) is that the message can be understood.
 
 == "Classic" Approaches
 
@@ -76,7 +80,9 @@ The provider can then talk to the team responsible for the affected consumer and
 
 == Showcase
 
-Contains three projects:
+Contains two modules:
+
+=== Http module
 
 **provider:** A simple "Library Service" (as in managing a collection of books).
 It demonstrates the provider-side JUnit 5 and Spring Boot integration.
@@ -91,6 +97,17 @@ It demonstrates a slightly more complex consumer-side contract using parameteriz
 None of the consumers is interested in a book's `description` attribute.
 To demonstrate the advantages contract testing provides, the `description` can be deleted from the provider's `Book` definition without any of the consumers suffering any consequences.
 If any of the other attributes is changed at least one, if not both, of the contracts will break.
+
+=== Messaging module
+
+**provider:** A simple "Library Service" that notifies consumers about the creation of new books by pushing notifications to a message
+  broker.
+
+**consumer:** A consumer of the Library Service that reads the messages sent by the provider to add the books to its own library.
+
+PACT's implementation for messaging contracts is agnostic with regards to any specific message broker technology. As such both modules
+consist of nothing more than the bare scaffold that is needed to provide PACT with the necessary information about the structure of the
+messages.
 
 == Links
 
