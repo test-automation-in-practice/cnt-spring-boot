@@ -106,6 +106,8 @@ Instead of wasting time arguing about how to name certain kinds of similar tests
 
 === Examples of Tests
 
+*Quick disclaimer:* As most things are identical between front and backend, the following examples rarely go into detail on which part of your application it applies to.
+
 ==== I want to make sure that the result of my pure function, given specific inputs, is correct.
 
 * **scope:**
@@ -189,6 +191,113 @@ The most important aspect under test here is that the actually produced HTTP req
 
 None of which is possible without using an external simulator.
 
+==== I want to make sure my button triggers my logic service when pressed.
+
+* **scope:**
+_component_
+
+* **aspects under test:**
+_functionality_ ("button triggers my logic service")
+
+* **implementation effort:**
+Generally _low_ since most common testing frameworks offer enough DOM abstaction to perform the action and the service logic can be stubbed or mocked.
+
+* **maintenance effort:**
+Usually _low_. But can be problematic due to a non optimal access strategy such as via CSS classes.
+
+* **execution time:**
+_Very fast_ with modern testing frameworks that do not rely on an actual browser.
+
+The goal is to ensure that your logic is acutually triggered by a user clicking the button, not to validate that the logic is working correctly. That can be done in a separate test for that particular logic. For this kind of test, we can safely mock the service logic.
+
+A common label for this type of test would be _Unit-Test_. Dependent on the Framework, we could use things as Angulars TestBed, where one could argue for labeling it as an _Integration-Test_ but that's splitting hairs.
+
+==== I want to make sure that my basic ui component is rendered in a consistent way.
+
+* **scope:**
+_component_ or _module_
+
+* **aspects under test:**
+_rendering_ ("rendered in a consistent way")
+
+* **implementation effort:**
+Given a good testing framework and sufficient architecture _almost for free_.
+
+* **maintenance effort:**
+_Almost none_. Shallow rendering (or as shallow as possible) ensures small snapshots and changes can be processed quickly.
+
+* **execution time:**
+_Very fast_ with modern testing frameworks that do not rely on an actual browser.
+
+The goal of those tests is to ensure that your rendering only changes when it is supposed to do so. Therefore, good separation of concerns is needed to ensure, that you do not render too much information in a given test. Shallow rendering helps a lot with that as we strip out any unwanted and bloated components, that do not actually benefit the intend of the test.
+
+A common label for this type of test would be _Unit-Test_ or _Snapshot-Test_. Tests like those fall under the topic of _Approval Testing_.
+
+==== I want to ensure that my complex rendering logic is visually stable.
+
+* **scope:**
+_deployment unit_
+
+* **aspects under test:**
+_rendering_ ("complex rendering logic")
+
+* **implementation effort:**
+_Low to medium_ in most circumstances, depending on the UI complexity. Increases proportional to the data requirements for the rendering.
+
+* **maintenance effort:**
+_Medium to high_ as those tests will rely on actual browser rendering which can change for several reasons those requiring regular attention.
+
+* **execution time:**
+_Medium to slow_ as we do require both a browser and some for of image comparison.
+
+We want to focus on the complex rendering logic and thus isolate the important parts, that can not be appropriately checked with faster and easier to implement testing approaches. Most often we are testing actual rendering, e.g. for integrations against canvas libraries. As those tests often rely on screenshots being taken, it is important to isolate the important parts as the tests become very brittle otherwise. For example, one could only validate the appearance of a certain canvas, instead of the complete page.
+
+A common label for this type of test would be _End-to-End-Test_ or _Visual-Regression-Test_. Tests like those fall under the topic of _Approval Testing_ but with images instead of text as a base line.
+
+==== I want to make sure my state management handles changes appropriately.
+
+* **scope:**
+_module_
+
+* **aspects under test:**
+_functionality_ ("handles changes") & _integration_ ("state management")
+
+* **implementation effort:**
+_Low_ as the integration part is provided by testing utility of good libraries.
+
+* **maintenance effort:**
+Given good isolation of the state management, _low_.
+
+* **execution time:**
+_Very fast_ as there is no need for any browser interaction.
+
+In order to ensure good testability, it is advisable to encapsulate state management behind some form of facade to test the state module in isolation and mock its integration in other components.
+As we want to ensure that our state management is handled correctly, only mock side effects that are triggered but no other pieces like state manipulation functions.
+
+A common label for this type of test would be _Unit-Test_ or _Integration-Test_. But as the integration is provided with mock libraries for popular state management solutions, most would argue for _Unit-Test_.
+
+==== I want to make sure my callbacks for asynchronous timers doing the right thing at the appropriate time.
+
+* **scope:**
+_function_ or _class_
+
+* **aspects under test:**
+_functionality_ ("callbacks doing the right thing" and "at the appropriate time")
+
+* **implementation effort:**
+_Low to medium_ as most popular testing frameworks offer some form of timer manipulation but the timer complexity is often complex.
+
+* **maintenance effort:**
+_Low_ as the majority of test code will only handle (hopefully) pure functions.
+
+* **execution time:**
+_Very fast_ as there is no need for any browser interaction and timers are simulated.
+
+The goal is not to wait for the timers to pass but to make sure the timers are triggered when they need to be triggered.
+This is done by simulating time progression to a certain point and check whether the logic is called.
+
+A common label for this type of test would be _Unit-Test_.
+
 ==== I want to make sure that an orchestrating service class behaves like it should even when exceptions occur.
 
 * **scope:**
@@ -265,6 +374,29 @@ This is an excellent example how knowing the scope and different aspects of what
 
 Practices like having contracts for testing the integration of separate deployment units might just mitigate 90% of the risk.
 But they are much more efficient than full integration tests which might mitigate 92% of the risk
+
+==== I want to make sure that a specific part of my user journey works with front- and backend involved.
+
+* **scope:**
+_deployment unit(s)_
+
+* **aspects under test:**
+_functionality_ ("user journey works") & _integration_ ("with front- and backend involved")
+
+* **implementation effort:**
+High if tests are implemented in a way that needs both runtimes and a browser to be involved at the same time.
+Much lower if communication is ensured via contract testing (e.g. PACT) and the user journey test runs against mocks.
+
+* **maintenance effort:**
+Every time something is changed by either of the deployment units, these tests need to be changed as well.
+Depending on how the tests are set up (full integration vs. contract-based), the actual effort for each change might be very low or very high.
+
+* **execution time:**
+Depends on how the tests are set up.
+Bootstrapping two deployment units and having to also set up test data for the target can take a lot of time.
+Running against a simulation on the other hand is very fast.
+
+The goal of this test is not to test that your database in the backend saves your data as expected but to test that your user journey works. Decoupling different deployment units (e.g. via contract-based tests), helps with that and enables simulating any backend calls as the communication is tested on other levels. This will decrease both implementation and maintenance complexity.
 
 ==== I want to make sure, that certain architectural principals are followed in our codebase.
 
