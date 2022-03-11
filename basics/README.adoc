@@ -36,16 +36,23 @@ Writing automated tests during normal development has several key benefits:
 - Having to write testable production code usually means that the code is also better structured.
 - If you have a good suite of _efficient_ automated tests, you'll never be afraid of refactoring your code to keep it maintainable for future generations.
 
-Manual testing of the whole software still has its place in the software development life cycle.
+Manual testing of the whole software still has its place in the software development lifecycle.
 But that place is not with testing for regression (testing everything everytime something changes to see if something unrelated broke).
 Its testing if a feature (e.g. in form of a user story) was implemented as intended.
 What we might call an _Acceptance-Test_.
 
 These kinds of tests should be done by qualified people (e.g. testers, product owners etc.) who were not directly involved in writing the actual code, and therefore should not have blindspots regarding that code.
-Everything that is manually tested to accept a feature should also be reflected in some automated tests.
-If tests are missing, they need to be added.
+Manually testing for acceptance of a feature should only be done once though.
+Every repeated testing must be automated.
+That's why every risk covered by a manual acceptance tests needs to also be implemented as one or many automated tests with appropriate scopes.
+Ideally during development of the feature.
+But at the latest after it was discovered that tests are missing.
 
 Having every test automated and only testing manually whenever something is added or changed, makes it possible to ship software faster, in smaller increments and with greater confidence.
+
+In a perfect world automated tests would be implemented in a cooperative way that allows event the people responsible for accepting a feature to simply trust the automated tests and no manual testing is ever required.
+But an overwhelming number of software projects is far from that ideal.
+Reasons for this often include missing basic technical understanding, regulations, etc.
 
 == How?
 
@@ -104,9 +111,9 @@ But this should be done with the conscious knowledge that whatever labels you de
 Instead of wasting time arguing about how to name certain kinds of similar tests, invest that time into building common understanding about how your team wants to approach testing certain similar components.
 (e.g. how to test repositories, controllers, cached method calls, etc.)
 
-==== Examples of Tests
+=== Examples of Tests
 
-===== I want to make sure that the result of my pure function, given specific inputs, is correct.
+==== I want to make sure that the result of my pure function, given specific inputs, is correct.
 
 * **scope:**
 _function_
@@ -130,7 +137,7 @@ _extremely fast_
 The common label for this type of test is _Unit-Test_.
 Which in this case should be rather uncontroversial.
 
-===== I want to make sure that my repository class' SQL statements are syntactically correct and do what I expect them to.
+==== I want to make sure that my repository class' SQL statements are syntactically correct and do what I expect them to.
 
 * **scope:**
 _class_
@@ -162,7 +169,7 @@ This specifies that its goal is to test that we are using a technology, in this 
 
 But as mentioned above, don't waste too much time labeling tests in the first place.
 
-===== I want to make sure that the component responsible for talking to an HTTP API of another service runtime handles all relevant scenarios as intended.
+==== I want to make sure that the component responsible for talking to an HTTP API of another service runtime handles all relevant scenarios as intended.
 
 * **scope:**
 _class_ or _package_ (might include some function calls and helper classes as well as the main component)
@@ -189,7 +196,7 @@ The most important aspect under test here is that the actually produced HTTP req
 
 None of which is possible without using an external simulator.
 
-===== I want to make sure that an orchestrating service class behaves like it should even when exceptions occur.
+==== I want to make sure that an orchestrating service class behaves like it should even when exceptions occur.
 
 * **scope:**
 _class_
@@ -215,7 +222,7 @@ Pure functions and other static calls should _not be mocked_!
 Tests usually involve checking that the correct parts of the input data is given to the dependencies and that their results are in turn used correctly in the following steps.
 If there are side effects (e.g. publishing of events) in the components code, their invocation is also tested.
 
-===== I want to make sure that security rules, like the way a user is authenticated, for certain paths of my HTTP-based API are enforced.
+==== I want to make sure that security rules, like the way a user is authenticated, for certain paths of my HTTP-based API are enforced.
 
 * **scope:**
 _deployment unit_
@@ -238,7 +245,7 @@ Bootstrapping the _deployment unit_ to start with the minimum set of components,
 The goal is to test that certain security rules are applied for parts of an API using a certain authentication technology.
 The security framework, the authentication protocols and HTTP as a transport layer are all technologies being integrated with your own code.
 
-===== I want to make sure two of my service runtimes can talk to each other over HTTP and messages.
+==== I want to make sure two of my service runtimes can talk to each other over HTTP and messages.
 
 * **scope:**
 _deployment units_
@@ -264,7 +271,7 @@ This is an excellent example how knowing the scope and different aspects of what
 Practices like having contracts for testing the integration of separate deployment units might just mitigate 90% of the risk.
 But they are much more efficient than full integration tests which might mitigate 92% of the risk
 
-===== I want to make sure, that certain architectural principals are followed in our codebase.
+==== I want to make sure, that certain architectural principals are followed in our codebase.
 
 * **scope:**
 _modules_ / _deployment unit_ / _repository_
@@ -288,38 +295,286 @@ With the initial startup & analysis taking up most of the time.
 
 === Writing Automated Tests (JVM)
 
-```
-- structure (classes, methods, life cycle)
-- abstraction
-- permutation
-```
+Automated tests on the Java Virtual Machine (JVM) usually involve a number of supporting libraries.
+You'll need at least a testing framework - something that defines what a test is, how they are structured, how they are executed and what the overall lifecycle of executing tests actually involves.
+Then you need something to assert if desired results or behaviour was actually achieved.
+Testing for behaviour usually requires control over dependencies' which involves mocking components in order to define and record their behaviour.
+Last but not least you'll need to simulate certain components that are not part of you code (e.g. databases, HTTP services, Message Brokers, etc).
 
-==== Tooling (JVM)
+==== Tooling
 
-===== Test Runner
+A very well-rounded technology stack for any JVM project:
 
-- JUnit (Jupiter)
+* testing framework: https://junit.org/junit5/[JUnit 5]
+* assertions: https://assertj.github.io/doc/[AssertJ] - best for Java, also usable with Kotlin
+* mocking: https://site.mockito.org[Mockito] for Java and https://mockk.io[MockK] for Kotlin
+* simulators:
+** https://wiremock.org[WireMock] for anything related HTTP communication
+** https://www.h2database.com/html/main.html[H2] as an in memory replacement for SQL databases
+** https://www.testcontainers.org[Testcontainers] for basically any technology that does not provide an in-memory variant
 
-===== Assertions
+For alternative assertion libraries specifically for Kotlin, Novatec Consulting GmbH has an interesting https://www.novatec-gmbh.de/en/blog/kotlin-assertion-libraries-introduction/[blog series].
 
-- https://www.novatec-gmbh.de/en/blog/kotlin-assertion-libraries-assertj-as-baseline/[AssertJ]
-- https://www.novatec-gmbh.de/en/blog/kotlin-assertion-libraries-strikt/[Strikt]
-- https://www.novatec-gmbh.de/en/blog/kotlin-assertion-libraries-assertk/[AssertK]
-- https://www.novatec-gmbh.de/blog/kotlin-assertion-libraries-kotest-assertions/[KoTest Assertions]
-- https://www.novatec-gmbh.de/en/blog/kotlin-assertion-libraries-atrium/[Atrium]
-- Kluent
+==== Test Structure
 
-===== Mocking
+Automated JUnit tests are usually group by their scope into _test classes_ containing different _test methods_.
+There are also ways of further grouping _test methods_ inside a _test class_.
 
-- Mockito
-- MockK
+_Test methods_ should be structured into 3 phases: _arrange_, _act_ & _assert_ (_AAA_)
 
-===== Simulators
+In the _arrange_ phase test data is initialized, mocks are setup and state is initialized.
+In the _act_ phase the _function, class, method or system under test_ is invoked.
+In the _assert_ phase the result of _act_ incl. possible side-effects is asserted / verified.
 
-- H2
-- WireMock
+We'll see more of this in the following examples.
 
-===== Contracts
+==== Examples
 
-- PACT
-- Spring Cloud Contracts
+Let's take a look at a very simple test class:
+
+[source,kotlin]
+----
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+internal class CalculatorTests { // (1)
+
+    val cut = Calculator() // (2)
+
+    @Test // (3)
+    fun `sum can handle any two positive numbers`() { // (4)
+        assertThat(cut.sum(a = 1, b = 1)).isEqualTo(2)  // (5)
+        assertThat(cut.sum(a = 9, b = 42)).isEqualTo(51)
+        assertThat(cut.sum(a = 123456, b = 654321)).isEqualTo(777777)
+    }
+}
+
+----
+
+1. The scope of the tests inside the test class is the `Calculator` class.
+The naming convention for test classes is _scope_ + `Test` or `Tests` suffix.
+2. Usually a single instance of a _class under test_ (`cut`) is used for all tests inside the class.
+However, if your _class under test_ has state oder needs to initialized in different variants, the `cut` property might also be a variable within each test method.
+3. JUnit provides the `@Test` annotation for marking methods that should be treated as a single test.
+Those methods mustn't have a result type (Kotlin: `Unit` or nothing; Java: `void`) and unless provided by a https://junit.org/junit5/docs/current/user-guide/#extensions-parameter-resolution[JUnit extension], no parameters are allowed.
+4. Kotlin allows for naming test methods with spaces to build real sentences.
+Java test methods need to be camel-cased.
+Test names should be statements of (single) facts that, if the test fails, are proven wrong.
+5. Using AssertJ we formulate assertions that need to be true, otherwise the test fails instantly.
+Actually having a single test with multiple assertions basically asserting the same functionality is considered a bad practice.
+If the first assertion fails, you'll not be able to tell if the other assertions had passed or failed.
+
+The next example will show better alternatives of structuring this test:
+
+[source,kotlin]
+----
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+
+internal class CalculatorTests {
+
+    val cut = Calculator()
+
+    @ParameterizedTest // (1)
+    @CsvSource("1,1,2", "9,42,51", "123456,654321,777777") // (2)
+    fun `sum can handle two positive numbers`(a: Int, b: Int, expected: Int) { // (3)
+        assertThat(cut.sum(a = a, b = b)).isEqualTo(expected)
+    }
+
+    @TestFactory // (4)
+    fun `sum can handle two positive numbers`(): List<DynamicTest> = // (5)
+        listOf(
+            Triple(1, 1, 2),
+            Triple(9, 42, 51),
+            Triple(123456, 654321, 777777)
+        )
+        .map { (a, b, expected) -> // (6)
+            dynamicTest("$a + $b = $expected") {  // (7)
+                assertThat(cut.sum(a = a, b = b)).isEqualTo(expected)
+            }
+        }
+}
+----
+
+1. JUnit 5's https://junit.org/junit5/docs/current/user-guide/#writing-tests-parameterized-tests[parameterized test] annotation declares a special kind of test that actually support typed parameters to be injected into a test method.
+These kinds of tests are ideal for permuting over different input values and expected results.
+Each set of test data will be executed as its own test.
+So each assertion can also fail on its own.
+2. Parameterized tests need a source for the parameters.
+There is quite a number of sources available to choose from.
+In this case, because we want to provide 2 input values and an expectation, the CSV source allows us to define comma separated set of data.
+3. The test parameters can be typed (in this case as `Int`) and are automatically converted from the sources `String` data.
+4. A programmatic approach to this problem is provided by https://junit.org/junit5/docs/current/user-guide/#writing-tests-dynamic-tests[test factories].
+These can be used to execute any code in order to produce `DynamicTest` instances, which are then invoked by JUnit like normal tests.
+5. Methods annotated with `@TestFactory` are not allowed to have parameters (unless provided by a https://junit.org/junit5/docs/current/user-guide/#extensions-parameter-resolution[JUnit extension]) and need a return type of any `Collection<DynamicTest>` or `Stream<DynamicTest>`.
+6. Kotlin allows for https://kotlinlang.org/docs/destructuring-declarations.html[destructuring] the test data to make it more readable.
+7. The name for each dynamic test can be defined howerver you want.
+
+For simple cases _parameterized tests_ are the preferred way.
+_Test factories_ are a very powerful concept but are also genrally harder to read / understand.
+They should only be used if none of the _parameter sources_ is enough to do whatever it is you need to do in your tests!
+
+Finally, let's take a look at a much more complex example:
+
+[source,kotlin]
+----
+import info.novatec.testit.logrecorder.api.LogRecord
+import info.novatec.testit.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
+import info.novatec.testit.logrecorder.assertion.containsExactly
+import info.novatec.testit.logrecorder.logback.junit5.RecordLoggers
+import io.mockk.called
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.springframework.util.IdGenerator
+import java.time.Instant
+import java.util.UUID.randomUUID
+
+internal class BookCollectionTest {
+
+    val idGenerator: IdGenerator = mockk() // (1)
+    val repository: BookRepository = mockk()
+    val eventPublisher: BookEventPublisher = mockk(relaxUnitFun = true) // (2)
+
+    val cut = BookCollection(idGenerator, repository, eventPublisher)
+
+    @BeforeEach
+    fun resetMocks() { // (3)
+        clearMocks(idGenerator, repository, eventPublisher)
+    }
+
+    @Nested // (4)
+    inner class GetById {
+
+        @Test
+        fun `returns the record if it was found`() { // (5)
+            every { repository.findById(id_cleanCode) } returns record_cleanCode
+            val bookRecord = cut.get(id_cleanCode)
+            assertThat(bookRecord).isEqualTo(record_cleanCode)
+        }
+
+        @Test
+        fun `returns null if it was not found`() {
+            every { repository.findById(id_cleanCode) } returns null
+            val bookRecord = cut.get(id_cleanCode)
+            assertThat(bookRecord).isNull()
+        }
+
+    }
+
+    @Nested
+    inner class AddBook {
+
+        val generatedId = randomUUID()
+        val currentTimestamp = Instant.now()
+
+        @BeforeEach
+        fun stubDefaultBehaviour() {
+            every { idGenerator.generateId() } returns generatedId // (6)
+            every { repository.save(any()) } answers { simulateRepositorySave(firstArg()) } // (7)
+        }
+
+        @Test
+        fun `returns a book record`() { // (8)
+            val actualBookRecord = cut.add(book_cleanCode)
+            val expectedBookRecord = BookRecord(generatedId, book_cleanCode, currentTimestamp)
+            assertThat(actualBookRecord).isEqualTo(expectedBookRecord)
+        }
+
+        @Test
+        fun `persists a book record it in the repository`() { // (9)
+            cut.add(book_cleanCode)
+            val unsavedBookRecord = BookRecord(generatedId, book_cleanCode)
+            verify { repository.save(unsavedBookRecord) }
+        }
+
+        @Test
+        fun `publishes a creation event`() { // (10)
+            cut.add(book_cleanCode)
+
+            val savedBookRecord = BookRecord(generatedId, book_cleanCode, currentTimestamp)
+            val expectedEvent = BookRecordCreatedEvent(savedBookRecord)
+            verify { eventPublisher.publish(expectedEvent) }
+        }
+
+        fun simulateRepositorySave(bookRecord: BookRecord): BookRecord =
+            bookRecord.copy(timestamp = currentTimestamp)
+
+    }
+
+    @Nested
+    inner class DeleteById {
+
+        @Test
+        fun `publishes a deletion event, if the record was actually deleted`() { // (11)
+            every { repository.deleteById(id_cleanCode) } returns true
+            cut.delete(id_cleanCode)
+            verify { eventPublisher.publish(BookRecordDeletedEvent(id_cleanCode)) }
+        }
+
+        @Test
+        fun `does not publish any event, if the record did was not actually deleted`() {
+            every { repository.deleteById(id_cleanCode) } returns false
+            cut.delete(id_cleanCode)
+            verify { eventPublisher wasNot called }
+        }
+
+        @Test
+        @RecordLoggers(BookCollection::class)
+        fun `logs whether a book was actually deleted`(log: LogRecord) { // (12)
+            every { repository.deleteById(id_cleanCode) } returns true
+            every { repository.deleteById(id_cleanArchitecture) } returns false
+
+            cut.delete(id_cleanCode)
+            cut.delete(id_cleanArchitecture)
+
+            assertThat(log) {
+                containsExactly {
+                    info("trying to delete book with ID '$id_cleanCode'")
+                    debug("book with ID '$id_cleanCode' was deleted")
+                    info("trying to delete book with ID '$id_cleanArchitecture'")
+                    debug("book with ID '$id_cleanArchitecture' was not deleted")
+                }
+            }
+        }
+    }
+}
+----
+
+1. We are using MockK to generate mocks for all dependencies of the _class under test_.
+2. MockK allows defining certain behaviour when declaring a mock.
+In this case we are instructing it to simply accept and record any interactions with methods that do not have a result type.
+3. JUnit offers a variety of https://junit.org/junit5/docs/current/user-guide/#writing-tests-classes-and-methods[lifecycle methods] that allow, among other things, to execute code before and after each test.
+In this case we reset the state of all mocks before each test.
+4. As mention in the introduction, it is possible to group tests within a single test class.
+The `@Nested` annotation can be used to define a _nested test class_.
+All lifecycle methods of the surrounding class also apply for the nested class.
+But lifecycle methods inside the nested class will not be used outside it.
+5. Here you can see _AAA_ in action.
+The `repository's` behaviour is defined (arranged).
+Then the relevant method of the class under test is invoked (act).
+Finally, the result of the invocation is asserted to match expectations.
+6. Common default behaviour can be easily defined in a `@BeforeEach` method.
+In this case the ID generator should always return the same ID.
+7. MockK also allows for defining code (an "Answer") as behaviour.
+This is very useful for more complex operations.
+8. Different aspects of the same method should be tested with different test results.
+Same as with not asserting permutations in the same test method.
+Asserting multiple differnt aspects of a method in the same test would hide additional failures after the first assertion error.
+The first test focuses on the result of the method invocation.
+9. The second test checks behaviour.
+In this case that the book record was actually persisted in the repository.
+10. The third test makes sure that the correct application event was published.
+11. The first two tests of this group show that even methods without a result type can still be tested for their behaviour.
+12. This last test demonstrates how a custom extension can be used to inject something into a test.
+In this case Novatec Consulting GmbH's own https://github.com/nt-ca-aqe/logrecorder[LogRecorder] used for checking if certain log entries were actually written.

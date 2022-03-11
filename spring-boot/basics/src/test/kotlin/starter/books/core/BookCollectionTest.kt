@@ -4,7 +4,11 @@ import info.novatec.testit.logrecorder.api.LogRecord
 import info.novatec.testit.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import info.novatec.testit.logrecorder.assertion.containsExactly
 import info.novatec.testit.logrecorder.logback.junit5.RecordLoggers
-import io.mockk.*
+import io.mockk.called
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -75,7 +79,7 @@ internal class BookCollectionTest {
         // This test verifies that an event was published as a side effect of creating a new book record
 
         @Test
-        fun `publishes an creation event`() {
+        fun `publishes a creation event`() {
             cut.add(book_cleanCode)
 
             val savedBookRecord = BookRecord(generatedId, book_cleanCode, currentTimestamp)
