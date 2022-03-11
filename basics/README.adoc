@@ -20,6 +20,7 @@ Which just further delays the delivery of that version of the software.
 
 A much better approach is to test as part of programming.
 That's where automated tests come into play.
+
 Developers are very good at two things: _writing code_ and _automating boring tasks_
 Repeatedly testing the same things manually is very boring.
 That's why developers should be intrinsically motivated to automate their testing activities.
