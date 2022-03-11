@@ -29,30 +29,26 @@ Developers are very good at two things:
 Repeatedly testing the same things manually is very boring.
 That's why developers are generally intrinsically motivated to automate their tests.
 
-Writing automated tests during normal development has several key benefits:
+Writing automated tests during development has several key benefits:
 
 - No need to manually test what has already been automatically tested every time the software is built.
 - Executing huge amounts of tests in minutes, which would take a human tester days.
 - Having to write testable production code usually means that the code is also better structured.
 - If you have a good suite of _efficient_ automated tests, you'll never be afraid of refactoring your code to keep it maintainable for future generations.
 
-Manual testing of the whole software still has its place in the software development lifecycle.
-But that place is not with testing for regression (testing everything everytime something changes to see if something unrelated broke).
-Its testing if a feature (e.g. in form of a user story) was implemented as intended.
-What we might call an _Acceptance-Test_.
+Manual testing still has its place in the software development lifecycle.
+But that place is not with testing for regression (testing everything everytime something changes to see if anything was broken).
+They are useful for:
 
-These kinds of tests should be done by qualified people (e.g. testers, product owners etc.) who were not directly involved in writing the actual code, and therefore should not have blindspots regarding that code.
-Manually testing for acceptance of a feature should only be done once though.
-Every repeated testing must be automated.
-That's why every risk covered by a manual acceptance tests needs to also be implemented as one or many automated tests with appropriate scopes.
-Ideally during development of the feature.
-But at the latest after it was discovered that tests are missing.
+* _Explorative Testing_ on production or at least close to production systems to find bugs and potential for improvement.
+* _Approving_ of changes (e.g. user stories) to the software by qualified people (e.g. product owner, business analyst etc.) if required.
 
-Having every test automated and only testing manually whenever something is added or changed, makes it possible to ship software faster, in smaller increments and with greater confidence.
+Automated tests must build the backbone of your software development process though.
+Every found bug and resulting bugfix will add new automated tests to protect against regression.
+Similarly, whenever one or more missing automated tests are discovered in manual testing efforts, they need to be added as well.
+Every repeated test must be automated!
 
-In a perfect world automated tests would be implemented in a cooperative way that allows event the people responsible for accepting a feature to simply trust the automated tests and no manual testing is ever required.
-But an overwhelming number of software projects is far from that ideal.
-Reasons for this often include missing basic technical understanding, regulations, etc.
+This will allow you to move faster by deploying more often, changing whatever needs to change whenever it needs to and with much more confidence.
 
 == How?
 
@@ -293,9 +289,9 @@ Depends on the size of the code base.
 Usually just a _couple of seconds_.
 With the initial startup & analysis taking up most of the time.
 
-=== Writing Automated Tests (JVM)
+=== Writing Automated Tests (Kotlin/Java)
 
-Automated tests on the Java Virtual Machine (JVM) usually involve a number of supporting libraries.
+Automated tests for Kotlin or Java usually involve a number of supporting libraries.
 You'll need at least a testing framework - something that defines what a test is, how they are structured, how they are executed and what the overall lifecycle of executing tests actually involves.
 Then you need something to assert if desired results or behaviour was actually achieved.
 Testing for behaviour usually requires control over dependencies' which involves mocking components in order to define and record their behaviour.
@@ -303,7 +299,7 @@ Last but not least you'll need to simulate certain components that are not part 
 
 ==== Tooling
 
-A very well-rounded technology stack for any JVM project:
+A very well-rounded technology stack for any Kotlin/Java project:
 
 * testing framework: https://junit.org/junit5/[JUnit 5]
 * assertions: https://assertj.github.io/doc/[AssertJ] - best for Java, also usable with Kotlin
