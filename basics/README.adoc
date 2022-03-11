@@ -712,3 +712,47 @@ In this case that the book record was actually persisted in the repository.
 11. The first two tests of this group show that even methods without a result type can still be tested for their behaviour.
 12. This last test demonstrates how a custom extension can be used to inject something into a test.
 In this case Novatec Consulting GmbH's own https://github.com/nt-ca-aqe/logrecorder[LogRecorder] used for checking if certain log entries were actually written.
+
+
+
+==== Tooling (Angular / TypeScript)
+
+===== Test Runner
+
+* Karma / Jasmine
+* Jest
+* Cypress
+
+===== Assertions
+
+* Jasmine
+* Jest
+* Cypress
+
+===== Mocking
+
+* Jasmine
+** jest-auto-spies
+** jest-marbles
+* Jest
+** jasmine-auto-spies
+** jasmine-marbles
+* ng-mocks
+* Cypress
+
+==== Simulators
+
+Most libraries and provide their own testing utility in Angular, some examples are:
+
+* Angular Testing Modules for HTTP
+* NgRx Mock Stores
+* ....
+
+==== Contracts
+
+* PACT
+
+==== DOM Interaction
+
+* Angular Component Harnesses
+* Spectator
