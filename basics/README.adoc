@@ -440,6 +440,12 @@ import org.springframework.util.IdGenerator
 import java.time.Instant
 import java.util.UUID.randomUUID
 
+// test data
+import starter.Examples.book_cleanCode
+import starter.Examples.id_cleanArchitecture
+import starter.Examples.id_cleanCode
+import starter.Examples.record_cleanCode
+
 internal class BookCollectionTest {
 
     val idGenerator: IdGenerator = mockk() // (1)
