@@ -219,8 +219,8 @@ This is done by initializing an instance of the class with most, if not all, dep
 Dependencies include references to local resources (e.g. system clock) and other classes (e.g. event handler, repositories etc.).
 Pure functions and other static calls should _not be mocked_!
 
-Tests usually involve checking that the correct parts of the input data is given to the dependencies and that their results are in turn used correctly in the following steps.
-If there are side effects (e.g. publishing of events) in the components code, their invocation is also tested.
+Tests usually involve checking that the correct parts of the input data are given to the dependencies and that their results are in turn used correctly in the following steps.
+If there are side effects (e.g. publishing of events) in the component's code, their invocation is also tested.
 
 ==== I want to make sure that security rules, like the way a user is authenticated, for certain paths of my HTTP-based API are enforced.
 
