@@ -420,6 +420,7 @@ Depends on the size of the code base.
 Usually just a _couple of seconds_.
 With the initial startup & analysis taking up most of the time.
 
+[#TestsKotlinJava]
 === Writing Automated Tests (Kotlin/Java)
 
 Automated tests for Kotlin or Java usually involve a number of supporting libraries.
@@ -717,42 +718,22 @@ In this case Novatec Consulting GmbH's own https://github.com/nt-ca-aqe/logrecor
 
 ==== Tooling (Angular / TypeScript)
 
-===== Test Runner
+A well-rounded stack for Angular / TypeScript projects could look like this:
 
-* Karma / Jasmine
-* Jest
-* Cypress
+* unit testing framework: https://jestjs.io/[Jest] which includes spying and mocking functions and provides assertions
+** with the addition of jest-auto-spies to create mock objects more easily
+** with jest-marbles to easily test and stub RxJS observables
+* End2End testing framework: https://www.cypress.io/[Cypress] which provides assertions and includes a variety of helpers, for example to mock http requests.
+* ng-mocks for automatically mocking modules, services and so on, to focus on the current component under test
+* angular testing modules to provide test replacements for routers, state management and so on
+* angular component harnesses to ease up dom interaction and element selection
 
-===== Assertions
+There are many more tools that can be benefitial. Some of them will be adressed in future examples of this repository.
 
-* Jasmine
-* Jest
-* Cypress
+==== Test Structure
 
-===== Mocking
+Automated Tests for Angular Applications are usually directly attached to a feature under test. Thus, most components, services and so on have corresponding .spec.ts file. I.e. the `app.component.ts` is accompanied by a `app.component.spec.ts`.
 
-* Jasmine
-** jest-auto-spies
-** jest-marbles
-* Jest
-** jasmine-auto-spies
-** jasmine-marbles
-* ng-mocks
-* Cypress
+As Jest and Jasmine, two of the primary testing frameworks used for angular, are based on the describe/it notation, tests should be written in a user centric fashion. Describe blocks are therefor nested to build the test scope while the it block provides the actual test code. They are structured according to the _AAA_ strategy (_arrange_, _act_, _assert_), which is already explained in the <<TestsKotlinJava, Kotlin/Java section about writing automated tests>>.
 
-==== Simulators
-
-Most libraries and provide their own testing utility in Angular, some examples are:
-
-* Angular Testing Modules for HTTP
-* NgRx Mock Stores
-* ....
-
-==== Contracts
-
-* PACT
-
-==== DOM Interaction
-
-* Angular Component Harnesses
-* Spectator
+In the future, we will provide practical examples for such tests for Angular as we already did for the backend side of things.
