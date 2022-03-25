@@ -1,30 +1,46 @@
 package jdbc.books
 
-import com.ninjasquad.springmockk.MockkBean
+import io.mockk.clearMocks
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
+import org.flywaydb.core.Flyway
+import org.h2.jdbcx.JdbcDataSource
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.context.annotation.Import
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.util.IdGenerator
 import java.util.UUID.randomUUID
 
-@JdbcTest
-@MockkBean(IdGenerator::class)
-@Import(BooksRepository::class)
-internal class BookRepositoryTest(
-    @Autowired val idGenerator: IdGenerator,
-    @Autowired val cut: BooksRepository
-) {
+internal class BookRepositoryUnitTest {
+
+    val dataSource = JdbcDataSource()
+        .apply { setUrl("jdbc:h2:mem:${randomUUID()};DB_CLOSE_DELAY=-1") }
+        .apply { user = "sa"; password = "sa" }
+        .also {
+            Flyway.configure()
+                .dataSource(it)
+                .locations("classpath:db/migration")
+                .load()
+                .migrate()
+        }
+
+    val jdbcTempalte = NamedParameterJdbcTemplate(dataSource)
+    val idGenerator: IdGenerator = mockk()
+    val cut = BooksRepository(jdbcTempalte, idGenerator)
 
     val cleanCode = Book("Clean Code", "9780132350884")
     val cleanArchitecture = Book("Clean Architecture", "9780134494166")
 
     val id1 = randomUUID()
     val id2 = randomUUID()
+
+    @BeforeEach
+    fun resetMocks() {
+        clearMocks(idGenerator)
+    }
 
     @Nested
     inner class Creating {
