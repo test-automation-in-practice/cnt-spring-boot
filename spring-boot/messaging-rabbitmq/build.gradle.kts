@@ -17,4 +17,5 @@ dependencies {
     testImplementation("io.mockk:mockk")
     testImplementation("com.ninja-squad:springmockk")
     testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:rabbitmq")
 }

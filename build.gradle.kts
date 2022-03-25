@@ -38,6 +38,7 @@ allprojects {
                 dependency("au.com.dius.pact.provider:junit5:4.2.14")
                 dependency("com.ninja-squad:springmockk:3.0.1")
                 dependency("org.testcontainers:kafka:1.16.2")
+                dependency("org.testcontainers:rabbitmq:1.16.2")
             }
         }
     }
