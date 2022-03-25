@@ -21,7 +21,7 @@ Which just further delays the delivery of that version of the software.
 A much better approach is to test as part of programming.
 That's where automated tests come into play.
 
-Developers are very good at two things: _writing code_ and _automating boring tasks_
+Developers are very good at two things: _writing code_ and _automating boring tasks_.
 Repeatedly testing the same things manually is very boring.
 That's why developers should be intrinsically motivated to automate their testing activities.
 
@@ -30,7 +30,7 @@ Writing automated tests during development has several key benefits:
 - No need to manually test what has already been automatically tested every time the software is built.
 - Executing huge amounts of tests in minutes, which would take a human tester days.
 - Having to write testable production code usually means that the code is also better structured.
-- If you have a good suite of _efficient_ automated tests, you'll never be afraid of refactoring your code to keep it maintainable for future generations.
+- If you have a good suite of _efficient_ automated tests, you'll never be afraid of refactoring your code to keep it maintainable long into the future.
 
 Manual testing still has its place in the software development lifecycle.
 But that place is not with testing for regression (testing everything everytime something changes to see if anything was broken).
@@ -42,7 +42,7 @@ They are useful for:
 Automated tests must build the backbone of your software development process though.
 Every found bug and resulting bugfix will add new automated tests to protect against regression.
 Similarly, whenever one or more missing automated tests are discovered in manual testing efforts, they need to be added as well.
-Every repeated test must be automated!
+Every repeated testing must be automated!
 
 This will allow you to move faster by deploying more often, changing whatever needs to change whenever it needs to and with much more confidence.
 
@@ -72,9 +72,9 @@ These are a lot of labels for seemingly complex things, that actually come down 
 
 The goal of efficient and sustainable automated testing is to keep the following **costs** down, while still covering all relevant risks:
 
-* implementation effort - _"How long does it take me to initially implement the test?"_
-* maintenance effort - _"How often, and how much time, do I need to invest in maintaining the test?"_
-* execution time - _"How much time is needed to execute the test?"_
+* *implementation effort* - _"How long does it take me to initially implement the test?"_
+* *maintenance effort* - _"How often, and how much time, do I need to invest in maintaining the test?"_
+* *execution time* - _"How much time is needed to execute the test?"_
 
 By far the most important of these, for projects with long life spans, is _execution time_.
 Test suites will be run thousands of times over the life span of a project.
@@ -85,8 +85,9 @@ Without having to schedule a coffee break or meeting to kill time while waiting 
 
 === On Labeling Tests
 
-Humans tend to put things into mental boxes in order to easier make sense of them.
-This also happens when we think about tests, as can be seen by all the different kinds of tests in the previous chapter.
+Humans tend to put things into mental boxes in order to make sense of them.
+This also happens when we think about tests.
+As can be seen by all the different kinds of tests in the previous chapter.
 There is just one problem:
 
 _Things also tend to be more complicated and multi-faceted to just neatly fit into a box._
@@ -211,6 +212,8 @@ This is done by initializing an instance of the class with most, if not all, dep
 Dependencies include references to local resources (e.g. system clock) and other classes (e.g. event handler, repositories etc.).
 Pure functions and other static calls should _not be mocked_!
 
+If your static code needs mocking because of some kind of state, then that's bad static code!
+
 Tests usually involve checking that the correct parts of the input data are given to the dependencies and that their results are in turn used correctly in the following steps.
 If there are side effects (e.g. publishing of events) in the component's code, their invocation is also tested.
 
@@ -288,6 +291,7 @@ With the initial startup & analysis taking up most of the time.
 === Writing Automated Tests (Kotlin/Java)
 
 Automated tests for Kotlin or Java usually involve a number of supporting libraries.
+
 You'll need at least a testing framework - something that defines what a test is, how they are structured, how they are executed and what the overall lifecycle of executing tests actually involves.
 Then you need something to assert if desired results or behaviour was actually achieved.
 Testing for behaviour usually requires control over dependencies' which involves mocking components in order to define and record their behaviour.
@@ -297,10 +301,10 @@ Last but not least you'll need to simulate certain components that are not part 
 
 A very well-rounded technology stack for any Kotlin/Java project:
 
-* testing framework: https://junit.org/junit5/[JUnit 5]
-* assertions: https://assertj.github.io/doc/[AssertJ] - best for Java, also usable with Kotlin
-* mocking: https://site.mockito.org[Mockito] for Java and https://mockk.io[MockK] for Kotlin
-* simulators:
+* *testing framework*: https://junit.org/junit5/[JUnit 5]
+* *assertions*: https://assertj.github.io/doc/[AssertJ] - best for Java, also suitable for Kotlin
+* *mocking*: https://site.mockito.org[Mockito] for Java and https://mockk.io[MockK] for Kotlin
+* *simulators*:
 ** https://wiremock.org[WireMock] for anything related HTTP communication
 ** https://www.h2database.com/html/main.html[H2] as an in memory replacement for SQL databases
 ** https://www.testcontainers.org[Testcontainers] for basically any technology that does not provide an in-memory variant
@@ -314,9 +318,9 @@ There are also ways of further grouping _test methods_ inside a _test class_.
 
 _Test methods_ should be structured into 3 phases: _arrange_, _act_ & _assert_ (_AAA_)
 
-In the _arrange_ phase test data is initialized, mocks are setup and state is initialized.
+In the _arrange_ phase test data is defined, mocks are stubbed and state is initialized.
 In the _act_ phase the _function, class, method or system under test_ is invoked.
-In the _assert_ phase the result of _act_ incl. possible side-effects is asserted / verified.
+In the _assert_ phase the result of _act_ incl. possible side effects is asserted / verified.
 
 We'll see more of this in the following examples.
 
@@ -407,7 +411,7 @@ These can be used to execute any code in order to produce `DynamicTest` instance
 7. The name for each dynamic test can be defined howerver you want.
 
 For simple cases _parameterized tests_ are the preferred way.
-_Test factories_ are a very powerful concept but are also genrally harder to read / understand.
+_Test factories_ are a very powerful concept but are also generally harder to read and understand.
 They should only be used if none of the _parameter sources_ is enough to do whatever it is you need to do in your tests!
 
 Finally, let's take a look at a much more complex example:
