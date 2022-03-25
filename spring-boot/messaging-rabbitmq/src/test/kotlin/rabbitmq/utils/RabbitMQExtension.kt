@@ -5,9 +5,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL
 import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
 import org.testcontainers.containers.RabbitMQContainer
-import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import org.testcontainers.utility.DockerImageName.parse
-import java.time.Duration
 
 class RabbitMQExtension : BeforeAllCallback {
 
@@ -27,14 +25,7 @@ class RabbitMQExtension : BeforeAllCallback {
 
 private class CloseableRabbitMqContainerResource :
     RabbitMQContainer(parse("rabbitmq:3.8")), CloseableResource {
-
     init {
-        setWaitStrategy(
-            LogMessageWaitStrategy()
-                .withRegEx(".*Server startup complete.*\n")
-                .withStartupTimeout(Duration.ofSeconds(30))
-        )
         addExposedPort(5672)
     }
-
 }

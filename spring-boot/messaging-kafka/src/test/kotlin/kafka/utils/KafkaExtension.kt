@@ -5,9 +5,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL
 import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
 import org.testcontainers.containers.KafkaContainer
-import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import org.testcontainers.utility.DockerImageName.parse
-import java.time.Duration
 
 class KafkaExtension : BeforeAllCallback {
 
@@ -26,14 +24,4 @@ class KafkaExtension : BeforeAllCallback {
 }
 
 private class CloseableKafkaContainerResource :
-    KafkaContainer(parse("confluentinc/cp-kafka:6.2.1")), CloseableResource {
-
-    init {
-        setWaitStrategy(
-            LogMessageWaitStrategy()
-                .withRegEx(".*Startup complete..*\n")
-                .withStartupTimeout(Duration.ofSeconds(180))
-        )
-    }
-
-}
+    KafkaContainer(parse("confluentinc/cp-kafka:6.2.1")), CloseableResource
