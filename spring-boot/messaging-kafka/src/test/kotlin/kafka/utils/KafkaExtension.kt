@@ -24,4 +24,6 @@ class KafkaExtension : BeforeAllCallback {
 }
 
 private class CloseableKafkaContainerResource :
-    KafkaContainer(parse("confluentinc/cp-kafka:6.2.1")), CloseableResource
+    KafkaContainer(parse("confluentinc/cp-kafka:6.2.1")), CloseableResource {
+    override fun close() = stop()
+}

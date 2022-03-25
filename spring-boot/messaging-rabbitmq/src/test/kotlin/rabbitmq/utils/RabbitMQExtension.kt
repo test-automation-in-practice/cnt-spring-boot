@@ -28,4 +28,6 @@ private class CloseableRabbitMqContainerResource :
     init {
         addExposedPort(5672)
     }
+
+    override fun close() = stop()
 }
