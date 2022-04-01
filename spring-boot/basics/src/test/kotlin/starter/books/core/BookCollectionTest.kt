@@ -1,9 +1,9 @@
 package starter.books.core
 
-import info.novatec.testit.logrecorder.api.LogRecord
-import info.novatec.testit.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
-import info.novatec.testit.logrecorder.assertion.containsExactly
-import info.novatec.testit.logrecorder.logback.junit5.RecordLoggers
+import io.github.logrecorder.api.LogRecord
+import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
+import io.github.logrecorder.assertion.containsExactly
+import io.github.logrecorder.logback.junit5.RecordLoggers
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
