@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/media",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer [a-z0-9-]+"
+      }
+    }
+  },
+  "response": {
+    "status": 201
+  }
+}

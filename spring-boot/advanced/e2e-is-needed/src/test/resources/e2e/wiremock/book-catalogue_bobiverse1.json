@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/books/9781680680584",
+    "headers": {
+      "Authorization": {
+        "matches": "Bearer [a-z0-9-]+"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "isbn": "9781680680584",
+      "title": "We Are Legion (We Are Bob)"
+    }
+  }
+}

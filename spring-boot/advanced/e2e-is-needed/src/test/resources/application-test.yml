@@ -1,0 +1,7 @@
+services:
+  book-catalogue:
+    host: localhost
+    port: ${wiremock.server.port:8081}
+  media-collection:
+    host: localhost
+    port: ${wiremock.server.port:8081}

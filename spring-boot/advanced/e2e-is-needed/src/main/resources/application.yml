@@ -1,0 +1,7 @@
+services:
+  book-catalogue:
+    host: localhost
+    port: 80
+  media-collection:
+    host: localhost
+    port: 80

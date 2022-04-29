@@ -53,6 +53,7 @@ allprojects {
             kotlinOptions {
                 freeCompilerArgs = listOf("-Xjsr305=strict")
                 jvmTarget = "11"
+                incremental = false
             }
         }
         withType<Test> {
