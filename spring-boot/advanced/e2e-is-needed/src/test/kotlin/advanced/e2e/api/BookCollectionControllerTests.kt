@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpHeaders.LOCATION
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
@@ -36,16 +37,14 @@ internal class BookCollectionControllerTests(
             headers { setBearerAuth(TEST_TOKEN_1) }
         }.andExpect {
             status { isCreated() }
+            header { string(LOCATION, "http://localhost/api/books/b3fc0be8-463e-4875-9629-67921a1e00f4") }
             content {
                 contentType(APPLICATION_JSON)
                 json(
                     """
                     { 
-                      "id": "b3fc0be8-463e-4875-9629-67921a1e00f4",
-                      "book": {
-                        "isbn": "9781680680584",
-                        "title": "We Are Legion (We Are Bob)"
-                      }
+                      "isbn": "9781680680584",
+                      "title": "We Are Legion (We Are Bob)"
                     }
                     """
                 )

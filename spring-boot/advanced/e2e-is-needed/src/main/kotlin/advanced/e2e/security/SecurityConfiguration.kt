@@ -8,6 +8,8 @@ import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector
 
+internal const val SCOPE_API = "SCOPE_API"
+
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
@@ -26,5 +28,5 @@ class SecurityConfiguration(
             authorize("/**", denyAll)
         }
     }
-    
+
 }

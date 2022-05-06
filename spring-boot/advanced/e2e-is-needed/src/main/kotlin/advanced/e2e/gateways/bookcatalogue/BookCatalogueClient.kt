@@ -2,7 +2,7 @@ package advanced.e2e.gateways.bookcatalogue
 
 import advanced.e2e.domain.Book
 import advanced.e2e.domain.BookCatalogue
-import advanced.e2e.gateways.defaultHttpClient
+import advanced.e2e.gateways.common.defaultHttpClient
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import okhttp3.Request
@@ -12,21 +12,21 @@ import org.springframework.stereotype.Component
 import java.io.IOException
 
 @Component
-class BookCatalogueAccessor(
-    private val properties: BookCatalogueProperties
+class BookCatalogueClient(
+    private val properties: BookCatalogueServiceProperties
 ) : BookCatalogue {
 
-    private val client = defaultHttpClient()
+    private val httpClient = defaultHttpClient()
     private val objectMapper = jacksonObjectMapper()
 
     override fun findByIsbn(isbn: String): Book? {
         val request = Request.Builder()
-            .url("http://${properties.host}:${properties.port}/api/books/$isbn")
+            .url(properties.url("/api/books/$isbn"))
             .header(ACCEPT, APPLICATION_JSON_VALUE)
             .get()
             .build()
 
-        return client.newCall(request).execute()
+        return httpClient.newCall(request).execute()
             .use { response ->
                 val body = response.body()?.string() ?: ""
                 when (val status = response.code()) {

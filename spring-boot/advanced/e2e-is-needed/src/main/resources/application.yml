@@ -1,7 +1,9 @@
 services:
   book-catalogue:
+    protocol: https
     host: localhost
     port: 80
   media-collection:
+    protocol: https
     host: localhost
     port: 80

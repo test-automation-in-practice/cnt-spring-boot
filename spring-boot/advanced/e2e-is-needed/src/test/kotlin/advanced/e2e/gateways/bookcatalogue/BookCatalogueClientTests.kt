@@ -32,9 +32,9 @@ import java.io.IOException
 
 @ActiveProfiles("test")
 @AutoConfigureWireMock(port = 0)
-@SpringBootTest(classes = [BookCatalogueAccessorTestConfiguration::class])
-internal class BookCatalogueAccessorTests(
-    @Autowired val cut: BookCatalogueAccessor,
+@SpringBootTest(classes = [BookCatalogueClientTestConfiguration::class])
+internal class BookCatalogueClientTests(
+    @Autowired val cut: BookCatalogueClient,
     @Autowired val wireMock: WireMockServer
 ) {
 
@@ -91,6 +91,6 @@ internal class BookCatalogueAccessorTests(
     }
 }
 
-@Import(BookCatalogueAccessor::class)
-@EnableConfigurationProperties(BookCatalogueProperties::class)
-private class BookCatalogueAccessorTestConfiguration
+@Import(BookCatalogueClient::class)
+@EnableConfigurationProperties(BookCatalogueServiceProperties::class)
+private class BookCatalogueClientTestConfiguration

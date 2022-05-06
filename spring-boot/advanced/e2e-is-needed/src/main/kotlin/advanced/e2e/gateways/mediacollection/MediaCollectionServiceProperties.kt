@@ -1,11 +1,13 @@
 package advanced.e2e.gateways.mediacollection
 
+import advanced.e2e.gateways.common.ServiceProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
 @ConfigurationProperties("services.media-collection")
-class MediaCollectionProperties(
-    val host: String,
-    val port: Int
-)
+class MediaCollectionServiceProperties(
+    override val protocol: String,
+    override val host: String,
+    override val port: Int
+) : ServiceProperties

@@ -29,9 +29,9 @@ import java.io.IOException
 
 @ActiveProfiles("test")
 @AutoConfigureWireMock(port = 0)
-@SpringBootTest(classes = [MediaCollectionAccessorTestConfiguration::class])
-internal class MediaCollectionAccessorTests(
-    @Autowired val cut: MediaCollectionAccessor,
+@SpringBootTest(classes = [MediaCollectionClientTestConfiguration::class])
+internal class MediaCollectionClientTests(
+    @Autowired val cut: MediaCollectionClient,
     @Autowired val wireMock: WireMockServer
 ) {
 
@@ -70,6 +70,6 @@ internal class MediaCollectionAccessorTests(
     }
 }
 
-@Import(MediaCollectionAccessor::class)
-@EnableConfigurationProperties(MediaCollectionProperties::class)
-private class MediaCollectionAccessorTestConfiguration
+@Import(MediaCollectionClient::class)
+@EnableConfigurationProperties(MediaCollectionServiceProperties::class)
+private class MediaCollectionClientTestConfiguration

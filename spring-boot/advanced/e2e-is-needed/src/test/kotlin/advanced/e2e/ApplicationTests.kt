@@ -4,6 +4,9 @@ import advanced.e2e.security.TEST_TOKEN_1
 import advanced.e2e.security.TestTokenIntrospector
 import com.github.tomakehurst.wiremock.WireMockServer
 import io.restassured.RestAssured
+import io.restassured.module.kotlin.extensions.Given
+import io.restassured.module.kotlin.extensions.Then
+import io.restassured.module.kotlin.extensions.When
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -38,12 +41,13 @@ internal class ApplicationTests {
 
     @Test
     fun `adding a book by its ISBN works`() {
-        RestAssured.given()
-            .header(AUTHORIZATION, "Bearer $TEST_TOKEN_1")
-            .`when`()
-            .post("/api/books/9781680680584")
-            .then()
-            .statusCode(201)
+        Given {
+            header(AUTHORIZATION, "Bearer $TEST_TOKEN_1")
+        } When {
+            post("/api/books/9781680680584")
+        } Then {
+            statusCode(201)
+        }
     }
 
 }

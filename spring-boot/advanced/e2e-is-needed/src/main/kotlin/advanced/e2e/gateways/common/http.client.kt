@@ -1,4 +1,4 @@
-package advanced.e2e.gateways
+package advanced.e2e.gateways.common
 
 import advanced.e2e.security.SecurityContextAuthorizationHeaderInterceptor
 import okhttp3.OkHttpClient

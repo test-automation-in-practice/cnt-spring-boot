@@ -40,6 +40,7 @@ allprojects {
                 dependency("com.ninja-squad:springmockk:3.0.1")
                 dependency("org.testcontainers:kafka:1.16.2")
                 dependency("org.testcontainers:rabbitmq:1.16.2")
+                dependency("io.rest-assured:kotlin-extensions:4.3.3")
             }
         }
     }
