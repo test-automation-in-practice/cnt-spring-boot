@@ -18,6 +18,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("io.rest-assured:rest-assured")
+    testImplementation("io.rest-assured:kotlin-extensions")
     testImplementation("io.mockk:mockk")
 }
 

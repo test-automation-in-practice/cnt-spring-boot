@@ -1,6 +1,9 @@
 package webmvc
 
 import io.restassured.RestAssured
+import io.restassured.module.kotlin.extensions.Given
+import io.restassured.module.kotlin.extensions.Then
+import io.restassured.module.kotlin.extensions.When
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.startsWith
 import org.junit.jupiter.api.Test
@@ -22,17 +25,18 @@ internal class ApplicationAcceptanceTest {
 
     @Test
     fun `creating a book responds with resource representation including self link`() {
-        RestAssured.given()
-            .header("Content-Type", "application/json")
-            .body("""{ "title": "Clean Code", "isbn": "9780132350884" }""")
-            .`when`()
-            .post("/hateoas-api/books")
-            .then()
-            .statusCode(201)
-            .contentType("application/hal+json")
-            .body("title", equalTo("Clean Code"))
-            .body("isbn", equalTo("9780132350884"))
-            .body("_links.self.href", startsWith("http://localhost:$port/hateoas-api/books/"))
+        Given {
+            header("Content-Type", "application/json")
+            body("""{ "title": "Clean Code", "isbn": "9780132350884" }""")
+        } When {
+            post("/hateoas-api/books")
+        } Then {
+            statusCode(201)
+            contentType("application/hal+json")
+            body("title", equalTo("Clean Code"))
+            body("isbn", equalTo("9780132350884"))
+            body("_links.self.href", startsWith("http://localhost:$port/hateoas-api/books/"))
+        }
     }
 
 }
