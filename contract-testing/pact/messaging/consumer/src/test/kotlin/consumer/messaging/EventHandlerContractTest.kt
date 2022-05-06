@@ -5,6 +5,7 @@ import au.com.dius.pact.consumer.dsl.newJsonObject
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt
 import au.com.dius.pact.consumer.junit5.PactTestFor
 import au.com.dius.pact.consumer.junit5.ProviderType
+import au.com.dius.pact.core.model.PactSpecVersion.V3
 import au.com.dius.pact.core.model.annotations.Pact
 import au.com.dius.pact.core.model.messaging.Message
 import au.com.dius.pact.core.model.messaging.MessagePact
@@ -46,11 +47,11 @@ class EventHandlerContractTest {
             ).toPact()
 
     @Test
-    @PactTestFor(pactMethod = "receiveBookCreatedEventPact")
+    @PactTestFor(pactMethod = "receiveBookCreatedEventPact", pactVersion = V3)
     fun `get single existing book interaction`(messages: List<Message>) {
         assertThat(messages).hasSize(1)
 
-        val receivedEvent = objectMapper.readValue<BookCreatedEvent>(messages.first().contentsAsString())
+        val receivedEvent = objectMapper.readValue<BookCreatedEvent>(messages.first().contentsAsBytes())
 
         assertThat(receivedEvent).isEqualTo(event)
     }

@@ -6,6 +6,7 @@ import au.com.dius.pact.consumer.dsl.newArray
 import au.com.dius.pact.consumer.dsl.newJsonObject
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt
 import au.com.dius.pact.consumer.junit5.PactTestFor
+import au.com.dius.pact.core.model.PactSpecVersion.V3
 import au.com.dius.pact.core.model.annotations.Pact
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -42,7 +43,7 @@ internal class LibraryAccessorContractTest {
         .toPact()
 
     @Test
-    @PactTestFor(pactMethod = "getExistingBookPact")
+    @PactTestFor(pactMethod = "getExistingBookPact", pactVersion = V3)
     fun `get single existing book interaction`(mockServer: MockServer) {
         settings.url = mockServer.getUrl() // change url at runtime
 

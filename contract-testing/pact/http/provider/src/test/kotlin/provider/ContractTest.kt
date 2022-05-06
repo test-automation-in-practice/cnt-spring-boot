@@ -10,7 +10,7 @@ import au.com.dius.pact.provider.junitsupport.loader.PactFolder
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import org.apache.http.HttpRequest
+import org.apache.hc.core5.http.HttpRequest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS

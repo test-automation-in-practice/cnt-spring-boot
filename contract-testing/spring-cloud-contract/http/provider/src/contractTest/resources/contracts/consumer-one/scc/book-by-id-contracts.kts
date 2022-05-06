@@ -1,4 +1,4 @@
-package contracts.`consumer-one`.scc
+package contracts.consumer_one.scc
 
 import org.springframework.cloud.contract.spec.ContractDsl.Companion.contract
 import org.springframework.cloud.contract.spec.internal.RegexPatterns.nonBlank
