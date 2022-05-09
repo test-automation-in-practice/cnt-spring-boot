@@ -40,7 +40,8 @@ internal class BookCollectionTests {
 
         addBookByIsbn(isbn_bobiverse2)
 
-        verify(timeout = 1_000) { mediaCollection.register(record_bobiverse2) }
+        verify { mediaCollection.register(record_bobiverse2) }
+        // verify(timeout = 1_000) { mediaCollection.register(record_bobiverse2) }
     }
 
     @Test
