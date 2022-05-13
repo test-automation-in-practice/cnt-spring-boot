@@ -3,6 +3,7 @@ package advanced.e2e.gateways.mediacollection
 import advanced.e2e.domain.BookRecord
 import advanced.e2e.domain.MediaCollection
 import advanced.e2e.gateways.common.defaultHttpClient
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import okhttp3.MediaType.get
 import okhttp3.Request
 import okhttp3.RequestBody.create
@@ -16,12 +17,14 @@ class MediaCollectionClient(
 ) : MediaCollection {
 
     private val client = defaultHttpClient()
+    private val objectMapper = jacksonObjectMapper()
 
     override fun register(record: BookRecord) {
-        val requestBody = """{ "type": "BOOK", "id": "${record.id}" }"""
+        val registration = MediaRegistration(type = "BOOK", id = record.id.toString(), label = record.book.title)
+
         val request = Request.Builder()
             .url(properties.url("/api/media"))
-            .post(jsonRequestBody(requestBody))
+            .post(jsonRequestBody(registration))
             .build()
 
         client.newCall(request).execute()
@@ -33,6 +36,8 @@ class MediaCollectionClient(
             }
     }
 
-    private fun jsonRequestBody(requestBody: String) = create(get(APPLICATION_JSON_VALUE), requestBody)
+    private fun jsonRequestBody(registration: MediaRegistration) =
+        create(get(APPLICATION_JSON_VALUE), objectMapper.writeValueAsString(registration))
 
+    data class MediaRegistration(val type: String, val id: String, val label: String)
 }

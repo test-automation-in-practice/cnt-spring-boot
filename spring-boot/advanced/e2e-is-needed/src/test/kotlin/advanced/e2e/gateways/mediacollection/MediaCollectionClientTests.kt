@@ -3,6 +3,7 @@ package advanced.e2e.gateways.mediacollection
 import advanced.e2e.domain.Examples.id_bobiverse1
 import advanced.e2e.domain.Examples.record_bobiverse1
 import advanced.e2e.domain.Examples.record_bobiverse2
+import advanced.e2e.domain.Examples.title_bobiverse1
 import advanced.e2e.security.TEST_TOKEN_4
 import advanced.e2e.security.clearSecurityContext
 import advanced.e2e.security.setSecurityContext
@@ -49,7 +50,11 @@ internal class MediaCollectionClientTests(
             post("/api/media")
                 .withHeader(AUTHORIZATION, equalTo("Bearer $TEST_TOKEN_4"))
                 .withHeader(CONTENT_TYPE, equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalToJson("""{ "type": "BOOK", "id": "$id_bobiverse1" }"""))
+                .withRequestBody(
+                    equalToJson(
+                        """{ "type": "BOOK", "id": "$id_bobiverse1", "label": "$title_bobiverse1" }"""
+                    )
+                )
                 .willReturn(aResponse().withStatus(status))
         }
 

@@ -1,14 +1,15 @@
 package advanced.e2e.domain
 
-import java.util.*
+import java.util.UUID
 
 object Examples {
 
     val id_bobiverse1 = UUID.fromString("b3fc0be8-463e-4875-9629-67921a1e00f4")
     val isbn_bobiverse1 = "9781680680584"
+    val title_bobiverse1 = "We Are Legion (We Are Bob)"
     val book_bobiverse1 = Book(
         isbn = isbn_bobiverse1,
-        title = "We Are Legion (We Are Bob)"
+        title = title_bobiverse1
     )
     val record_bobiverse1 = BookRecord(
         id = id_bobiverse1,
