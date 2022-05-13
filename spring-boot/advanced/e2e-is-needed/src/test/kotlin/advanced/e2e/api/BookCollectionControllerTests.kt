@@ -41,12 +41,14 @@ internal class BookCollectionControllerTests(
             content {
                 contentType(APPLICATION_JSON)
                 json(
-                    """
+                    jsonContent = """
                     { 
+                      "id": "b3fc0be8-463e-4875-9629-67921a1e00f4",
                       "isbn": "9781680680584",
                       "title": "We Are Legion (We Are Bob)"
                     }
-                    """
+                    """,
+                    strict = true
                 )
             }
         }
