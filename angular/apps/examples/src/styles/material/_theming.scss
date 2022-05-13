@@ -1,0 +1,102 @@
+@use '@angular/material' as mat;
+
+$angular-typography: mat.define-typography-config(
+  $font-family: 'Roboto, "Helvetica Neue", sans-serif',
+  $display-4: mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  $display-3: mat.define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+  $display-2: mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  $display-1: mat.define-typography-level(34px, 42px, 400),
+  $headline: mat.define-typography-level(24px, 38px, 400),
+  $title: mat.define-typography-level(20px, 34px, 400),
+  $subheading-2: mat.define-typography-level(20px, 34px, 400),
+  $subheading-1: mat.define-typography-level(18px, 30px, 400),
+  $body-2: mat.define-typography-level(16px, 26px, 400),
+  $body-1: mat.define-typography-level(16px, 26px, 400),
+  $caption: mat.define-typography-level(inherit, 1.5, 400),
+  $button: mat.define-typography-level(inherit, 1, 400),
+  $input: mat.define-typography-level(inherit, 1.125, 400),
+);
+
+@include mat.core($angular-typography);
+
+$ntred: (
+  100: theme('colors.accent.100'),
+  200: theme('colors.accent.200'),
+  300: theme('colors.accent.300'),
+  400: theme('colors.accent.400'),
+  500: theme('colors.accent.500'),
+  600: theme('colors.accent.600'),
+  700: theme('colors.accent.700'),
+  800: theme('colors.accent.800'),
+  900: theme('colors.accent.900'),
+  A100: theme('colors.accent.A100'),
+  A200: theme('colors.accent.A200'),
+  A400: theme('colors.accent.A400'),
+  A700: theme('colors.accent.A700'),
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$ntviolette: (
+  100: theme('colors.primary.100'),
+  200: theme('colors.primary.200'),
+  300: theme('colors.primary.300'),
+  400: theme('colors.primary.400'),
+  500: theme('colors.primary.500'),
+  600: theme('colors.primary.600'),
+  700: theme('colors.primary.700'),
+  800: theme('colors.primary.800'),
+  900: theme('colors.primary.900'),
+  A100: theme('colors.primary.A100'),
+  A200: theme('colors.primary.A200'),
+  A400: theme('colors.primary.A400'),
+  A700: theme('colors.primary.A700'),
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$angular-primary: mat.define-palette($ntviolette, 500, 100, 900);
+$angular-accent: mat.define-palette($ntred, 500, 100, 900);
+
+$angular-warn: mat.define-palette(mat.$red-palette);
+
+$angular-default-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $angular-primary,
+      accent: $angular-accent,
+    ),
+  )
+);
+
+@include mat.all-component-themes($angular-default-theme);
+
+//@include mat.expansion-theme()

@@ -1,0 +1,14 @@
+<div fxLayout="row wrap" fxLayoutGap="16px grid">
+  <div fxFlex="33.33%" fxFlex.sm="50%" fxFlex.xs="100%" *ngFor="let location of weatherLocations">
+    <mat-card [id]="locationId(location)">
+      <mat-card-title>
+        {{ location.location }}
+      </mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        The current temperature is: {{ location.temp }} °C
+        <button mat-raised-button color="primary" (click)="saveLocation($event, location)">Save Location & Reload</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

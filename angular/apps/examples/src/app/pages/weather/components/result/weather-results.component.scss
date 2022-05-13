@@ -1,0 +1,21 @@
+mat-card-title {
+  font-size: 1.25rem;
+}
+
+mat-card-content {
+  padding-top: 8px;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+
+  button {
+    margin-top: 8px;
+  }
+}
+
+mat-card-actions {
+  button {
+    width: 100%;
+  }
+}

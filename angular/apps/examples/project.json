@@ -1,7 +1,8 @@
 {
   "projectType": "application",
+  "root": "apps/examples",
   "sourceRoot": "apps/examples/src",
-  "prefix": "angular",
+  "prefix": "examples",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -71,14 +72,14 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/examples/**/*.ts", "apps/examples/**/*.html"]
+        "lintFilePatterns": ["apps/examples/src/**/*.ts", "apps/examples/src/**/*.html"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/examples"],
       "options": {
-        "jestConfig": "apps/examples/jest.config.ts",
+        "jestConfig": "apps/examples/jest.config.js",
         "passWithNoTests": true
       }
     }

@@ -46,15 +46,14 @@ function symlinkNgCLItoNxCLI() {
        * This is the most reliable way to create symlink-like behavior on Windows.
        * Such that it works in all shells and works with npx.
        */
-      ['', '.cmd', '.ps1'].forEach(ext => {
+      ['', '.cmd', '.ps1'].forEach((ext) => {
         if (fs.existsSync(nxPath + ext)) fs.writeFileSync(ngPath + ext, fs.readFileSync(nxPath + ext));
       });
     } else {
       // If unix-based, symlink
       cp.execSync(`ln -sf ./nx ${ngPath}`);
     }
-  }
-  catch(e) {
+  } catch (e) {
     output.error({ title: 'Unable to create a symlink from the Angular CLI to the Nx CLI:' + e.message });
     throw e;
   }
@@ -64,6 +63,6 @@ try {
   symlinkNgCLItoNxCLI();
   require('nx/src/adapter/decorate-cli').decorateCli();
   output.log({ title: 'Angular CLI has been decorated to enable computation caching.' });
-} catch(e) {
+} catch (e) {
   output.error({ title: 'Decoration of the Angular CLI did not complete successfully' });
 }

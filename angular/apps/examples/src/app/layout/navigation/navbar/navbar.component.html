@@ -1,0 +1,5 @@
+<mat-toolbar color="primary" class="w-screen">
+  <a *ngFor="let route of routes" [routerLink]="route.buildRouterLink()" mat-button>
+    {{ route.displayName }}
+  </a>
+</mat-toolbar>

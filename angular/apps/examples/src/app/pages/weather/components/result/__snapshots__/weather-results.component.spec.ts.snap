@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`A user viewing his results should see a consistent layout 1`] = `
+<mock-render
+  __ngContext__={[Function LRootView]}
+>
+  <examples-weather-results>
+    <div
+      fxlayout="row wrap"
+      fxlayoutgap="16px grid"
+    >
+      <div
+        fxflex="33.33%"
+        fxflex.sm="50%"
+        fxflex.xs="100%"
+      >
+        <mat-card
+          id="location-Stuttgart"
+        >
+          <mat-card-title>
+             Stuttgart 
+          </mat-card-title>
+          <mat-divider />
+          <mat-card-content>
+             The current temperature is: 25 °C 
+            <button
+              color="primary"
+              mat-raised-button=""
+            >
+              Save Location & Reload
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div
+        fxflex="33.33%"
+        fxflex.sm="50%"
+        fxflex.xs="100%"
+      >
+        <mat-card
+          id="location-Freiburg"
+        >
+          <mat-card-title>
+             Freiburg 
+          </mat-card-title>
+          <mat-divider />
+          <mat-card-content>
+             The current temperature is: 22 °C 
+            <button
+              color="primary"
+              mat-raised-button=""
+            >
+              Save Location & Reload
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </examples-weather-results>
+</mock-render>
+`;

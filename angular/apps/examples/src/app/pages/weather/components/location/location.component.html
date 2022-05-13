@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-subtitle *ngIf="defaultLocation">Current saved location: {{ defaultLocation }}</mat-card-subtitle>
+  <mat-card-content>
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="startSearch()" class="flex content-center flex-col">
+      <mat-form-field class="mb-3">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="location" placeholder="Enter location" />
+        <mat-error *ngIf="form.controls['location'].hasError('required')">Please enter a location before searching!</mat-error>
+        <mat-error *ngIf="form.controls['location'].hasError('minlength')">At least 3 characters are needed!</mat-error>
+        <mat-error *ngIf="form.controls['location'].hasError('pattern')">Numbers are not allowed!</mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary">Search</button>
+    </form>
+  </mat-card-content>
+</mat-card>
