@@ -7,7 +7,8 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "server": "ts-node ./server/server.ts --watch"
   },
   "private": true,
   "dependencies": {
@@ -48,6 +49,7 @@
     "eslint-plugin-cypress": "^2.10.3",
     "jest": "27.5.1",
     "jest-preset-angular": "11.1.1",
+    "json-server": "^0.17.0",
     "nx": "14.1.5",
     "prettier": "^2.5.1",
     "ts-jest": "27.1.4",
