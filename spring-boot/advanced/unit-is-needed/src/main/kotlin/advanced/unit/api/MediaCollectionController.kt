@@ -8,14 +8,14 @@ import advanced.unit.domain.TypeOfMedia.BOOK
 import advanced.unit.domain.TypeOfMedia.GAME
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.HttpStatus.ACCEPTED
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-import javax.validation.constraints.Max
+import javax.validation.Valid
+import javax.validation.constraints.Size
 
 @RestController
 @RequestMapping("/api/media")
@@ -27,7 +27,7 @@ class MediaCollectionController(
 
     @PostMapping
     @ResponseStatus(ACCEPTED)
-    fun register(@Validated @RequestBody registration: MediaRegistration) {
+    fun register(@Valid @RequestBody registration: MediaRegistration) {
         log.debug("received registration of new media item: $registration")
         val item = createMediaItem(registration)
         collection.register(item)
@@ -39,6 +39,10 @@ class MediaCollectionController(
             GAME -> Game(registration.id, registration.label)
         }
 
-    data class MediaRegistration(val type: TypeOfMedia, val id: UUID, @Max(100) val label: String)
+    data class MediaRegistration(
+        val type: TypeOfMedia,
+        val id: UUID,
+        @field:Size(max = 100) val label: String
+    )
 
 }

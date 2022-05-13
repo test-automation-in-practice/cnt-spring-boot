@@ -1,7 +1,7 @@
 package advanced.unit.domain
 
-import advanced.unit.domain.Examples.book_bobiverse1
-import advanced.unit.domain.Examples.book_bobiverse2
+import advanced.unit.Examples.book_bobiverse1
+import advanced.unit.Examples.book_bobiverse2
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsExactly
