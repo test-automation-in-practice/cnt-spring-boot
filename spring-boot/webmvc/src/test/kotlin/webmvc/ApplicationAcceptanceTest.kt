@@ -9,7 +9,8 @@ import org.hamcrest.CoreMatchers.startsWith
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
+
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 internal class ApplicationAcceptanceTest {

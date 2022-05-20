@@ -32,9 +32,9 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
-import java.util.UUID
+import java.util.*
 import java.util.UUID.randomUUID
 
 @ActiveProfiles("test")
@@ -86,12 +86,12 @@ internal class ApplicationTests(
 
     @Test
     fun `registering a book adds a new media item`() {
-        assertThat(repositoryContainsBookWithId(book_bobiverse3_id)).isFalse()
+        assertThat(repositoryContainsBookWithId(book_bobiverse3_id)).isFalse
         registerMediaItem(book_bobiverse3_registration_json)
 
         waitForAsyncProcessingToBeDone()
 
-        assertThat(repositoryContainsBookWithId(book_bobiverse3_id)).isTrue()
+        assertThat(repositoryContainsBookWithId(book_bobiverse3_id)).isTrue
     }
 
     @TestFactory

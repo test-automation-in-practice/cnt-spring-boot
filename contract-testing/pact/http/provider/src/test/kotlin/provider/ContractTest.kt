@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.HttpHeaders.AUTHORIZATION
@@ -28,7 +28,7 @@ import org.springframework.http.HttpHeaders.encodeBasicAuth
 import provider.books.Book
 import provider.books.BookRecord
 import provider.books.Library
-import java.util.UUID
+import java.util.*
 import kotlin.text.Charsets.UTF_8
 
 // Example of provider-side contract test.
