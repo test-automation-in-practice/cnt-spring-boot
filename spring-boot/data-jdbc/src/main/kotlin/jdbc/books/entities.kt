@@ -10,7 +10,7 @@ abstract class VersionedEntity {
     var version: Long = 0
 }
 
-@Table("BOOK_RECORDS")
+@Table("book_records")
 data class BookRecord(
     @Id
     val id: UUID,

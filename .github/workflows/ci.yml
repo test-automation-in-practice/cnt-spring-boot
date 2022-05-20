@@ -210,6 +210,25 @@ jobs:
           name: test-results_spring-boot_jdbc
           path: "**/build/reports/tests"
 
+  spring-boot_data-jdbc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :spring-boot:data-jdbc:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_spring-boot_data-jdbc
+          path: "**/build/reports/tests"
+
   spring-boot_data-jpa:
     runs-on: ubuntu-latest
     steps:

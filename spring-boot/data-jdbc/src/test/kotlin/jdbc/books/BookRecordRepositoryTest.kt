@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.test.context.ActiveProfiles
 import java.util.UUID.randomUUID
@@ -32,7 +33,7 @@ internal class BookRecordRepositoryTest(
             }
         assertThatThrownBy { cut.save(savedEntity) }
             .isInstanceOf(DbActionExecutionException::class.java)
-            .hasStackTraceContaining("can not be saved in lower version")
+            .hasCauseInstanceOf(DuplicateKeyException::class.java)
     }
 
     @Test
@@ -45,7 +46,7 @@ internal class BookRecordRepositoryTest(
 
         assertThatThrownBy { cut.save(savedEntity) }
             .isInstanceOf(DbActionExecutionException::class.java)
-            .hasStackTraceContaining("can not be saved in same version")
+            .hasCauseInstanceOf(DuplicateKeyException::class.java)
     }
 
     @Test
