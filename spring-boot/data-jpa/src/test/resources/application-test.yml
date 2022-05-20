@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: "jdbc:h2:mem:database-${random.uuid};MODE=PostgreSQL"
+    username: "sa"
+    password: "sa"
+  test:
+    database:
+      replace: none

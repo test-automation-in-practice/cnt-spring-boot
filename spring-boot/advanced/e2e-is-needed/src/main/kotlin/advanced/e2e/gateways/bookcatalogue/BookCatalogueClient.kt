@@ -28,8 +28,8 @@ class BookCatalogueClient(
 
         return httpClient.newCall(request).execute()
             .use { response ->
-                val body = response.body()?.string() ?: ""
-                when (val status = response.code()) {
+                val body = response.body?.string() ?: ""
+                when (val status = response.code) {
                     200 -> objectMapper.readTree(body)
                     204, 404 -> null
                     else -> throw IOException("Failed call [status=$status]: $body")

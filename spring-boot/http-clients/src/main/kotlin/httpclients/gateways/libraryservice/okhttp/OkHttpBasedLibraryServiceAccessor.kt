@@ -7,11 +7,10 @@ import httpclients.gateways.libraryservice.Book
 import httpclients.gateways.libraryservice.CreatedBook
 import httpclients.gateways.libraryservice.LibraryService
 import httpclients.gateways.libraryservice.LibraryServiceProperties
-import okhttp3.HttpUrl
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.create
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.stereotype.Service
@@ -24,27 +23,30 @@ internal class OkHttpBasedLibraryServiceAccessor(
     private val properties: LibraryServiceProperties
 ) : LibraryService {
 
-    private val jsonMediaType = MediaType.get(APPLICATION_JSON_VALUE)
+    private val jsonMediaType = APPLICATION_JSON_VALUE.toMediaType()
+
     private val objectMapper = jacksonObjectMapper()
         .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     override fun addBook(book: Book): CreatedBook {
-        val jsonPayload = objectMapper.writeValueAsString(book)
 
         val request = Request.Builder()
-            .url(HttpUrl.get(properties.baseUrl + "/api/books"))
-            .post(create(jsonMediaType, jsonPayload))
+            .url(properties.baseUrl + "/api/books")
+            .post(jsonRequestBody(book))
             .build()
 
         return httpClient.newCall(request).execute()
             .use { response ->
-                val responseBody = response.body()?.string() ?: ""
-                when (val status = response.code()) {
+                val responseBody = response.body?.string() ?: ""
+                when (val status = response.code) {
                     200, 201 -> objectMapper.readValue(responseBody)
                     else -> throw exception(status, responseBody)
                 }
             }
     }
+
+    private fun jsonRequestBody(book: Book) =
+        objectMapper.writeValueAsString(book).toRequestBody(jsonMediaType)
 
     private fun exception(status: Int, responseBody: String) =
         IOException("Recieved bad response status $status: $responseBody")

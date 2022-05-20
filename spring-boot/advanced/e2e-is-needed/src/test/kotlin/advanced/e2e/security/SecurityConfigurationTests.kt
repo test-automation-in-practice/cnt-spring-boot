@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @WebMvcTest(TestRestController::class)
-@Import(TestTokenIntrospector::class)
+@Import(TestTokenIntrospector::class, SecurityConfiguration::class)
 internal class SecurityConfigurationTests(
     @Autowired val mockMvc: MockMvc
 ) {

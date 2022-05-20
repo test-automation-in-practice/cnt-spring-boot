@@ -6,6 +6,7 @@ import advanced.e2e.domain.Examples.isbn_bobiverse1
 import advanced.e2e.domain.Examples.isbn_bobiverse2
 import advanced.e2e.domain.Examples.isbn_bobiverse3
 import advanced.e2e.domain.Examples.record_bobiverse1
+import advanced.e2e.security.SecurityConfiguration
 import advanced.e2e.security.TEST_TOKEN_1
 import advanced.e2e.security.TestTokenIntrospector
 import com.ninjasquad.springmockk.MockkBean
@@ -23,7 +24,7 @@ import kotlin.Result.Companion.success
 
 @WebMvcTest(BookCollectionController::class)
 @MockkBean(BookCollection::class)
-@Import(TestTokenIntrospector::class)
+@Import(TestTokenIntrospector::class, SecurityConfiguration::class)
 internal class BookCollectionControllerTests(
     @Autowired val collection: BookCollection,
     @Autowired val mockMvc: MockMvc
