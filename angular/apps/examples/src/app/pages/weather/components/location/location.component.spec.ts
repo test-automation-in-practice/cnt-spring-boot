@@ -45,22 +45,20 @@ describe('A user', () => {
     });
 
     describe('which is not valid', () => {
-      [
-        { error: getErrors('required'), input: '' },
-        { error: getErrors('minlength'), input: '1' },
-        { error: getErrors('pattern'), input: '1' },
-        { error: getErrors('minlength'), input: 'St' },
-        { error: getErrors('pattern'), input: '123' },
-      ].forEach((test) => {
-        it(`should see ${test.error} error if he enters '${test.input}'`, async () => {
-          const input = await loader.getHarness(MatInputHarness.with({ placeholder: 'Enter location' }));
-          await input.setValue(test.input);
-          const button = await loader.getHarness(MatButtonHarness);
-          await button.click();
-          const formField = await loader.getHarness(MatFormFieldHarness);
-          const shownError = await formField.getTextErrors();
-          expect(shownError).toContain(test.error);
-        });
+      test.each([
+        [getErrors('required'), ''],
+        [getErrors('minlength'), '1'],
+        [getErrors('pattern'), '1'],
+        [getErrors('minlength'), 'St'],
+        [getErrors('pattern'), '123'],
+      ])("should see '%s' error if he enters '%s'", async (error: string, inputValue: string) => {
+        const input = await loader.getHarness(MatInputHarness.with({ placeholder: 'Enter location' }));
+        await input.setValue(inputValue);
+        const button = await loader.getHarness(MatButtonHarness);
+        await button.click();
+        const formField = await loader.getHarness(MatFormFieldHarness);
+        const shownError = await formField.getTextErrors();
+        expect(shownError).toContain(error);
       });
 
       it('should not be able to search', async () => {

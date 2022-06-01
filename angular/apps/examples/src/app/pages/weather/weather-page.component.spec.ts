@@ -14,6 +14,19 @@ import { MatCardHarness } from '@angular/material/card/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
+import { MatCardModule } from '@angular/material/card';
+import { WeatherIntroductionComponent } from './paragraphs/introduction/weather-introduction.component';
+import { WeatherExplanationComponent } from './paragraphs/explanation/weather-explanation.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { LocationComponent } from './components/location/location.component';
+import { ErrorMessageComponent } from './components/error-message/error-message.component';
+import { LoadingComponent } from './components/loading/loading/loading.component';
+import { WeatherResultsComponent } from './components/result/weather-results.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 type serviceMockProps = {
   isLoading?: boolean;
@@ -32,6 +45,8 @@ function createServiceMock(opts: serviceMockProps) {
   return MockService(WeatherService, stateOverrides);
 }
 
+const MaterialModules = [MatCardModule, MatExpansionModule, MatInputModule, MatButtonModule, MatDividerModule, MatProgressSpinnerModule];
+
 describe('A user visiting the Component Testing Page', () => {
   /**
    * These tests are testing the complete module and give us confidence for bigger refactorings.
@@ -46,7 +61,17 @@ describe('A user visiting the Component Testing Page', () => {
 
     beforeEach(async () => {
       return TestBed.configureTestingModule({
-        imports: [NoopAnimationsModule, WeatherModule, HttpClientTestingModule],
+        declarations: [
+          WeatherPageComponent,
+          WeatherIntroductionComponent,
+          WeatherExplanationComponent,
+          LocationComponent,
+          ErrorMessageComponent,
+          LoadingComponent,
+          WeatherResultsComponent,
+        ],
+        imports: [NoopAnimationsModule, HttpClientTestingModule, ReactiveFormsModule, ...MaterialModules],
+        providers: [WeatherService],
       }).compileComponents();
     });
 
