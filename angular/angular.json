@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "examples": "apps/examples",
-    "examples-e2e": "apps/examples-e2e"
+    "basics": "apps/basics",
+    "basics-e2e": "apps/basics-e2e"
   }
 }

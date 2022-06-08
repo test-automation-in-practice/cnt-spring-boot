@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`A user triggering an error can get it displayed 1`] = `
+<mock-render
+  __ngContext__={[Function LRootView]}
+>
+  <basics-error-message>
+    <mat-card>
+      <mat-card-content>
+        <div
+          class="flex flex-row items-center"
+        >
+          <mat-icon
+            color="accent"
+            mat-card-avatar=""
+          >
+            warning
+          </mat-icon>
+          <span
+            class="pl-4 text-lg"
+          >
+            Error message will be visible!
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </basics-error-message>
+</mock-render>
+`;

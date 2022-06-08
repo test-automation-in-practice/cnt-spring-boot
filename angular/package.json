@@ -5,12 +5,16 @@
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
+    "start:basics": "nx serve basics",
     "start": "nx serve",
+    "build:basics": "nx build basics",
     "build": "nx build",
+    "test:basics": "nx test basics",
     "test": "nx test",
+    "test:basics:watch": "nx test basics --watch",
     "test:watch": "nx test --watch",
-    "e2e": "nx e2e examples-e2e",
-    "e2e:watch": "nx e2e examples-e2e --watch",
+    "e2e:basics": "nx e2e basics-e2e",
+    "e2e:basics:watch": "nx e2e basics-e2e --watch",
     "server": "ts-node ./server/server.ts --watch"
   },
   "private": true,
