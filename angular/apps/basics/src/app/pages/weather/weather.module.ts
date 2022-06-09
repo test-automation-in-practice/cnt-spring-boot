@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { WeatherIntroductionComponent } from './paragraphs/introduction/weather-introduction.component';
 import { WeatherExplanationComponent } from './paragraphs/explanation/weather-explanation.component';
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
@@ -35,7 +34,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatInputModule,
     MatCardModule,
     MatDividerModule,
-    FlexLayoutModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
