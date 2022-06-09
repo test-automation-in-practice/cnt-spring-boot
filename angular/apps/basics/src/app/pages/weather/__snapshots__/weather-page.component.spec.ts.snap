@@ -2,7 +2,7 @@
 
 exports[`A user visiting the Component Testing Page should have a consistent layout if the service has a warning 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__={[Function Number]}
 >
   <basics-weather-page>
     <h1>
@@ -33,7 +33,7 @@ exports[`A user visiting the Component Testing Page should have a consistent lay
 
 exports[`A user visiting the Component Testing Page should have a consistent layout if the service has no warning 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__={[Function Number]}
 >
   <basics-weather-page>
     <h1>
@@ -61,7 +61,7 @@ exports[`A user visiting the Component Testing Page should have a consistent lay
 
 exports[`A user visiting the Component Testing Page should have a consistent layout if the service is loading 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__={[Function Number]}
 >
   <basics-weather-page>
     <h1>

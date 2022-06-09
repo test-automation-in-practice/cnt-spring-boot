@@ -2,7 +2,7 @@
 
 exports[`A user triggering an error can get it displayed 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__="0"
 >
   <basics-error-message>
     <mat-card>

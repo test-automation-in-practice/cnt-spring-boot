@@ -2,7 +2,7 @@
 
 exports[`A user viewing the component should see a consistent layout if no location is saved 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__={[Function Number]}
 >
   <basics-location>
     <mat-card>
@@ -40,7 +40,7 @@ exports[`A user viewing the component should see a consistent layout if no locat
 
 exports[`A user viewing the component should see a consistent layout with their saved location 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__={[Function Number]}
 >
   <basics-location>
     <mat-card>

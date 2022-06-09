@@ -2,7 +2,7 @@
 
 exports[`A loading component should render a spinner 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__="0"
 >
   <basics-loading>
     <mat-spinner />

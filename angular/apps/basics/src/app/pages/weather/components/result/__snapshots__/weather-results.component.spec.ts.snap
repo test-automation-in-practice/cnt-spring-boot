@@ -2,7 +2,7 @@
 
 exports[`A user viewing their results should see a consistent layout 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__="0"
 >
   <basics-weather-results>
     <div

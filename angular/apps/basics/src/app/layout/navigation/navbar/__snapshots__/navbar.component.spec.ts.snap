@@ -2,7 +2,7 @@
 
 exports[`Navbar should stay consistent 1`] = `
 <mock-render
-  __ngContext__={[Function LRootView]}
+  __ngContext__="0"
 >
   <basics-navbar>
     <mat-toolbar
