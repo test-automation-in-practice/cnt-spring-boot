@@ -1,42 +1,40 @@
-# Workshop: Cloud Native Testing
+# Cloud Native Testing
 
-This repository contains example code for the `Cloud Native Testing` workshop.
+This repository contains example code for all kinds of technologies and how to efficiently test them.
+All examples are based on _our_ experience in different actual small and large scale projects. 
 
-What you can find:
+## Topics
 
-- [`contract-testing`](contract-testing)
-  - [`pact`](contract-testing/pact)
-  - [`spring-cloud-contract`](contract-testing/spring-cloud-contract)
-- [`spring-boot`](spring-boot)
-  - [`basics`](spring-boot/basics)
-  - [`caching`](spring-boot/caching)
-  - [`data-jpa`](spring-boot/data-jpa)
-  - [`data-mongodb`](spring-boot/data-mongodb)
-  - [`http-clients`](spring-boot/http-clients)
-  - [`jdbc`](spring-boot/jdbc)
-  - [`messaging-rabbitmq`](spring-boot/messaging-rabbitmq)
-  - [`security`](spring-boot/security)
-  - [`webflux`](spring-boot/webflux)
-  - [`webmvc`](spring-boot/webmvc)
+- Backend Applications
+  - [_Spring Boot_ with _Kotlin_](spring-boot/README.adoc)
+- Frontend Application
+  - [_Angular_](angular)
+- Methods & Practices
+  - [Test Automation Basics](basics/README.adoc)
+  - Contract Testing
+    - [Consumer-driven Contract Testing with _PACT_](contract-testing/pact/README.adoc)
+    - [Contract Testing with _Spring Cloud Contracts_ (SCC)](contract-testing/spring-cloud-contract/README.adoc)
 
-Further Reading:
+## Examples
 
-- [PACT](https://docs.pact.io)
-- [PACT JVM Implementation](https://github.com/DiUS/pact-jvm)
-- [TestContainers User Guide](https://www.testcontainers.org/usage.html)
-- [TestContainers GitHub](https://github.com/testcontainers/testcontainers-java)
-- [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/)
-- [JUnit 5 GitHub](https://github.com/junit-team/junit5)
-- [RestAssured](http://rest-assured.io)
-- [RestAssured GitHub](https://github.com/rest-assured/rest-assured)
-- [WireMock Documentation](http://wiremock.org/docs/)
-- [WireMock GitHub](https://github.com/tomakehurst/wiremock)
-- [The Practical Test Pyramid Article](https://martinfowler.com/articles/practical-test-pyramid.html)
-
-Further Watching:
-
-- [Spring Tips (Playlist)](https://www.youtube.com/playlist?list=PLgGXSWYM2FpPw8rV0tZoMiJYSCiLhPnOc)
-- [Spring Tips: Bootiful Testing](https://youtu.be/lTSJCr7xdbM)
-- [Spring Tips: Demystifying Bootiful Magic](https://youtu.be/Sw7I70vjN0E)
-
-[1]:https://circleci.com/gh/nt-ca-aqe/ws-cloud-native-testing/tree/master
+- Angular
+  - [Basics](angular/apps/basics) & [Basics E2E](angular/apps/basics-e2e)
+- Contract Testing
+  - [PACT](contract-testing/pact)
+  - [Spring Cloud Contracts (SCC)](contract-testing/spring-cloud-contract)
+- Spring Boot
+  - General Practices
+    - [Basics](spring-boot/basics)
+    - [Advanced Topics](spring-boot/advanced)
+  - Technologies
+    - [Caching](spring-boot/caching)
+    - [Spring Data JDBC](spring-boot/data-jdbc)
+    - [Spring Data JPA](spring-boot/data-jpa)
+    - [Spring Data MongoDB](spring-boot/data-mongodb)
+    - [HTTP Clients](spring-boot/http-clients)
+    - [JDBC](spring-boot/jdbc)
+    - [Messaging with Kafka](spring-boot/messaging-kafka)
+    - [Messaging with RabbitMQ](spring-boot/messaging-rabbitmq)
+    - [Spring Security](spring-boot/security)
+    - [WebFlux](spring-boot/webflux)
+    - [WebMVC](spring-boot/webmvc)
