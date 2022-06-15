@@ -41,11 +41,13 @@ The response body will include an error providing further information.
 | The requested resource did not exist.
 |===
 
-== Resources
+== Default API
 
-=== Books
+=== Resources
 
-==== Creating a new Book
+==== Books
+
+===== Creating a new Book
 
 In order to create a book, the consumer needs to provide a `title` string, an 13 digit `isbn` and `POST` them to the `books` resource:
 
@@ -55,3 +57,29 @@ This will create a new book in the database.
 The response to this request will contain the stored data and links to available other resources.
 
 include::{snippets}/default/books/post/created/http-response.adoc[]
+
+== HATEOAS API
+
+=== Hypermedia
+
+This application uses hypermedia and resources include links to other resources in their responses.
+Responses are in
+http://stateless.co/hal_specification.html[Hypertext Application from resource to resource. Language (HAL)]
+format.
+Links can be found beneath the `_links` key.
+Users of the API should not create URIs themselves, instead they should use the above-described links to navigate
+
+=== Resources
+
+==== Books
+
+===== Creating a new Book
+
+In order to create a book, the consumer needs to provide a `title` string, an 13 digit `isbn` and `POST` them to the `books` resource:
+
+include::{snippets}/hateoas/books/post/created/http-request.adoc[]
+
+This will create a new book in the database.
+The response to this request will contain the stored data and links to available other resources.
+
+include::{snippets}/hateoas/books/post/created/http-response.adoc[]

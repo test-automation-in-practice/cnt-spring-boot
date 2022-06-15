@@ -75,7 +75,9 @@ internal class HateoasBookControllerTest(
                           "title": "Clean Code",
                           "isbn": "9780132350884",
                           "_links": {
-                            "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanCode"}
+                            "self": {
+                              "href": "http://localhost:8080/hateoas-api/books/$id_cleanCode"
+                            }
                           }
                         }
                         """
@@ -126,14 +128,18 @@ internal class HateoasBookControllerTest(
                                     "title": "Clean Code",
                                     "isbn": "9780132350884",
                                     "_links": {
-                                      "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanCode"}
+                                      "self": {
+                                        "href": "http://localhost:8080/hateoas-api/books/$id_cleanCode"
+                                      }
                                     }
                                   },
                                   {
                                     "title": "Clean Architecture",
                                     "isbn": "9780134494166",
                                     "_links": {
-                                      "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanArchitecture"}
+                                      "self": {
+                                        "href": "http://localhost:8080/hateoas-api/books/$id_cleanArchitecture"
+                                      }
                                     }
                                   }
                                 ]
@@ -197,7 +203,9 @@ internal class HateoasBookControllerTest(
                               "title": "Clean Code",
                               "isbn": "9780132350884",
                               "_links": {
-                                "self": {"href":"http://localhost:8080/hateoas-api/books/$id_cleanCode"}
+                                "self": {
+                                  "href": "http://localhost:8080/hateoas-api/books/$id_cleanCode"
+                                }
                               }
                             }
                             """
