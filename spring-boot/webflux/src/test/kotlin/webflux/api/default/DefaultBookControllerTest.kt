@@ -3,6 +3,7 @@ package webflux.api.default
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -13,7 +14,9 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType.APPLICATION_JSON
-import org.springframework.restdocs.operation.preprocess.Preprocessors.*
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
+import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
@@ -25,7 +28,7 @@ import webflux.business.Examples.id_cleanArchitecture
 import webflux.business.Examples.id_cleanCode
 import webflux.business.Examples.record_cleanArchitecture
 import webflux.business.Examples.record_cleanCode
-import java.util.*
+import java.util.UUID
 
 private class DefaultBookControllerTestConfiguration {
     @Bean
@@ -47,7 +50,7 @@ internal class DefaultBookControllerTest(
     @DisplayName("POST /default-api/books")
     inner class Post {
 
-        fun postBook(body: String) = webTestClient.post()
+        fun postBook(@Language("json") body: String) = webTestClient.post()
             .uri("/default-api/books")
             .contentType(APPLICATION_JSON)
             .bodyValue(body)
@@ -60,15 +63,15 @@ internal class DefaultBookControllerTest(
             postBook("""{ "title": "Clean Code", "isbn": "9780132350884" }""")
                 .expectStatus().isCreated
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody().json {
+                .expectBody().strictJson(
                     """
                     {
-                        "id": "$id_cleanCode",
-                        "title": "Clean Code",
-                        "isbn": "9780132350884"
+                       "id": "$id_cleanCode",
+                       "title": "Clean Code",
+                       "isbn": "9780132350884"
                     }
                     """
-                }
+                )
                 .andDocument("post/created")
         }
 
@@ -105,22 +108,22 @@ internal class DefaultBookControllerTest(
             getBooks()
                 .expectStatus().isOk
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody().json {
+                .expectBody().strictJson(
                     """
                     [
-                        {
-                            "id": "$id_cleanCode",
-                            "title": "Clean Code",
-                            "isbn": "9780132350884"
-                        },
-                        {
-                            "id": "$id_cleanArchitecture",
-                            "title": "Clean Architecture",
-                            "isbn": "9780134494166"
-                        }
+                      {
+                        "id": "$id_cleanCode",
+                        "title": "Clean Code",
+                        "isbn": "9780132350884"
+                      },
+                      {
+                        "id": "$id_cleanArchitecture",
+                        "title": "Clean Architecture",
+                        "isbn": "9780134494166"
+                      }
                     ]
                     """
-                }
+                )
                 .andDocument("get/ok_found")
         }
 
@@ -152,15 +155,15 @@ internal class DefaultBookControllerTest(
             getBook(id_cleanCode)
                 .expectStatus().isOk
                 .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody().json {
+                .expectBody().strictJson(
                     """
                     {
-                        "id": "$id_cleanCode",
-                        "title": "Clean Code",
-                        "isbn": "9780132350884"
+                      "id": "$id_cleanCode",
+                      "title": "Clean Code",
+                      "isbn": "9780132350884"
                     }
                     """
-                }
+                )
                 .andDocument("by-id/get/ok")
         }
 
@@ -198,7 +201,7 @@ internal class DefaultBookControllerTest(
 
     }
 
-    fun WebTestClient.BodyContentSpec.json(supplier: () -> String) = json(supplier())
+    fun WebTestClient.BodyContentSpec.strictJson(@Language("json") json: String) = json(json, true)
 
     fun WebTestClient.BodyContentSpec.andDocument(identifier: String) =
         consumeWith(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))

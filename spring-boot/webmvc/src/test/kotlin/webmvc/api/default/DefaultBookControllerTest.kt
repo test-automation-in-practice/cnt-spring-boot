@@ -1,6 +1,11 @@
 package webmvc.api.default
 
-import io.mockk.*
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -12,8 +17,15 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
-import org.springframework.restdocs.operation.preprocess.Preprocessors.*
-import org.springframework.test.web.servlet.*
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
+import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
+import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
+import org.springframework.test.web.servlet.MockHttpServletRequestDsl
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MockMvcResultHandlersDsl
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.result.ContentResultMatchersDsl
 import webmvc.business.BookCollection
 import webmvc.business.BookRecordNotFoundException
@@ -48,13 +60,12 @@ internal class DefaultBookControllerTest(
             every { bookCollection.add(book_cleanCode) } returns record_cleanCode
 
             mockMvc.post("/default-api/books") {
-                contentType = APPLICATION_JSON
-                content = """{ "title": "Clean Code", "isbn": "9780132350884" }"""
+                jsonContent("""{ "title": "Clean Code", "isbn": "9780132350884" }""")
             }.andExpect {
                 status { isCreated() }
                 content {
                     contentType(APPLICATION_JSON)
-                    strictJson {
+                    strictJson(
                         """
                         {
                             "id": "$id_cleanCode",
@@ -62,7 +73,7 @@ internal class DefaultBookControllerTest(
                             "isbn": "9780132350884"
                         }
                         """
-                    }
+                    )
                 }
             }.andDo { document("post/created") }
         }
@@ -70,8 +81,7 @@ internal class DefaultBookControllerTest(
         @Test
         fun `posting a book with a invalid property responds with status 400`() {
             mockMvc.post("/default-api/books") {
-                contentType = APPLICATION_JSON
-                content = """{ "title": "Clean Code", "isbn": "0132350884" }""" // isbn malformed
+                jsonContent("""{ "title": "Clean Code", "isbn": "0132350884" }""") // isbn malformed
             }.andExpect {
                 status { isBadRequest() }
             }.andDo { document("post/bad-request_invalid") }
@@ -80,8 +90,7 @@ internal class DefaultBookControllerTest(
         @Test
         fun `posting a book with missing property responds with status 400`() {
             mockMvc.post("/default-api/books") {
-                contentType = APPLICATION_JSON
-                content = """{ "isbn": "Clean Code" }"""
+                jsonContent("""{ "isbn": "Clean Code" }""")
             }.andExpect {
                 status { isBadRequest() }
             }.andDo { document("post/bad-request_missing") }
@@ -102,7 +111,7 @@ internal class DefaultBookControllerTest(
                     status { isOk() }
                     content {
                         contentType(APPLICATION_JSON)
-                        strictJson {
+                        strictJson(
                             """
                             [
                                 {
@@ -117,7 +126,7 @@ internal class DefaultBookControllerTest(
                                 }
                             ]
                             """
-                        }
+                        )
                     }
                 }
                 .andDo { document("get/ok_found") }
@@ -132,11 +141,7 @@ internal class DefaultBookControllerTest(
                     status { isOk() }
                     content {
                         contentType(APPLICATION_JSON)
-                        strictJson {
-                            """
-                            []
-                            """
-                        }
+                        strictJson("[]")
                     }
                 }
                 .andDo { document("get/ok_empty") }
@@ -157,7 +162,7 @@ internal class DefaultBookControllerTest(
                     status { isOk() }
                     content {
                         contentType(APPLICATION_JSON)
-                        strictJson {
+                        strictJson(
                             """
                             {
                                 "id": "$id_cleanCode",
@@ -165,7 +170,7 @@ internal class DefaultBookControllerTest(
                                 "isbn": "9780132350884"
                             }
                             """
-                        }
+                        )
                     }
                 }
                 .andDo { document("by-id/get/ok") }
@@ -203,8 +208,13 @@ internal class DefaultBookControllerTest(
 
     }
 
-    fun ContentResultMatchersDsl.strictJson(supplier: () -> String) =
-        json(jsonContent = supplier(), strict = true)
+    private fun MockHttpServletRequestDsl.jsonContent(@Language("json") json: String) {
+        contentType = APPLICATION_JSON
+        content = json
+    }
+
+    fun ContentResultMatchersDsl.strictJson(@Language("json") json: String) =
+        json(jsonContent = json, strict = true)
 
     fun MockMvcResultHandlersDsl.document(identifier: String) =
         handle(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))

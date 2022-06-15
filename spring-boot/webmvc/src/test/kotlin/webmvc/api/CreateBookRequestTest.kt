@@ -3,6 +3,7 @@ package webmvc.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -48,7 +49,8 @@ internal class CreateBookRequestTest {
                 }
             }
 
-        private fun read(json: String) = objectMapper.readValue(json, CreateBookRequest::class.java)
+        private fun read(@Language("json") json: String) =
+            objectMapper.readValue(json, CreateBookRequest::class.java)
 
     }
 
