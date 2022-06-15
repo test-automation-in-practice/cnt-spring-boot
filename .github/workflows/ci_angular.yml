@@ -20,6 +20,9 @@ jobs:
 
   angular:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./angular
     steps:
       - uses: actions/checkout@v2
         with:
@@ -28,16 +31,9 @@ jobs:
         with:
           main-branch-name: 'master'
       - run: npm ci
-        working-directory: ./angular
       - run: npx nx workspace-lint
-        working-directory: ./angular
       - run: npx nx format:check --base=origin/master
-        working-directory: ./angular
       - run: npx nx affected --target=lint --base=origin/master
-        working-directory: ./angular
       - run: npx nx affected --target=test --base=origin/master --ci --code-coverage
-        working-directory: ./angular
       - run: npx nx affected --target=e2e --base=origin/master
-        working-directory: ./angular
       - run: npx nx affected --target=build --base=origin/master
-        working-directory: ./angular
