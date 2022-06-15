@@ -1,0 +1,6 @@
+= Spring Boot: GraphQL
+
+This module demonstrates:
+
+- How to test _GraphQL_ `Controller` using `@GraphQlTest` and `GraphQlTester`.
+- How to write high level smoke tests for _GraphQL_ APIs
