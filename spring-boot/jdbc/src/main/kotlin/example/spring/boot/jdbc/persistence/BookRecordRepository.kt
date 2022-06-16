@@ -1,5 +1,7 @@
-package jdbc.books
+package example.spring.boot.jdbc.persistence
 
+import example.spring.boot.jdbc.business.Book
+import example.spring.boot.jdbc.business.BookRecord
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
@@ -7,10 +9,10 @@ import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 import org.springframework.util.IdGenerator
-import java.util.*
+import java.util.UUID
 
 @Repository
-class BooksRepository(
+class BookRecordRepository(
     private val jdbcTemplate: NamedParameterJdbcTemplate,
     private val idGenerator: IdGenerator
 ) {

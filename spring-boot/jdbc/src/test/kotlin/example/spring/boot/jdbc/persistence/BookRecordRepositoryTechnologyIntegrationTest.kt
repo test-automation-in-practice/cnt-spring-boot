@@ -1,6 +1,8 @@
-package jdbc.books
+package example.spring.boot.jdbc.persistence
 
 import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.jdbc.business.Book
+import example.spring.boot.jdbc.business.BookRecord
 import io.mockk.every
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -9,15 +11,28 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.util.IdGenerator
 import java.util.UUID.randomUUID
 
+/**
+ * This technology integration test uses Spring Boot's [JdbcTest] test slice
+ * mechanic to create an application context like it would be in the real
+ * running application. Except that actual database is overridden with an
+ * in-memory H2 database.
+ *
+ * All database related components, like Flyway schema migration, are active
+ * as well.
+ *
+ * The actual tests are exactly the same as [BookRecordRepositoryUnitTest].
+ */
 @JdbcTest
+@ActiveProfiles("test")
 @MockkBean(IdGenerator::class)
-@Import(BooksRepository::class)
-internal class BookRepositoryTechnologyIntegrationTest(
+@Import(BookRecordRepository::class)
+internal class BookRecordRepositoryTechnologyIntegrationTest(
     @Autowired val idGenerator: IdGenerator,
-    @Autowired val cut: BooksRepository
+    @Autowired val cut: BookRecordRepository
 ) {
 
     val cleanCode = Book("Clean Code", "9780132350884")

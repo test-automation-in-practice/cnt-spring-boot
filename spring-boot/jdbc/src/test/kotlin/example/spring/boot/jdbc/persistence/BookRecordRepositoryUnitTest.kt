@@ -1,5 +1,7 @@
-package jdbc.books
+package example.spring.boot.jdbc.persistence
 
+import example.spring.boot.jdbc.business.Book
+import example.spring.boot.jdbc.business.BookRecord
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -14,10 +16,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.util.IdGenerator
 import java.util.UUID.randomUUID
 
-internal class BookRepositoryUnitTest {
+/**
+ * This unit test uses does not rely on any Spring Boot mechanics.
+ * An H2 in-memory database is used to simulate an actual PostgreSQL database.
+ * Flyway migration is triggered manually.
+ *
+ * The actual tests are exactly the same as [BookRecordRepositoryTechnologyIntegrationTest].
+ */
+internal class BookRecordRepositoryUnitTest {
 
     val dataSource = JdbcDataSource()
-        .apply { setUrl("jdbc:h2:mem:${randomUUID()};DB_CLOSE_DELAY=-1") }
+        .apply { setUrl("jdbc:h2:mem:${randomUUID()};MODE=PostgreSQL;DB_CLOSE_DELAY=-1") }
         .apply { user = "sa"; password = "sa" }
         .also {
             Flyway.configure()
@@ -29,7 +38,7 @@ internal class BookRepositoryUnitTest {
 
     val jdbcTempalte = NamedParameterJdbcTemplate(dataSource)
     val idGenerator: IdGenerator = mockk()
-    val cut = BooksRepository(jdbcTempalte, idGenerator)
+    val cut = BookRecordRepository(jdbcTempalte, idGenerator)
 
     val cleanCode = Book("Clean Code", "9780132350884")
     val cleanArchitecture = Book("Clean Architecture", "9780134494166")

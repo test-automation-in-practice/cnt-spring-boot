@@ -1,6 +1,8 @@
-CREATE TABLE book_records (
-  id    VARCHAR(36),
-  title TEXT,
-  isbn  VARCHAR(13),
-  PRIMARY KEY (id)
+CREATE TABLE book_records
+(
+    id      uuid,
+    title   text,
+    isbn    varchar(13),
+    version bigint,
+    PRIMARY KEY (id)
 )
