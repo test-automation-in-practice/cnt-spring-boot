@@ -1,4 +1,4 @@
-package mongodb
+package example.spring.boot.data.mongodb
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

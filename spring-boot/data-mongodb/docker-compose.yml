@@ -1,4 +1,0 @@
-mongo-db:
-  image: mongo:3.5
-  ports:
-    - "27017:27017"
