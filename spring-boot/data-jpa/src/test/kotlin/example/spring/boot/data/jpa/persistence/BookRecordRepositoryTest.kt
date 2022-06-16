@@ -1,4 +1,4 @@
-package jpa.books
+package example.spring.boot.data.jpa.persistence
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,28 +15,32 @@ internal class BookRecordRepositoryTest(
 
     @Test
     fun `entity can be saved`() {
-        val entity = BookRecordEntity(randomUUID(), "Clean Code", "9780132350884")
+        val entity = bookRecordEntity()
         val savedEntity = cut.save(entity)
         assertThat(savedEntity).isEqualTo(entity)
     }
 
     @Test
     fun `entity can be found by id`() {
-        val id = randomUUID()
-        val savedEntity = cut.save(BookRecordEntity(id, "Clean Code", "9780132350884"))
-        val foundEntity = cut.findById(id)
+        val savedEntity = cut.save(bookRecordEntity())
+        val foundEntity = cut.findById(savedEntity.id)
         assertThat(foundEntity).hasValue(savedEntity)
     }
 
     @Test
     fun `entity can be found by title`() {
-        val e1 = cut.save(BookRecordEntity(randomUUID(), "Clean Code", "9780132350884"))
-        val e2 = cut.save(BookRecordEntity(randomUUID(), "Clean Architecture", "9780134494166"))
-        val e3 = cut.save(BookRecordEntity(randomUUID(), "Clean Code", "9780132350884"))
+        val e1 = cut.save(bookRecordEntity("Clean Code"))
+        val e2 = cut.save(bookRecordEntity("Clean Architecture"))
+        val e3 = cut.save(bookRecordEntity("Clean Code"))
+
         val foundEntities = cut.findByTitle("Clean Code")
+
         assertThat(foundEntities)
             .contains(e1, e3)
             .doesNotContain(e2)
     }
+
+    private fun bookRecordEntity(title: String = "Clean Code") =
+        BookRecordEntity(randomUUID(), title, "9780123456789")
 
 }

@@ -1,4 +1,4 @@
-package jpa
+package example.spring.boot.data.jpa
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,11 +1,11 @@
-package jpa.books
+package example.spring.boot.data.jpa.persistence
 
-import java.util.*
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
 
-@Entity(name = "BookRecord")
+@Entity
 @Table(name = "book_records")
 data class BookRecordEntity(
     @Id
