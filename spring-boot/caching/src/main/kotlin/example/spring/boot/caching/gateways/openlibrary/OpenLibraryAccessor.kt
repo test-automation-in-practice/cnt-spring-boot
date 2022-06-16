@@ -1,4 +1,4 @@
-package caching
+package example.spring.boot.caching.gateways.openlibrary
 
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.cache.annotation.Cacheable
@@ -20,12 +20,5 @@ class OpenLibraryAccessor(
             log.error("Unable to get number of pages for ISBN [$isbn] because of an exception: ${e.message}", e)
             null
         }
-
-}
-
-interface OpenLibraryClient {
-
-    @Throws(IOException::class)
-    fun getNumberOfPages(isbn: String): Int?
 
 }

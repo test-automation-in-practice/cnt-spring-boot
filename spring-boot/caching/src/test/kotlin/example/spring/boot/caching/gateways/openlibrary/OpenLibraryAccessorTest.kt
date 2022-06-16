@@ -1,6 +1,12 @@
-package caching
+package example.spring.boot.caching.gateways.openlibrary
 
-import io.mockk.*
+import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.caching.config.CacheConfiguration
+import io.mockk.clearAllMocks
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -8,7 +14,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.Cache
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import java.io.IOException
 
@@ -20,11 +25,11 @@ internal class OpenLibraryAccessorTest {
     @BeforeEach
     fun resetMocks() = clearAllMocks()
 
+    /**
+     * The correct functionality of our own code is verified using unit-tests.
+     */
     @Nested
     inner class FunctionalTests {
-
-        // everything that could & should be unit-tested will be done here
-        // which is not all that much for the simplified example code
 
         val client: OpenLibraryClient = mockk()
         val cut = OpenLibraryAccessor(client)
@@ -52,7 +57,20 @@ internal class OpenLibraryAccessorTest {
 
     }
 
+    /**
+     * Since caching is a framework feature, it cannot be unit-tested.
+     *
+     * In this technology integration test the real [CacheConfiguration] is used
+     * to verify that the [OpenLibraryAccessor] actually behaves like it should
+     * in regard to caching.
+     *
+     * In this example:
+     * - tests would fail if a non-existing cache was referenced
+     * - tests would fail if the desired _unless_ condition was wrong
+     * - tests would fail if caching would not be enabled by the [CacheConfiguration]
+     */
     @Nested
+    @MockkBean(OpenLibraryClient::class)
     @SpringBootTest(classes = [CachingTestsConfiguration::class])
     inner class CachingTests(
         @Autowired val client: OpenLibraryClient,
@@ -93,11 +111,6 @@ internal class OpenLibraryAccessorTest {
     }
 
     @Import(CacheConfiguration::class, OpenLibraryAccessor::class)
-    private class CachingTestsConfiguration {
-
-        @Bean
-        fun openLibraryClient(): OpenLibraryClient = mockk()
-
-    }
+    private class CachingTestsConfiguration
 
 }

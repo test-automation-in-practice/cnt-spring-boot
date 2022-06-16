@@ -1,4 +1,4 @@
-package caching
+package example.spring.boot.caching
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
