@@ -1,10 +1,10 @@
-package example.graphql.api
+package example.spring.boot.graphql.api
 
-import example.graphql.business.Book
-import example.graphql.business.BookCollection
-import example.graphql.business.BookRecord
-import example.graphql.business.Isbn
-import example.graphql.business.Title
+import example.spring.boot.graphql.business.Book
+import example.spring.boot.graphql.business.BookCollection
+import example.spring.boot.graphql.business.BookRecord
+import example.spring.boot.graphql.business.Isbn
+import example.spring.boot.graphql.business.Title
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping

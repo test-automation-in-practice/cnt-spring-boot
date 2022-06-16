@@ -1,6 +1,6 @@
-package example.graphql.business
+package example.spring.boot.graphql.business
 
-import example.graphql.persistence.BookRecordRepository
+import example.spring.boot.graphql.persistence.BookRecordRepository
 import org.springframework.stereotype.Service
 import org.springframework.util.IdGenerator
 import java.util.UUID

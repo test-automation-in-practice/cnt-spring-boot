@@ -1,10 +1,10 @@
-package example.graphql
+package example.spring.boot.graphql
 
 import com.ninjasquad.springmockk.MockkBean
-import example.graphql.business.Examples.id_theMartion
-import example.graphql.business.Examples.record_projectHailMary
-import example.graphql.business.Examples.record_theMartion
-import example.graphql.persistence.BookRecordRepository
+import example.spring.boot.graphql.business.Examples.id_theMartian
+import example.spring.boot.graphql.business.Examples.record_projectHailMary
+import example.spring.boot.graphql.business.Examples.record_theMartian
+import example.spring.boot.graphql.persistence.BookRecordRepository
 import io.mockk.every
 import io.restassured.RestAssured
 import io.restassured.module.kotlin.extensions.Extract
@@ -41,7 +41,7 @@ internal class ApplicationAcceptanceTest(
 
     @Test
     fun `adding a book`() {
-        every { idGenerator.generateId() } returns id_theMartion
+        every { idGenerator.generateId() } returns id_theMartian
 
         testGraphQLInteraction(
             query = """
@@ -65,7 +65,7 @@ internal class ApplicationAcceptanceTest(
 
     @Test
     fun `getting all books`() {
-        repository.save(record_theMartion)
+        repository.save(record_theMartian)
         repository.save(record_projectHailMary)
 
         testGraphQLInteraction(
@@ -115,7 +115,7 @@ internal class ApplicationAcceptanceTest(
 
     @Test
     fun `delete a book by id`() {
-        repository.save(record_theMartion)
+        repository.save(record_theMartian)
 
         testGraphQLInteraction(
             query = """

@@ -1,13 +1,13 @@
-package example.graphql.api
+package example.spring.boot.graphql.api
 
 import com.ninjasquad.springmockk.MockkBean
-import example.graphql.business.BookCollection
-import example.graphql.business.Examples.book_projectHailMary
-import example.graphql.business.Examples.book_theMartian
-import example.graphql.business.Examples.id_projectHailMary
-import example.graphql.business.Examples.id_theMartion
-import example.graphql.business.Examples.record_projectHailMary
-import example.graphql.business.Examples.record_theMartion
+import example.spring.boot.graphql.business.BookCollection
+import example.spring.boot.graphql.business.Examples.book_projectHailMary
+import example.spring.boot.graphql.business.Examples.book_theMartian
+import example.spring.boot.graphql.business.Examples.id_projectHailMary
+import example.spring.boot.graphql.business.Examples.id_theMartian
+import example.spring.boot.graphql.business.Examples.record_projectHailMary
+import example.spring.boot.graphql.business.Examples.record_theMartian
 import io.mockk.every
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
@@ -26,14 +26,14 @@ internal class BookControllerTests(
 
     @BeforeEach
     fun stubDefaultBehaviour() {
-        every { collection.add(book_theMartian) } returns record_theMartion
+        every { collection.add(book_theMartian) } returns record_theMartian
         every { collection.add(book_projectHailMary) } returns record_projectHailMary
-        every { collection.getAll() } returns listOf(record_theMartion, record_projectHailMary)
+        every { collection.getAll() } returns listOf(record_theMartian, record_projectHailMary)
         every { collection.get(any()) } returns null
-        every { collection.get(id_theMartion) } returns record_theMartion
+        every { collection.get(id_theMartian) } returns record_theMartian
         every { collection.get(id_projectHailMary) } returns record_projectHailMary
         every { collection.delete(any()) } returns false
-        every { collection.delete(id_theMartion) } returns true
+        every { collection.delete(id_theMartian) } returns true
         every { collection.delete(id_projectHailMary) } returns true
     }
 
@@ -76,7 +76,7 @@ internal class BookControllerTests(
         @Language("graphql")
         val document = """
             query {
-              getBookById(id: "$id_theMartion") {
+              getBookById(id: "$id_theMartian") {
                 title
               }
             }

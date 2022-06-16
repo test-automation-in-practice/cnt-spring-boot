@@ -1,4 +1,4 @@
-package example.graphql.business
+package example.spring.boot.graphql.business
 
 import java.util.UUID
 
