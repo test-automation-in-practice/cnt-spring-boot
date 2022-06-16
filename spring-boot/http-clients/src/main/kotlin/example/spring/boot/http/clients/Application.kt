@@ -1,6 +1,6 @@
-package httpclients
+package example.spring.boot.http.clients
 
-import httpclients.gateways.libraryservice.LibraryServiceProperties
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceProperties
 import okhttp3.OkHttpClient
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties

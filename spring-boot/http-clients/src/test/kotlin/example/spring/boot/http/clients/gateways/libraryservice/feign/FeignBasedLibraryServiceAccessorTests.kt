@@ -1,9 +1,9 @@
-package httpclients.gateways.libraryservice.okhttp
+package example.spring.boot.http.clients.gateways.libraryservice.feign
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import httpclients.gateways.libraryservice.LibraryServiceContract
-import httpclients.gateways.libraryservice.LibraryServiceProperties
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceContract
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceProperties
 import okhttp3.OkHttpClient
 
 /**
@@ -11,11 +11,11 @@ import okhttp3.OkHttpClient
  * contract interface [LibraryServiceContract].
  */
 @WireMockTest
-internal class OkHttpBasedLibraryServiceAccessorTests(
+internal class FeignBasedLibraryServiceAccessorTests(
     wireMockInfo: WireMockRuntimeInfo
 ) : LibraryServiceContract {
     override val wireMock = wireMockInfo.wireMock
-    override val cut = OkHttpBasedLibraryServiceAccessor(
+    override val cut = FeignBasedLibraryServiceAccessor(
         httpClient = OkHttpClient(),
         properties = LibraryServiceProperties(baseUrl = wireMockInfo.httpBaseUrl)
     )

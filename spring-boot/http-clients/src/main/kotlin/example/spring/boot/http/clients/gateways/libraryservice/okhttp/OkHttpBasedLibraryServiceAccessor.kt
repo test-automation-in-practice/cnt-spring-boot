@@ -1,12 +1,12 @@
-package httpclients.gateways.libraryservice.okhttp
+package example.spring.boot.http.clients.gateways.libraryservice.okhttp
 
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import httpclients.gateways.libraryservice.Book
-import httpclients.gateways.libraryservice.CreatedBook
-import httpclients.gateways.libraryservice.LibraryService
-import httpclients.gateways.libraryservice.LibraryServiceProperties
+import example.spring.boot.http.clients.gateways.libraryservice.Book
+import example.spring.boot.http.clients.gateways.libraryservice.CreatedBook
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryService
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceProperties
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request

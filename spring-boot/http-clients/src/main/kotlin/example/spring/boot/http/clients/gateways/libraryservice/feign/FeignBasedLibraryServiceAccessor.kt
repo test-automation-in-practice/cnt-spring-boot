@@ -1,17 +1,21 @@
-package httpclients.gateways.libraryservice.feign
+package example.spring.boot.http.clients.gateways.libraryservice.feign
 
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import feign.*
+import example.spring.boot.http.clients.gateways.libraryservice.Book
+import example.spring.boot.http.clients.gateways.libraryservice.CreatedBook
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryService
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceProperties
+import feign.Feign
+import feign.FeignException
+import feign.Headers
 import feign.Logger.Level
+import feign.RequestLine
+import feign.Retryer
 import feign.Target.HardCodedTarget
 import feign.jackson.JacksonDecoder
 import feign.jackson.JacksonEncoder
 import feign.slf4j.Slf4jLogger
-import httpclients.gateways.libraryservice.Book
-import httpclients.gateways.libraryservice.CreatedBook
-import httpclients.gateways.libraryservice.LibraryService
-import httpclients.gateways.libraryservice.LibraryServiceProperties
 import okhttp3.OkHttpClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service

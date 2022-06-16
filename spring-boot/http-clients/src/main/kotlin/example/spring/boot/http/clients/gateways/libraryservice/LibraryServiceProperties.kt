@@ -1,4 +1,4 @@
-package httpclients.gateways.libraryservice
+package example.spring.boot.http.clients.gateways.libraryservice
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding

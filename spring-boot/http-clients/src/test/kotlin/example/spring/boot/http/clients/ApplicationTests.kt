@@ -1,11 +1,14 @@
-package httpclients
+package example.spring.boot.http.clients
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.MappingBuilder
-import com.github.tomakehurst.wiremock.client.WireMock.*
-import httpclients.gateways.libraryservice.Book
-import httpclients.gateways.libraryservice.CreatedBook
-import httpclients.gateways.libraryservice.LibraryService
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.containing
+import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import example.spring.boot.http.clients.gateways.libraryservice.Book
+import example.spring.boot.http.clients.gateways.libraryservice.CreatedBook
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

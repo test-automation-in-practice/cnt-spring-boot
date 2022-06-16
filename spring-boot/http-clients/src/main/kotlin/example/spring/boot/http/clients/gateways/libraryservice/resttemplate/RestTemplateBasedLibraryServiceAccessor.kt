@@ -1,11 +1,11 @@
-package httpclients.gateways.libraryservice.resttemplate
+package example.spring.boot.http.clients.gateways.libraryservice.resttemplate
 
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import httpclients.gateways.libraryservice.Book
-import httpclients.gateways.libraryservice.CreatedBook
-import httpclients.gateways.libraryservice.LibraryService
-import httpclients.gateways.libraryservice.LibraryServiceProperties
+import example.spring.boot.http.clients.gateways.libraryservice.Book
+import example.spring.boot.http.clients.gateways.libraryservice.CreatedBook
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryService
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceProperties
 import okhttp3.OkHttpClient
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.http.HttpStatus.CREATED

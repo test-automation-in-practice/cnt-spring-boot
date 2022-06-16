@@ -1,9 +1,9 @@
-package httpclients.gateways.libraryservice.resttemplate
+package example.spring.boot.http.clients.gateways.libraryservice.resttemplate
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import httpclients.gateways.libraryservice.LibraryServiceContract
-import httpclients.gateways.libraryservice.LibraryServiceProperties
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceContract
+import example.spring.boot.http.clients.gateways.libraryservice.LibraryServiceProperties
 import okhttp3.OkHttpClient
 
 /**
