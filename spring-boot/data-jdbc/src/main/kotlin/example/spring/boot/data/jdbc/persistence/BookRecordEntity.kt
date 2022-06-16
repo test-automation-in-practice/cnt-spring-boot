@@ -1,21 +1,16 @@
-package jdbc.books
+package example.spring.boot.data.jdbc.persistence
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.Table
-import java.util.*
-
-abstract class VersionedEntity {
-    @Version
-    var version: Long = 0
-}
+import java.util.UUID
 
 @Table("book_records")
-data class BookRecord(
+data class BookRecordEntity(
     @Id
     val id: UUID,
     val title: String,
     val isbn: String,
-) : VersionedEntity()
-
-
+    @Version
+    var version: Long = 0
+)
