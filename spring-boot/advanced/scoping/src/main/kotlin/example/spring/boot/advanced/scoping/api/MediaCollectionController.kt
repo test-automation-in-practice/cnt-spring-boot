@@ -1,11 +1,11 @@
-package advanced.unit.api
+package example.spring.boot.advanced.scoping.api
 
-import advanced.unit.domain.Book
-import advanced.unit.domain.Game
-import advanced.unit.domain.MediaCollection
-import advanced.unit.domain.TypeOfMedia
-import advanced.unit.domain.TypeOfMedia.BOOK
-import advanced.unit.domain.TypeOfMedia.GAME
+import example.spring.boot.advanced.scoping.domain.Book
+import example.spring.boot.advanced.scoping.domain.Game
+import example.spring.boot.advanced.scoping.domain.MediaCollection
+import example.spring.boot.advanced.scoping.domain.TypeOfMedia
+import example.spring.boot.advanced.scoping.domain.TypeOfMedia.BOOK
+import example.spring.boot.advanced.scoping.domain.TypeOfMedia.GAME
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.web.bind.annotation.PostMapping

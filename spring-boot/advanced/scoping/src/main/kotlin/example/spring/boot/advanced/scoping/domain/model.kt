@@ -1,4 +1,4 @@
-package advanced.unit.domain
+package example.spring.boot.advanced.scoping.domain
 
 import java.util.UUID
 

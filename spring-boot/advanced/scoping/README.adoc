@@ -1,0 +1,9 @@
+= Spring Boot: Scoping is Important
+
+This showcase demonstrates how only writing End-to-End Tests for the whole application will either leave relevant code uncovered or will lead to messy test classes with all kinds of compensation code for provoking testable behaviour.
+
+In this scenario there is one big End-to-End Test for everything that should be testet as well as alternative lower-level tests for the same logical tests.
+You can compare these tests and how they differ in maintainability, runtime and general structure.
+
+Event though this is just a very small example, it should be enough to demonstrate that not everything that should be testet can be covered by the highest level of tests.
+At least not without polluting those tests with knowledge / dependencies they should not have.

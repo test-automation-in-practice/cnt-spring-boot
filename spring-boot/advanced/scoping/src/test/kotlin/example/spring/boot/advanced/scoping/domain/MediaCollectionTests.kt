@@ -1,7 +1,7 @@
-package advanced.unit.domain
+package example.spring.boot.advanced.scoping.domain
 
-import advanced.unit.Examples.book_bobiverse1
-import advanced.unit.Examples.book_bobiverse2
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse1
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse2
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsExactly

@@ -1,4 +1,4 @@
-package advanced.unit.domain
+package example.spring.boot.advanced.scoping.domain
 
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.scheduling.annotation.Async

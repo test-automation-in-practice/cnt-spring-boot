@@ -1,8 +1,8 @@
-package advanced.unit.persistence
+package example.spring.boot.advanced.scoping.persistence
 
-import advanced.unit.admin.AdminMediaRepository
-import advanced.unit.domain.MediaItem
-import advanced.unit.domain.MediaRepository
+import example.spring.boot.advanced.scoping.admin.AdminMediaRepository
+import example.spring.boot.advanced.scoping.domain.MediaItem
+import example.spring.boot.advanced.scoping.domain.MediaRepository
 import org.springframework.stereotype.Component
 import java.util.UUID
 

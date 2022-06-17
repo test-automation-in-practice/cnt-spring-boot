@@ -1,14 +1,14 @@
-package advanced.unit.api
+package example.spring.boot.advanced.scoping.api
 
-import advanced.unit.Examples
-import advanced.unit.Examples.book_bobiverse1
-import advanced.unit.Examples.book_bobiverse1_registration_json
-import advanced.unit.Examples.book_bobiverse2_registration_json
-import advanced.unit.Examples.gameRegistrationJson
-import advanced.unit.Examples.game_eldenring
-import advanced.unit.Examples.game_eldenring_registration_json
-import advanced.unit.domain.MediaCollection
 import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.advanced.scoping.Examples
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse1
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse1_registration_json
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse2_registration_json
+import example.spring.boot.advanced.scoping.Examples.gameRegistrationJson
+import example.spring.boot.advanced.scoping.Examples.game_eldenring
+import example.spring.boot.advanced.scoping.Examples.game_eldenring_registration_json
+import example.spring.boot.advanced.scoping.domain.MediaCollection
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsOnly

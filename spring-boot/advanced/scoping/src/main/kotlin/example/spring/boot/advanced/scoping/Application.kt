@@ -1,4 +1,4 @@
-package advanced.unit
+package example.spring.boot.advanced.scoping
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan

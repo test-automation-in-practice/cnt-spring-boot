@@ -1,18 +1,18 @@
-package advanced.unit
+package example.spring.boot.advanced.scoping
 
-import advanced.unit.Examples.book_bobiverse1_registration_json
-import advanced.unit.Examples.book_bobiverse2_registration_json
-import advanced.unit.Examples.book_bobiverse3_id
-import advanced.unit.Examples.book_bobiverse3_registration_json
-import advanced.unit.Examples.game_eldenring_registration_json
-import advanced.unit.Examples.registrationJson
-import advanced.unit.Examples.stringOfLength
-import advanced.unit.admin.AdminMediaRepository
-import advanced.unit.api.MediaCollectionController
-import advanced.unit.api.MediaCollectionController.MediaRegistration
-import advanced.unit.domain.Book
-import advanced.unit.domain.MediaCollection
-import advanced.unit.domain.TypeOfMedia.BOOK
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse1_registration_json
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse2_registration_json
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse3_id
+import example.spring.boot.advanced.scoping.Examples.book_bobiverse3_registration_json
+import example.spring.boot.advanced.scoping.Examples.game_eldenring_registration_json
+import example.spring.boot.advanced.scoping.Examples.registrationJson
+import example.spring.boot.advanced.scoping.Examples.stringOfLength
+import example.spring.boot.advanced.scoping.admin.AdminMediaRepository
+import example.spring.boot.advanced.scoping.api.MediaCollectionController
+import example.spring.boot.advanced.scoping.api.MediaCollectionController.MediaRegistration
+import example.spring.boot.advanced.scoping.domain.Book
+import example.spring.boot.advanced.scoping.domain.MediaCollection
+import example.spring.boot.advanced.scoping.domain.TypeOfMedia.BOOK
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsExactly
@@ -34,7 +34,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
-import java.util.*
+import java.util.UUID
 import java.util.UUID.randomUUID
 
 @ActiveProfiles("test")
@@ -71,11 +71,11 @@ internal class ApplicationTests(
     }
 
     @Test
-    @RecordLoggers(MediaCollectionController::class, MediaCollection::class)
+    @RecordLoggers(MediaCollectionController::class, MediaCollection::class) // needs to know where the logs come from
     fun `registering a book creates correct log entries`(log: LogRecord) {
         registerMediaItem(book_bobiverse2_registration_json)
 
-        waitForAsyncProcessingToBeDone()
+        waitForAsyncProcessingToBeDone() // needs to wait for async calls
 
         assertThat(log) containsExactly {
             any("received registration of new media item: MediaRegistration(type=BOOK, id=aadfe61a-4bbd-44c4-85ba-6bddbe7d10a2, label=For We Are Many)")
@@ -89,7 +89,7 @@ internal class ApplicationTests(
         assertThat(repositoryContainsBookWithId(book_bobiverse3_id)).isFalse
         registerMediaItem(book_bobiverse3_registration_json)
 
-        waitForAsyncProcessingToBeDone()
+        waitForAsyncProcessingToBeDone() // needs to wait for async calls
 
         assertThat(repositoryContainsBookWithId(book_bobiverse3_id)).isTrue
     }
