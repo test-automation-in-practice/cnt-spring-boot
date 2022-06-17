@@ -1,8 +1,26 @@
 spring:
+  test:
+    database:
+      replace: none
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "in-memory"
   datasource:
     url: "jdbc:h2:mem:database-${random.uuid};MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;"
     username: "sa"
     password: "sa"
-  test:
-    database:
-      replace: none
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "docker"
+  datasource:
+    url: ${POSTGRESQL_URL}
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PASSWORD}
