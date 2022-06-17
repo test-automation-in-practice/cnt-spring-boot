@@ -1,3 +1,12 @@
 = Spring Boot: Basics
 
 This module demonstrates the basics of implementing and testing Spring Boot applications.
+
+This includes examples for how to:
+
+- write Unit Tests for your own code.
+- write Technology Integration Tests for your use of framework features.
+- structure test classes
+- stub dependency behaviour using mocks
+- test logged messages
+- use test contracts to reuse tests for multiple implementations of the same interface
