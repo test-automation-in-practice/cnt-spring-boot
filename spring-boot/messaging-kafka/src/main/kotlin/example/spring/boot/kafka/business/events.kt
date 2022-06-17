@@ -1,16 +1,6 @@
-package kafka.books
+package example.spring.boot.kafka.business
 
-import java.util.*
-
-data class Book(
-    val isbn: String,
-    val title: String
-)
-
-data class BookRecord(
-    val id: UUID,
-    val book: Book
-)
+import java.util.UUID
 
 sealed class BookEvent {
     abstract val type: String

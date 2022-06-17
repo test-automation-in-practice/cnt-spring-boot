@@ -1,6 +1,6 @@
-package kafka.messaging
+package example.spring.boot.kafka.messaging
 
-import kafka.books.BookEvent
+import example.spring.boot.kafka.business.BookEvent
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafka

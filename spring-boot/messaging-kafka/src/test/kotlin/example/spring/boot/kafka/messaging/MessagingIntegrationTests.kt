@@ -1,15 +1,15 @@
-package kafka.messaging
+package example.spring.boot.kafka.messaging
 
 import com.ninjasquad.springmockk.SpykBean
+import example.spring.boot.kafka.business.BookEvent
+import example.spring.boot.kafka.business.Examples
+import example.spring.boot.kafka.business.createdEvent
+import example.spring.boot.kafka.business.deletedEvent
+import example.spring.boot.kafka.events.EventHandler
+import example.spring.boot.kafka.events.PublishEventFunction
+import example.spring.boot.kafka.utils.KafkaExtension
 import io.mockk.every
 import io.mockk.verify
-import kafka.books.BookEvent
-import kafka.books.Examples
-import kafka.books.createdEvent
-import kafka.books.deletedEvent
-import kafka.events.EventHandler
-import kafka.events.PublishEventFunction
-import kafka.utils.KafkaExtension
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,10 +25,10 @@ import org.springframework.kafka.core.KafkaTemplate
     classes = [MessagingIntegrationTestsConfiguration::class],
     properties = ["spring.kafka.bootstrap-servers=\${KAFKA_SERVER}"]
 )
-class MessagingIntegrationTests @Autowired constructor(
-    val eventHandler: EventHandler,
-    val publishEvent: PublishEventFunction,
-    val kafkaTemplate: KafkaTemplate<String, BookEvent>
+class MessagingIntegrationTests(
+    @Autowired val eventHandler: EventHandler,
+    @Autowired val publishEvent: PublishEventFunction,
+    @Autowired val kafkaTemplate: KafkaTemplate<String, BookEvent>
 ) {
 
     val createdEvent = Examples.cleanCode.createdEvent()

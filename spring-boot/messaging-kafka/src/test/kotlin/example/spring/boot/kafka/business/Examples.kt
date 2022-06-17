@@ -1,6 +1,6 @@
-package kafka.books
+package example.spring.boot.kafka.business
 
-import java.util.*
+import java.util.UUID
 
 object Examples {
 

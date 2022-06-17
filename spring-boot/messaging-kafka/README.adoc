@@ -4,6 +4,6 @@ This module implements asynchronous communication through messaging via a Kafka 
 receiving end, using Spring's Kafka integration:
 
 - `KafkaTemplate` to send messages
-- `@KafkaListener` to read messages
+- `@KafkaListener` to receive messages
 - Error handling and dead-letter topics
-- Testing with a Kafka instance running in a dockerized TestContainer
+- Testing with a Kafka instance running in a dockerized _TestContainer_

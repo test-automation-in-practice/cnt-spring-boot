@@ -1,9 +1,9 @@
-package kafka.events
+package example.spring.boot.kafka.events
 
-import kafka.books.BookCreatedEvent
-import kafka.books.BookDeletedEvent
+import example.spring.boot.kafka.business.BookCreatedEvent
+import example.spring.boot.kafka.business.BookDeletedEvent
 import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.slf4j.LoggerFactory
+import org.slf4j.LoggerFactory.getLogger
 import org.springframework.kafka.annotation.DltHandler
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.annotation.RetryableTopic
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @Component
 class EventHandler {
 
-    private val log = LoggerFactory.getLogger(javaClass)
+    private val log = getLogger(javaClass)
 
     @RetryableTopic(attempts = "1")
     @KafkaListener(id = "book-created-listener", topics = ["book-created"])
