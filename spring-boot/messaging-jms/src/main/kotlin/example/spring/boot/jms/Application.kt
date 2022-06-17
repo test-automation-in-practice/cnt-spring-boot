@@ -1,4 +1,4 @@
-package jms
+package example.spring.boot.jms
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

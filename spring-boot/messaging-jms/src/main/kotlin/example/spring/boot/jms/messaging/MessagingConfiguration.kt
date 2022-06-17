@@ -1,4 +1,4 @@
-package jms.messaging
+package example.spring.boot.jms.messaging
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.context.annotation.Bean

@@ -1,7 +1,7 @@
-package jms.events
+package example.spring.boot.jms.events
 
-import jms.books.BookCreatedEvent
-import jms.books.BookDeletedEvent
+import example.spring.boot.jms.business.BookCreatedEvent
+import example.spring.boot.jms.business.BookDeletedEvent
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.jms.annotation.JmsListener
 import org.springframework.stereotype.Component

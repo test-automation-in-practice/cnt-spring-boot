@@ -1,4 +1,4 @@
-package jms.books
+package example.spring.boot.jms.business
 
 import java.util.UUID.fromString
 

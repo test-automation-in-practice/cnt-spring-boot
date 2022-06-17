@@ -1,13 +1,13 @@
-package jms.messaging
+package example.spring.boot.jms.messaging
 
 import com.ninjasquad.springmockk.SpykBean
+import example.spring.boot.jms.business.Examples.cleanCode
+import example.spring.boot.jms.business.createdEvent
+import example.spring.boot.jms.business.deletedEvent
+import example.spring.boot.jms.events.EventHandler
+import example.spring.boot.jms.events.PublishEventFunction
 import io.mockk.every
 import io.mockk.verify
-import jms.books.Examples.cleanCode
-import jms.books.createdEvent
-import jms.books.deletedEvent
-import jms.events.EventHandler
-import jms.events.PublishEventFunction
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration

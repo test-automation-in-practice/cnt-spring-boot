@@ -1,4 +1,4 @@
-package jms.messaging
+package example.spring.boot.jms.messaging
 
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.jms.annotation.JmsListener
