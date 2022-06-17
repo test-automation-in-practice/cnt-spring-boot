@@ -1,17 +1,7 @@
-package rabbitmq.books
+package example.spring.boot.rabbitmq.business
 
-import java.util.*
+import java.util.UUID
 import java.util.UUID.randomUUID
-
-data class Book(
-    val isbn: String,
-    val title: String
-)
-
-data class BookRecord(
-    val id: UUID,
-    val book: Book
-)
 
 sealed class BookEvent {
     abstract val type: String

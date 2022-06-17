@@ -1,9 +1,9 @@
-package rabbitmq.messaging
+package example.spring.boot.rabbitmq.messaging
 
+import example.spring.boot.rabbitmq.business.BookEvent
+import example.spring.boot.rabbitmq.events.PublishEventFunction
 import org.springframework.amqp.core.AmqpTemplate
 import org.springframework.stereotype.Component
-import rabbitmq.books.BookEvent
-import rabbitmq.events.PublishEventFunction
 
 @Component
 class PublishEventViaMessagingFunction(

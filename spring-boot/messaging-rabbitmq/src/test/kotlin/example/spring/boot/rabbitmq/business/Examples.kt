@@ -1,4 +1,4 @@
-package rabbitmq.books
+package example.spring.boot.rabbitmq.business
 
 import java.util.UUID.fromString
 

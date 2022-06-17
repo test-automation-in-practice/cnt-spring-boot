@@ -4,6 +4,6 @@ This module implements asynchronous communication through messaging via a Rabbit
 receiving end, using Spring's AMQP integration:
 
 - `AmqpTemplate` to send messages
-- `@RabbitListener` to read messages
+- `@RabbitListener` to receive messages
 - Error handling and dead-letter topics
 - Testing with a RabbitMQ instance running in a dockerized TestContainer

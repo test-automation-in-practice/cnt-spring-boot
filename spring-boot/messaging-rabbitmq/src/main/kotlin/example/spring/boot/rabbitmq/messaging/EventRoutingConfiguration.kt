@@ -1,4 +1,4 @@
-package rabbitmq.messaging
+package example.spring.boot.rabbitmq.messaging
 
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.Queue

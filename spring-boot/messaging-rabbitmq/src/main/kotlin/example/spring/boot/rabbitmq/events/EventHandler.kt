@@ -1,10 +1,10 @@
-package rabbitmq.events
+package example.spring.boot.rabbitmq.events
 
+import example.spring.boot.rabbitmq.business.BookCreatedEvent
+import example.spring.boot.rabbitmq.business.BookDeletedEvent
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.stereotype.Component
-import rabbitmq.books.BookCreatedEvent
-import rabbitmq.books.BookDeletedEvent
 
 @Component
 class EventHandler {

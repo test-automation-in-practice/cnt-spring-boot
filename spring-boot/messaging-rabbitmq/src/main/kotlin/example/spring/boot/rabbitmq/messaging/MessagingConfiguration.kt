@@ -1,4 +1,4 @@
-package rabbitmq.messaging
+package example.spring.boot.rabbitmq.messaging
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.amqp.rabbit.connection.ConnectionFactory

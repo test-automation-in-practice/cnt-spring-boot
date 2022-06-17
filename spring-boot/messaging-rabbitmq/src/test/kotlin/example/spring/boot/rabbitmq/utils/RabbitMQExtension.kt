@@ -1,4 +1,4 @@
-package rabbitmq.utils
+package example.spring.boot.rabbitmq.utils
 
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext

@@ -1,4 +1,4 @@
-package rabbitmq.messaging
+package example.spring.boot.rabbitmq.messaging
 
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.amqp.rabbit.annotation.RabbitListener

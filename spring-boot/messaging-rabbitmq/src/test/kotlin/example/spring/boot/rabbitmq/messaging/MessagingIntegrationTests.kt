@@ -1,6 +1,12 @@
-package rabbitmq.messaging
+package example.spring.boot.rabbitmq.messaging
 
 import com.ninjasquad.springmockk.SpykBean
+import example.spring.boot.rabbitmq.business.Examples
+import example.spring.boot.rabbitmq.business.createdEvent
+import example.spring.boot.rabbitmq.business.deletedEvent
+import example.spring.boot.rabbitmq.events.EventHandler
+import example.spring.boot.rabbitmq.events.PublishEventFunction
+import example.spring.boot.rabbitmq.utils.RabbitMQExtension
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -11,12 +17,6 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
-import rabbitmq.books.Examples
-import rabbitmq.books.createdEvent
-import rabbitmq.books.deletedEvent
-import rabbitmq.events.EventHandler
-import rabbitmq.events.PublishEventFunction
-import rabbitmq.utils.RabbitMQExtension
 
 @ExtendWith(RabbitMQExtension::class)
 @SpringBootTest(
