@@ -18,7 +18,6 @@ Additions to Existing Modules:
 	- Testcontainers
 - Data JPA
 	- Optimistic Locking
-	- Testcontainers
 - Data Mongo
 	- Optimistic Locking
 	- Testcontainers
