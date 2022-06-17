@@ -1,12 +1,22 @@
-package springsecurity.domain
+package example.spring.boot.security.business
 
+import example.spring.boot.security.business.Examples.record_refactoring
+import example.spring.boot.security.persistence.BookRepository
+import example.spring.boot.security.security.Authorities.ROLE_CURATOR
+import example.spring.boot.security.security.Authorities.ROLE_USER
+import example.spring.boot.security.security.MethodSecurityConfiguration
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest.dynamicTest
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,13 +27,10 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.util.IdGenerator
-import springsecurity.security.Authorities.ROLE_CURATOR
-import springsecurity.security.Authorities.ROLE_USER
-import springsecurity.security.MethodSecurityConfiguration
 
 internal class BookCollectionTests {
 
-    val bookRecord = BookRecordExamples.REFACTORING
+    val bookRecord = record_refactoring
     val uuid = bookRecord.id
     val book = bookRecord.book
 

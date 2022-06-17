@@ -1,4 +1,4 @@
-package springsecurity.security
+package example.spring.boot.security.security
 
 object Authorities {
     const val ROLE_USER = "ROLE_${Roles.USER}"

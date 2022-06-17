@@ -1,10 +1,10 @@
-package springsecurity.domain
+package example.spring.boot.security.persistence
 
-import springsecurity.domain.model.BookRecord
-import java.util.*
+import example.spring.boot.security.business.BookRecord
+import java.util.UUID
 
 // We don't need an actual implementation for this showcase.
-// Instances needed for testing will be mocks.
+// Instances needed for testing will be mocked.
 
 interface BookRepository {
     fun save(record: BookRecord): BookRecord

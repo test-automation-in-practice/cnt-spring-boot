@@ -1,21 +1,23 @@
-package springsecurity.security
+package example.spring.boot.security.security
 
+import example.spring.boot.security.security.Authorities.ROLE_CURATOR
+import example.spring.boot.security.security.Authorities.ROLE_USER
+import example.spring.boot.security.security.Authorities.SCOPE_ACTUATOR
+import example.spring.boot.security.security.Authorities.SCOPE_BOOKS
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.boot.actuate.info.InfoEndpoint
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
-import springsecurity.security.Authorities.ROLE_CURATOR
-import springsecurity.security.Authorities.ROLE_USER
-import springsecurity.security.Authorities.SCOPE_ACTUATOR
-import springsecurity.security.Authorities.SCOPE_BOOKS
+import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import org.springframework.security.web.SecurityFilterChain
 
 // `@EnableWebSecurity` actually already declares `@Configuration` as
 // and acts as a composite annotation. But since this is an abnormality which
@@ -32,11 +34,12 @@ import springsecurity.security.Authorities.SCOPE_BOOKS
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
+class WebSecurityConfiguration {
 
     private val passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
-    override fun configure(http: HttpSecurity) {
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             cors { disable() }
             csrf { disable() }
@@ -54,14 +57,16 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
                 authorize(anyRequest, denyAll)
             }
         }
+        return http.build()
     }
 
-    override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.inMemoryAuthentication()
-            .withUser(user("user", SCOPE_BOOKS, ROLE_USER))
-            .withUser(user("curator", SCOPE_BOOKS, ROLE_USER, ROLE_CURATOR))
-            .withUser(user("actuator", SCOPE_ACTUATOR))
-    }
+    @Bean
+    fun userDetailService(): UserDetailsService =
+        InMemoryUserDetailsManager(
+            user("user", SCOPE_BOOKS, ROLE_USER),
+            user("curator", SCOPE_BOOKS, ROLE_USER, ROLE_CURATOR),
+            user("actuator", SCOPE_ACTUATOR)
+        )
 
     private fun user(username: String, vararg authorities: String) = User.withUsername(username)
         .password(passwordEncoder.encode(username.reversed()))

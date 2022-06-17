@@ -1,15 +1,14 @@
-package springsecurity.domain
+package example.spring.boot.security.business
 
+import example.spring.boot.security.persistence.BookRepository
+import example.spring.boot.security.security.Authorities.ROLE_CURATOR
+import example.spring.boot.security.security.Roles.CURATOR
+import example.spring.boot.security.security.Roles.USER
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Component
 import org.springframework.util.IdGenerator
-import springsecurity.domain.model.Book
-import springsecurity.domain.model.BookRecord
-import springsecurity.security.Authorities.ROLE_CURATOR
-import springsecurity.security.Roles.CURATOR
-import springsecurity.security.Roles.USER
-import java.util.*
+import java.util.UUID
 import javax.annotation.security.RolesAllowed
 
 // Security access rules are defined on the main business classes. Doing so will enforce the same rules

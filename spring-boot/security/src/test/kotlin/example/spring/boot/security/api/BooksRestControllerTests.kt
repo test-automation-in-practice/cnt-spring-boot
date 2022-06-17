@@ -1,15 +1,20 @@
-package springsecurity.api
+package example.spring.boot.security.api
 
+import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.security.business.BookCollection
+import example.spring.boot.security.business.Examples.book_refactoring
+import example.spring.boot.security.business.Examples.id_refactoring
+import example.spring.boot.security.business.Examples.record_refactoring
+import example.spring.boot.security.security.Authorities.SCOPE_BOOKS
+import example.spring.boot.security.security.WebSecurityConfiguration
 import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.security.test.context.support.WithMockUser
@@ -17,9 +22,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
-import springsecurity.domain.BookCollection
-import springsecurity.domain.BookRecordExamples
-import springsecurity.security.Authorities.SCOPE_BOOKS
 
 // @WebMvcTests automatically include Web-related components. This also includes any WebSecurityConfigurerAdapter!
 // This means, by default, our own security configuration is found and active during these kinds of tests.
@@ -30,17 +32,14 @@ import springsecurity.security.Authorities.SCOPE_BOOKS
 // The general HTTP security configuration is tests in another test. This class is focused solely on the
 // RestController's functionality.
 
+@MockkBean(BookCollection::class)
 @WebMvcTest(BooksRestController::class)
 @WithMockUser(authorities = [SCOPE_BOOKS])
-@Import(BooksRestControllerTestConfiguration::class)
+@Import(WebSecurityConfiguration::class)
 internal class BooksRestControllerTest(
     @Autowired val bookCollection: BookCollection,
     @Autowired val mockMvc: MockMvc
 ) {
-
-    val bookRecord = BookRecordExamples.REFACTORING
-    val id = bookRecord.id
-    val book = bookRecord.book
 
     @BeforeEach
     fun resetMocks() {
@@ -49,7 +48,7 @@ internal class BooksRestControllerTest(
 
     @Test
     fun `adding a new book responds with a 201 Created`() {
-        every { bookCollection.addBook(book) } returns bookRecord
+        every { bookCollection.addBook(book_refactoring) } returns record_refactoring
 
         mockMvc
             .post("/api/books") {
@@ -81,10 +80,10 @@ internal class BooksRestControllerTest(
 
     @Test
     fun `getting a non-existing book by ID responds with a 204 No Content`() {
-        every { bookCollection.getBookById(id) } returns null
+        every { bookCollection.getBookById(id_refactoring) } returns null
 
         mockMvc
-            .get("/api/books/$id")
+            .get("/api/books/$id_refactoring")
             .andExpect {
                 status { isNoContent() }
                 content { string("") }
@@ -93,10 +92,10 @@ internal class BooksRestControllerTest(
 
     @Test
     fun `getting an existing book by ID responds with a 200 Ok`() {
-        every { bookCollection.getBookById(id) } returns bookRecord
+        every { bookCollection.getBookById(id_refactoring) } returns record_refactoring
 
         mockMvc
-            .get("/api/books/$id")
+            .get("/api/books/$id_refactoring")
             .andExpect {
                 status { isOk() }
                 content {
@@ -118,21 +117,14 @@ internal class BooksRestControllerTest(
     @ValueSource(booleans = [true, false])
     @ParameterizedTest(name = "was deleted = {0}")
     fun `deleting book by ID responds with a 204 No Content`(deleted: Boolean) {
-        every { bookCollection.deleteBookById(id) } returns deleted
+        every { bookCollection.deleteBookById(id_refactoring) } returns deleted
 
         mockMvc
-            .delete("/api/books/$id")
+            .delete("/api/books/$id_refactoring")
             .andExpect {
                 status { isNoContent() }
                 content { string("") }
             }
     }
-
-}
-
-private class BooksRestControllerTestConfiguration {
-
-    @Bean
-    fun bookCollection(): BookCollection = mockk()
 
 }

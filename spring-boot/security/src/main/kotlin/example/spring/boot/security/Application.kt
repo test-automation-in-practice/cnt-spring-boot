@@ -1,4 +1,4 @@
-package springsecurity
+package example.spring.boot.security
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

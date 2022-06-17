@@ -1,30 +1,39 @@
-package springsecurity
+package example.spring.boot.security
 
+import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.security.persistence.BookRepository
 import io.mockk.every
-import io.mockk.mockk
 import io.restassured.RestAssured
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.*
-import springsecurity.domain.BookRepository
+import org.springframework.http.HttpStatus.FORBIDDEN
+import org.springframework.http.HttpStatus.NO_CONTENT
+import org.springframework.http.HttpStatus.OK
+import org.springframework.http.HttpStatus.UNAUTHORIZED
 import java.util.UUID.randomUUID
 
+@MockkBean(BookRepository::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@Import(AdditionalBeansForApplicationTests::class)
 internal class ApplicationSecurtiyTests {
 
     @BeforeEach
     fun setupRestAssured(@LocalServerPort port: Int) {
         RestAssured.port = port
+    }
+
+    @BeforeEach
+    fun stubRepository(@Autowired repository: BookRepository) {
+        every { repository.save(any()) } answers { firstArg() }
+        every { repository.findById(any()) } returns null
+        every { repository.deleteById(any()) } returns false
     }
 
     @Nested
@@ -87,17 +96,6 @@ internal class ApplicationSecurtiyTests {
             .apply { if (username != null) auth().preemptive().basic(username, username.reversed()) }
             .`when`().get(path)
             .then().statusCode(status.value())
-    }
-
-}
-
-private class AdditionalBeansForApplicationTests {
-
-    @Bean
-    fun bookRepository(): BookRepository = mockk {
-        every { save(any()) } answers { firstArg() }
-        every { findById(any()) } returns null
-        every { deleteById(any()) } returns false
     }
 
 }

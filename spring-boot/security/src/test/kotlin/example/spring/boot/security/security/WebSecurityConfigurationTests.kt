@@ -1,5 +1,8 @@
-package springsecurity.security
+package example.spring.boot.security.security
 
+import example.spring.boot.security.security.Authorities.SCOPE_ACTUATOR
+import example.spring.boot.security.security.Authorities.SCOPE_BOOKS
+import example.spring.boot.security.security.WebSecurityConfigurationTests.SecurityTestController
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -17,9 +20,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import springsecurity.security.Authorities.SCOPE_ACTUATOR
-import springsecurity.security.Authorities.SCOPE_BOOKS
-import springsecurity.security.WebSecurityConfigurationTests.SecurityTestController
 
 // Actuator endpoint security cannot be testet / simulated here, because how it is configured in the
 // WebSecurityConfiguration. Because everything about actuator endpoints can be changed by configuring
@@ -33,7 +33,7 @@ import springsecurity.security.WebSecurityConfigurationTests.SecurityTestControl
 
 @TestInstance(PER_CLASS)
 @WebMvcTest(SecurityTestController::class)
-@Import(SecurityTestController::class)
+@Import(SecurityTestController::class, WebSecurityConfiguration::class)
 internal class WebSecurityConfigurationTests(
     @Autowired private val mockMvc: MockMvc
 ) {
