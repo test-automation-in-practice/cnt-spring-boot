@@ -1,4 +1,4 @@
-= Spring Boot: End-to-End Tests are needed
+= Spring Boot: End-to-End Tests are Important
 
 This showcase demonstrates how End-to-End Tests are needed to secure your codebase from specific risks, that cannot really be mitigated on any other level.
 

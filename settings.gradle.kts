@@ -14,7 +14,7 @@ include("contract-testing:spring-cloud-contract:http:provider")
 include("contract-testing:spring-cloud-contract:messaging:consumer")
 include("contract-testing:spring-cloud-contract:messaging:provider")
 
-include("spring-boot:advanced:e2e-is-needed")
+include("spring-boot:advanced:end-to-end")
 include("spring-boot:advanced:scoping")
 include("spring-boot:basics")
 include("spring-boot:caching")
