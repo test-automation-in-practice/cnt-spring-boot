@@ -1,7 +1,7 @@
-package webmvc.api.default
+package example.spring.boot.webmvc.api.default
 
-import webmvc.business.BookRecord
-import java.util.*
+import example.spring.boot.webmvc.business.BookRecord
+import java.util.UUID
 
 data class BookRepresentation(
     val id: UUID,

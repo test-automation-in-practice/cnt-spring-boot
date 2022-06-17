@@ -1,4 +1,4 @@
-package webmvc.api
+package example.spring.boot.webmvc.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat

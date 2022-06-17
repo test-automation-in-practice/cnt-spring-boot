@@ -1,4 +1,4 @@
-package webmvc
+package example.spring.boot.webmvc
 
 import io.restassured.RestAssured
 import io.restassured.module.kotlin.extensions.Given

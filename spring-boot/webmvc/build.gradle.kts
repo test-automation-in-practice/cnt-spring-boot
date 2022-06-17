@@ -20,6 +20,7 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("io.rest-assured:kotlin-extensions")
     testImplementation("io.mockk:mockk")
+    testImplementation("com.ninja-squad:springmockk")
 }
 
 tasks {

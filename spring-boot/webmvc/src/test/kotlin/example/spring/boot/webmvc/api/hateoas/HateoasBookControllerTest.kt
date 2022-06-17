@@ -1,9 +1,16 @@
-package webmvc.api.hateoas
+package example.spring.boot.webmvc.api.hateoas
 
+import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.webmvc.business.BookCollection
+import example.spring.boot.webmvc.business.BookRecordNotFoundException
+import example.spring.boot.webmvc.business.Examples.book_cleanCode
+import example.spring.boot.webmvc.business.Examples.id_cleanArchitecture
+import example.spring.boot.webmvc.business.Examples.id_cleanCode
+import example.spring.boot.webmvc.business.Examples.record_cleanArchitecture
+import example.spring.boot.webmvc.business.Examples.record_cleanCode
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.just
-import io.mockk.mockk
 import io.mockk.runs
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
@@ -13,7 +20,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.MediaTypes.HAL_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -28,24 +34,10 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.result.ContentResultMatchersDsl
-import webmvc.business.BookCollection
-import webmvc.business.BookRecordNotFoundException
-import webmvc.business.Examples.book_cleanCode
-import webmvc.business.Examples.id_cleanArchitecture
-import webmvc.business.Examples.id_cleanCode
-import webmvc.business.Examples.record_cleanArchitecture
-import webmvc.business.Examples.record_cleanCode
 
-private class HateoasBookControllerTestConfiguration {
-    @Bean
-    fun rookRepresentationAssembler() = BookRepresentationAssembler()
-
-    @Bean
-    fun bookCollection(): BookCollection = mockk()
-}
-
+@MockkBean(BookCollection::class)
 @WebMvcTest(HateoasBookController::class)
-@Import(HateoasBookControllerTestConfiguration::class)
+@Import(BookRepresentationAssembler::class)
 @AutoConfigureRestDocs("build/generated-snippets/hateoas/books")
 internal class HateoasBookControllerTest(
     @Autowired val bookCollection: BookCollection,

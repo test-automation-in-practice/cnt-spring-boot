@@ -1,16 +1,8 @@
-package webmvc.api.hateoas
+package example.spring.boot.webmvc.api.hateoas
 
-import org.springframework.hateoas.RepresentationModel
-import org.springframework.hateoas.server.core.Relation
+import example.spring.boot.webmvc.business.BookRecord
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport
 import org.springframework.stereotype.Component
-import webmvc.business.BookRecord
-
-@Relation(value = "book", collectionRelation = "books")
-data class BookRepresentation(
-    val title: String,
-    val isbn: String
-) : RepresentationModel<BookRepresentation>()
 
 @Component
 class BookRepresentationAssembler : RepresentationModelAssemblerSupport<BookRecord, BookRepresentation>(

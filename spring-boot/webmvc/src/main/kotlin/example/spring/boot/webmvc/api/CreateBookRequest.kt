@@ -1,4 +1,4 @@
-package webmvc.api
+package example.spring.boot.webmvc.api
 
 import javax.validation.constraints.Pattern
 

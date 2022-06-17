@@ -1,7 +1,7 @@
-package webmvc.business
+package example.spring.boot.webmvc.business
 
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.UUID
 
 @Service
 class BookCollection {
