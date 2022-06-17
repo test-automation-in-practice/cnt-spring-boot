@@ -1,13 +1,19 @@
 package example.spring.boot.kafka.utils
 
 import org.junit.jupiter.api.extension.BeforeAllCallback
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL
 import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName.parse
 
-class KafkaExtension : BeforeAllCallback {
+@Retention
+@Target(AnnotationTarget.CLASS)
+@ExtendWith(KafkaExtension::class)
+annotation class RunWithDockerizedKafka
+
+private class KafkaExtension : BeforeAllCallback {
 
     override fun beforeAll(context: ExtensionContext) {
         if (context.container == null) {

@@ -6,24 +6,22 @@ import example.spring.boot.rabbitmq.business.createdEvent
 import example.spring.boot.rabbitmq.business.deletedEvent
 import example.spring.boot.rabbitmq.events.EventHandler
 import example.spring.boot.rabbitmq.events.PublishEventFunction
-import example.spring.boot.rabbitmq.utils.RabbitMQExtension
+import example.spring.boot.rabbitmq.utils.RunWithDockerizedRabbitMQ
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.test.context.ActiveProfiles
 
-@ExtendWith(RabbitMQExtension::class)
-@SpringBootTest(
-    classes = [MessagingIntegrationTestsConfiguration::class],
-    properties = ["spring.rabbitmq.port=\${RABBIT_MQ_PORT}"]
-)
+@ActiveProfiles("test")
+@RunWithDockerizedRabbitMQ
 @SpykBean(EventHandler::class, DeadLetterHandler::class)
+@SpringBootTest(classes = [MessagingIntegrationTestsConfiguration::class])
 internal class MessagingIntegrationTests(
     @Autowired val eventHandler: EventHandler,
     @Autowired val deadLetterHandler: DeadLetterHandler,
