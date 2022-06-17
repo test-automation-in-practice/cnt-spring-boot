@@ -1,0 +1,33 @@
+Complete New Modules:
+---------------------
+
+- Resilience4j
+- RSocket
+- Spring Data
+	- Elasticsearch
+	- LDAP
+	- Neo4j
+	- R2DBC
+- Spring Session
+- WebSocket
+
+Additions to Existing Modules:
+-------------------------------
+
+- Data JDBC
+	- Testcontainers
+- Data JPA
+	- Optimistic Locking
+	- Testcontainers
+- Data Mongo
+	- Optimistic Locking
+	- Testcontainers
+- GraphQL
+	- Validation
+	- Exception Handling
+	- RESTDocs
+- JDBC
+	- Testcontainers
+- Messaging JMS
+	- Topic + Subscriptions
+	- Testcontainers
