@@ -1,0 +1,3 @@
+= Spring Boot: Advanced Showcases
+
+This folder contains some advanced showcases that demonstrate specific finer points of writing efficient automated tests.

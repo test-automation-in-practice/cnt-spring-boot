@@ -1,0 +1,12 @@
+= Spring Boot: End-to-End Tests are needed
+
+This showcase demonstrates how End-to-End Tests are needed to secure your codebase from specific risks, that cannot really be mitigated on any other level.
+
+In this scenario all functional parts of the application are very efficiently tested using appropriate scopes and abstraction.
+But a specific refactoring done to make a side effect within the `BookCollection` component asynchronous, will break the application without any tests detecting the issue.
+Except for the End-to-End `ApplicationTests`.
+
+There are of course ways to implement that asynchronous behaviour "correctly" in a way that will not break the application.
+But the point is to demonstrate that a very trivial change in a small application can have unintended consequences because not every consequence was known / considered.
+
+Imagine what could happen in a "real" application with a much larger codebase and complexity!
