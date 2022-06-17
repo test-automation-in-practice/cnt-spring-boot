@@ -1,4 +1,4 @@
-package webflux
+package example.spring.boot.webflux
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

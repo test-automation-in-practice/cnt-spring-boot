@@ -1,6 +1,6 @@
-package webflux.business
+package example.spring.boot.webflux.business
 
-import java.util.*
+import java.util.UUID
 
 data class BookRecord(
     val id: UUID,

@@ -1,4 +1,4 @@
-package webflux.api
+package example.spring.boot.webflux.api
 
 import javax.validation.constraints.Pattern
 

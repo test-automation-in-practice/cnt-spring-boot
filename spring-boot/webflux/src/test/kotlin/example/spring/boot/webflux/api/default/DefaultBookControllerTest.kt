@@ -1,18 +1,21 @@
-package webflux.api.default
+package example.spring.boot.webflux.api.default
 
-import io.mockk.clearAllMocks
+import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.webflux.business.BookCollection
+import example.spring.boot.webflux.business.BookRecordNotFoundException
+import example.spring.boot.webflux.business.Examples.book_cleanCode
+import example.spring.boot.webflux.business.Examples.id_cleanArchitecture
+import example.spring.boot.webflux.business.Examples.id_cleanCode
+import example.spring.boot.webflux.business.Examples.record_cleanArchitecture
+import example.spring.boot.webflux.business.Examples.record_cleanCode
 import io.mockk.every
-import io.mockk.mockk
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
@@ -21,30 +24,15 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import webflux.business.BookCollection
-import webflux.business.BookRecordNotFoundException
-import webflux.business.Examples.book_cleanCode
-import webflux.business.Examples.id_cleanArchitecture
-import webflux.business.Examples.id_cleanCode
-import webflux.business.Examples.record_cleanArchitecture
-import webflux.business.Examples.record_cleanCode
 import java.util.UUID
 
-private class DefaultBookControllerTestConfiguration {
-    @Bean
-    fun bookCollection(): BookCollection = mockk()
-}
-
+@MockkBean(BookCollection::class)
 @WebFluxTest(DefaultBooksController::class)
-@Import(DefaultBookControllerTestConfiguration::class)
 @AutoConfigureRestDocs("build/generated-snippets/default/books")
 internal class DefaultBookControllerTest(
     @Autowired val bookCollection: BookCollection,
     @Autowired val webTestClient: WebTestClient
 ) {
-
-    @BeforeEach
-    fun resetMocks() = clearAllMocks()
 
     @Nested
     @DisplayName("POST /default-api/books")

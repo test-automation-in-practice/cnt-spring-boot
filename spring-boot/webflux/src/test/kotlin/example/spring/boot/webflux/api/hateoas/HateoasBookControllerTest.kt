@@ -1,17 +1,21 @@
-package webflux.api.hateoas
+package example.spring.boot.webflux.api.hateoas
 
-import io.mockk.clearAllMocks
+import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.webflux.business.BookCollection
+import example.spring.boot.webflux.business.BookRecordNotFoundException
+import example.spring.boot.webflux.business.Examples.book_cleanCode
+import example.spring.boot.webflux.business.Examples.id_cleanArchitecture
+import example.spring.boot.webflux.business.Examples.id_cleanCode
+import example.spring.boot.webflux.business.Examples.record_cleanArchitecture
+import example.spring.boot.webflux.business.Examples.record_cleanCode
 import io.mockk.every
-import io.mockk.mockk
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.MediaTypes.HAL_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -20,31 +24,16 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import webflux.business.BookCollection
-import webflux.business.BookRecordNotFoundException
-import webflux.business.Examples.book_cleanCode
-import webflux.business.Examples.id_cleanArchitecture
-import webflux.business.Examples.id_cleanCode
-import webflux.business.Examples.record_cleanArchitecture
-import webflux.business.Examples.record_cleanCode
 import java.util.UUID
 
-@Import(BookRepresentationAssembler::class)
-private class HateoasBookControllerTestConfiguration {
-    @Bean
-    fun bookCollection(): BookCollection = mockk()
-}
-
+@MockkBean(BookCollection::class)
 @WebFluxTest(HateoasBookController::class)
-@Import(HateoasBookControllerTestConfiguration::class)
+@Import(BookRepresentationAssembler::class)
 @AutoConfigureRestDocs("build/generated-snippets/hateoas/books")
 internal class HateoasBookControllerTest(
     @Autowired val bookCollection: BookCollection,
     @Autowired val webTestClient: WebTestClient
 ) {
-
-    @BeforeEach
-    fun resetMocks() = clearAllMocks()
 
     @Nested
     @DisplayName("POST /hateoas-api/books")

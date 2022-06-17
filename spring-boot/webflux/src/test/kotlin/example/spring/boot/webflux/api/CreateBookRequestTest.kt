@@ -1,4 +1,4 @@
-package webflux.api
+package example.spring.boot.webflux.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.assertj.core.api.Assertions.assertThat

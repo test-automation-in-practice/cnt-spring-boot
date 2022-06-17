@@ -1,11 +1,13 @@
-package webflux.business
+package example.spring.boot.webflux.business
 
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.core.publisher.Mono.*
+import reactor.core.publisher.Mono.empty
+import reactor.core.publisher.Mono.error
+import reactor.core.publisher.Mono.just
 import reactor.kotlin.core.publisher.toFlux
-import java.util.*
+import java.util.UUID
 
 @Service
 class BookCollection {
