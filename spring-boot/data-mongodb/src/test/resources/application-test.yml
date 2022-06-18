@@ -1,4 +1,21 @@
+
+---
+
 spring:
+  config:
+    activate:
+      on-profile: "embedded"
   mongodb:
     embedded:
       version: 4.0.12
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "docker"
+  data:
+    mongodb:
+      host: localhost
+      port: ${MONGODB_PORT}
