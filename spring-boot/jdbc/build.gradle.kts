@@ -19,4 +19,5 @@ dependencies {
     testImplementation("io.mockk:mockk")
     testImplementation("com.h2database:h2")
     testImplementation("com.ninja-squad:springmockk")
+    testImplementation("org.testcontainers:postgresql")
 }

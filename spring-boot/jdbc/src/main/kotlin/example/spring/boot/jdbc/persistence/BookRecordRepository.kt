@@ -23,7 +23,7 @@ class BookRecordRepository(
         val id = idGenerator.generateId()
         val statement = "INSERT INTO book_records (id, title, isbn) VALUES (:id, :title, :isbn)"
         val parameters = mutableMapOf(
-            "id" to id.toString(),
+            "id" to id,
             "title" to book.title,
             "isbn" to book.isbn
         )
@@ -40,7 +40,7 @@ class BookRecordRepository(
     fun update(bookRecord: BookRecord): Boolean {
         val query = "UPDATE book_records SET title = :title, isbn = :isbn WHERE id = :id"
         val parameters = mutableMapOf(
-            "id" to bookRecord.id.toString(),
+            "id" to bookRecord.id,
             "title" to bookRecord.book.title,
             "isbn" to bookRecord.book.isbn
         )
@@ -50,7 +50,7 @@ class BookRecordRepository(
 
     fun findBy(id: UUID): BookRecord? {
         val query = "SELECT * FROM book_records WHERE id = :id"
-        val parameters = mapOf("id" to id.toString())
+        val parameters = mapOf("id" to id)
 
         val rowMapper = RowMapper { rs, _ ->
             val title = rs.getString("title")!!
@@ -67,7 +67,7 @@ class BookRecordRepository(
 
     fun deleteBy(id: UUID): Boolean {
         val query = "DELETE FROM book_records WHERE id = :id"
-        val parameters = mapOf("id" to id.toString())
+        val parameters = mapOf("id" to id)
 
         return jdbcTemplate.update(query, parameters) != 0
     }

@@ -22,8 +22,6 @@ Additions to Existing Modules:
 	- Validation
 	- Exception Handling
 	- RESTDocs
-- JDBC
-	- Testcontainers
 - Messaging JMS
 	- Topic + Subscriptions
 	- Testcontainers
