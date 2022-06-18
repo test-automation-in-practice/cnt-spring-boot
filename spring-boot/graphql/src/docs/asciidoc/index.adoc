@@ -1,0 +1,32 @@
+= API Documentation
+
+== GraphQL Schema
+
+[source,graphql]
+----
+include::../../main/resources/graphql/schema.graphqls[]
+----
+
+=== Book Queries
+
+==== Getting all Books
+
+include::{snippets}/books/get-all/found/graphql-request.adoc[]
+include::{snippets}/books/get-all/found/http-response.adoc[]
+
+==== Getting single Book
+
+include::{snippets}/books/get-by-id/found/graphql-request.adoc[]
+include::{snippets}/books/get-by-id/found/http-response.adoc[]
+
+=== Book Mutations
+
+==== Adding a Book
+
+include::{snippets}/books/add/created/graphql-request.adoc[]
+include::{snippets}/books/add/created/http-response.adoc[]
+
+==== Deleting a Book
+
+include::{snippets}/books/delete-by-id/deleted/graphql-request.adoc[]
+include::{snippets}/books/delete-by-id/deleted/http-response.adoc[]

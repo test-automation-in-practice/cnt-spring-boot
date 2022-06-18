@@ -21,7 +21,5 @@ Additions to Existing Modules:
 - GraphQL
 	- Validation
 	- Exception Handling
-	- RESTDocs
 - Messaging JMS
 	- Topic + Subscriptions
-	- Testcontainers

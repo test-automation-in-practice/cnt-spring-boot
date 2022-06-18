@@ -54,7 +54,7 @@ In order to create a book, the consumer needs to provide a `title` string, an 13
 include::{snippets}/default/books/post/created/http-request.adoc[]
 
 This will create a new book in the database.
-The response to this request will contain the stored data and links to available other resources.
+The response to this request will contain the stored data.
 
 include::{snippets}/default/books/post/created/http-response.adoc[]
 
