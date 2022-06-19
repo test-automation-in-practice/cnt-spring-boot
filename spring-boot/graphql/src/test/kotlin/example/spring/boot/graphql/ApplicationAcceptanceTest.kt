@@ -1,23 +1,23 @@
 package example.spring.boot.graphql
 
 import com.ninjasquad.springmockk.MockkBean
-import example.spring.boot.graphql.business.Examples.id_theMartian
+import example.spring.boot.graphql.business.BookRecord
 import example.spring.boot.graphql.business.Examples.record_projectHailMary
 import example.spring.boot.graphql.business.Examples.record_theMartian
 import example.spring.boot.graphql.persistence.BookRecordRepository
 import example.spring.boot.graphql.utils.GraphQLRequestSnippet
 import io.mockk.every
 import io.restassured.RestAssured
+import io.restassured.filter.Filter
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import io.restassured.specification.RequestSpecification
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.extension.ExtendWith
 import org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import org.skyscreamer.jsonassert.JSONCompareMode.STRICT
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,42 +31,32 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors.preproces
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration
-import org.springframework.restdocs.restassured3.RestAssuredRestDocumentationConfigurer
 import org.springframework.util.IdGenerator
+import java.util.UUID
 
 @MockkBean(IdGenerator::class)
+@ExtendWith(RestDocumentationExtension::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 internal class ApplicationAcceptanceTest(
     @Autowired val idGenerator: IdGenerator,
     @Autowired val repository: BookRecordRepository
 ) {
 
-    @RegisterExtension
-    val restDocumentation = RestDocumentationExtension("build/generated-snippets/books")
-
-    lateinit var documentationConfigurationFilter: RestAssuredRestDocumentationConfigurer
+    lateinit var documentationConfiguration: Filter
 
     @BeforeEach
-    fun setupRestDocs(contextProvider: RestDocumentationContextProvider) {
-        documentationConfigurationFilter = documentationConfiguration(contextProvider)
-    }
-
-    @LocalServerPort
-    fun setupRestAssured(port: Int) {
+    fun setup(@LocalServerPort port: Int, contextProvider: RestDocumentationContextProvider) {
         RestAssured.port = port
-    }
-
-    @AfterEach
-    fun cleanUp() {
+        documentationConfiguration = documentationConfiguration(contextProvider)
         repository.deleteAll()
     }
 
     @Test
     fun `adding a book`() {
-        every { idGenerator.generateId() } returns id_theMartian
-
+        defineNextGeneratedId("b3fc0be8-463e-4875-9629-67921a1e00f4")
         testGraphQLInteraction(
-            query = """
+            documentationId = "books/add/created",
+            graphqlQuery = """
                 mutation {
                   addBook(title: "The Martian", isbn: "9780804139021") {
                     id
@@ -85,18 +75,16 @@ internal class ApplicationAcceptanceTest(
                     }
                   }
                 }                
-                """,
-            identifier = "add/created"
+                """
         )
     }
 
     @Test
     fun `getting all books`() {
-        repository.save(record_theMartian)
-        repository.save(record_projectHailMary)
-
+        defineAvailableBookRecords(record_theMartian, record_projectHailMary)
         testGraphQLInteraction(
-            query = """
+            documentationId = "books/get-all/found",
+            graphqlQuery = """
                 query {
                   getAllBooks {
                     id
@@ -122,17 +110,16 @@ internal class ApplicationAcceptanceTest(
                     ]
                   }
                 }                
-                """,
-            identifier = "get-all/found"
+                """
         )
     }
 
     @Test
     fun `getting a book by id`() {
-        repository.save(record_projectHailMary)
-
+        defineAvailableBookRecords(record_projectHailMary)
         testGraphQLInteraction(
-            query = """
+            documentationId = "books/get-by-id/found",
+            graphqlQuery = """
                 query {
                   getBookById(id: "7d823198-2ef3-41a6-b780-29ba6723d8c9") {
                     id
@@ -151,17 +138,16 @@ internal class ApplicationAcceptanceTest(
                     }
                   }
                 }                
-                """,
-            identifier = "get-by-id/found"
+                """
         )
     }
 
     @Test
     fun `delete a book by id`() {
-        repository.save(record_theMartian)
-
+        defineAvailableBookRecords(record_theMartian)
         testGraphQLInteraction(
-            query = """
+            documentationId = "books/delete-by-id/deleted",
+            graphqlQuery = """
                 mutation {
                   deleteBookById(id: "b3fc0be8-463e-4875-9629-67921a1e00f4")
                 }
@@ -172,20 +158,26 @@ internal class ApplicationAcceptanceTest(
                     "deleteBookById": true
                   }
                 }                
-                """,
-            identifier = "delete-by-id/deleted"
+                """
         )
     }
 
+    fun defineNextGeneratedId(id: String) {
+        every { idGenerator.generateId() } returns UUID.fromString(id)
+    }
+
+    fun defineAvailableBookRecords(vararg records: BookRecord) =
+        records.forEach(repository::save)
+
     private fun testGraphQLInteraction(
-        @Language("graphql") query: String,
-        @Language("json") expectedResponse: String,
-        identifier: String
+        documentationId: String,
+        @Language("graphql") graphqlQuery: String,
+        @Language("json") expectedResponse: String
     ) {
         val actualResponse = Given {
-            document(identifier)
+            document(documentationId)
             header("Content-Type", "application/json")
-            body(mapOf("query" to query))
+            body(mapOf("query" to graphqlQuery))
         } When {
             post("/graphql")
         } Then {
@@ -199,7 +191,7 @@ internal class ApplicationAcceptanceTest(
 
     private fun RequestSpecification.document(identifier: String): RequestSpecification =
         apply {
-            filter(documentationConfigurationFilter)
+            filter(documentationConfiguration)
             filter(
                 document(
                     /* identifier = */ identifier,
