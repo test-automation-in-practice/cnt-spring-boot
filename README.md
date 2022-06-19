@@ -31,6 +31,7 @@ All examples are based on _our_ experience in different actual small and large s
     - [Spring Data JDBC](spring-boot/data-jdbc)
     - [Spring Data JPA](spring-boot/data-jpa)
     - [Spring Data MongoDB](spring-boot/data-mongodb)
+    - [Spring Data Redis](spring-boot/data-redis)
     - [GraphQL](spring-boot/graphql)
     - [HTTP Clients](spring-boot/http-clients)
     - [JDBC](spring-boot/jdbc)
