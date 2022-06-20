@@ -1,3 +1,0 @@
-spring:
-  redis:
-    port: ${REDIS_PORT}

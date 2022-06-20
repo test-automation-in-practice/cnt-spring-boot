@@ -1,7 +1,7 @@
 package example.spring.boot.data.redis.persistence
 
 import example.spring.boot.data.redis.config.RedisRepositoryConfiguration
-import example.spring.boot.data.redis.utils.RunWithDockerizedRedis
+import example.spring.boot.data.redis.utils.InitializeWithContainerizedRedis
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -13,12 +13,10 @@ import org.springframework.context.annotation.Import
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.StringRedisSerializer
-import org.springframework.test.context.ActiveProfiles
 import java.util.UUID.randomUUID
 
-@RunWithDockerizedRedis
 @DataRedisTest
-@ActiveProfiles("test")
+@InitializeWithContainerizedRedis
 @Import(RedisRepositoryConfiguration::class)
 internal class BookRecordRepositoryTest(
     @Autowired val cut: BookRecordRepository

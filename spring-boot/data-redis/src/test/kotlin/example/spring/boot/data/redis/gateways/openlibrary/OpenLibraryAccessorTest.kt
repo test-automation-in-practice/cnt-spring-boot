@@ -2,7 +2,7 @@ package example.spring.boot.data.redis.gateways.openlibrary
 
 import com.ninjasquad.springmockk.MockkBean
 import example.spring.boot.data.redis.config.RedisCacheConfiguration
-import example.spring.boot.data.redis.utils.RunWithDockerizedRedis
+import example.spring.boot.data.redis.utils.InitializeWithContainerizedRedis
 import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cache.Cache
 import org.springframework.context.annotation.Import
 import org.springframework.data.redis.cache.RedisCacheManager
-import org.springframework.test.context.ActiveProfiles
 import java.io.IOException
 
 internal class OpenLibraryAccessorTest {
@@ -74,8 +73,7 @@ internal class OpenLibraryAccessorTest {
      * - tests would fail if caching would not be enabled by the [RedisCacheConfiguration]
      */
     @Nested
-    @ActiveProfiles("test")
-    @RunWithDockerizedRedis
+    @InitializeWithContainerizedRedis
     @MockkBean(OpenLibraryClient::class)
     @SpringBootTest(classes = [CachingTestsConfiguration::class])
     inner class CachingTests(
