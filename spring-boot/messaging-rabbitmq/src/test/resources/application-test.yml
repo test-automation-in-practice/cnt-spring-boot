@@ -1,3 +1,0 @@
-spring:
-  rabbitmq:
-    port: ${RABBIT_MQ_PORT}
