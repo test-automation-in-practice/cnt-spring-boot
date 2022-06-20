@@ -1,6 +1,6 @@
 package example.spring.boot.data.jdbc.persistence
 
-import example.spring.boot.data.jdbc.utils.RunWithDockerizedPostgreSQL
+import example.spring.boot.data.jdbc.utils.InitializeWithContainerizedPostgreSQL
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
@@ -28,9 +28,9 @@ internal class BookRecordRepositoryTest {
      * Takes longer to boostrap, but also provides real PostgreSQL behaviour.
      */
     @Nested
-    @RunWithDockerizedPostgreSQL
     @DataJdbcTest
     @ActiveProfiles("test", "docker")
+    @InitializeWithContainerizedPostgreSQL
     inner class WithDockerizedDatabase(
         @Autowired override val cut: BookRecordRepository
     ) : BookRecordRepositoryContract()
