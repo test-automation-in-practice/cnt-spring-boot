@@ -7,7 +7,7 @@ import example.spring.boot.kafka.business.createdEvent
 import example.spring.boot.kafka.business.deletedEvent
 import example.spring.boot.kafka.events.EventHandler
 import example.spring.boot.kafka.events.PublishEventFunction
-import example.spring.boot.kafka.utils.RunWithDockerizedKafka
+import example.spring.boot.kafka.utils.InitializeWithContainerizedKafka
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -17,11 +17,9 @@ import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.test.context.ActiveProfiles
 
-@ActiveProfiles("test")
-@RunWithDockerizedKafka
 @SpykBean(EventHandler::class)
+@InitializeWithContainerizedKafka
 @SpringBootTest(classes = [MessagingIntegrationTestsConfiguration::class])
 class MessagingIntegrationTests(
     @Autowired val eventHandler: EventHandler,
