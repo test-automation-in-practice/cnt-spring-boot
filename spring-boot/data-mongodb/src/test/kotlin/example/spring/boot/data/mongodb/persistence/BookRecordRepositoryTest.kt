@@ -1,11 +1,10 @@
 package example.spring.boot.data.mongodb.persistence
 
-import example.spring.boot.data.mongodb.utils.RunWithDockerizedMongoDB
+import example.spring.boot.data.mongodb.utils.InitializeWithContainerizedMongoDB
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.ActiveProfiles
 import java.util.UUID.randomUUID
@@ -18,7 +17,7 @@ internal class BookRecordRepositoryTest {
     @Nested
     @DataMongoTest
     @ActiveProfiles("test", "embedded")
-    inner class WithH2InMemoryDatabase(
+    inner class WithEmbeddedDatabase(
         @Autowired override val cut: BookRecordRepository
     ) : BookRecordRepositoryContract()
 
@@ -26,13 +25,9 @@ internal class BookRecordRepositoryTest {
      * Takes longer to boostrap, but also provides real MongoDB behaviour.
      */
     @Nested
-    @RunWithDockerizedMongoDB
-    @DataMongoTest(
-        excludeAutoConfiguration = [
-            EmbeddedMongoAutoConfiguration::class // only needed to have both options in one codebase
-        ]
-    )
+    @DataMongoTest
     @ActiveProfiles("test", "docker")
+    @InitializeWithContainerizedMongoDB
     inner class WithDockerizedDatabase(
         @Autowired override val cut: BookRecordRepository
     ) : BookRecordRepositoryContract()
