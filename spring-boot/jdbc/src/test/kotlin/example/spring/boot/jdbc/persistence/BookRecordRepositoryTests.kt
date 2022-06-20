@@ -3,32 +3,50 @@ package example.spring.boot.jdbc.persistence
 import com.ninjasquad.springmockk.MockkBean
 import example.spring.boot.jdbc.business.Book
 import example.spring.boot.jdbc.business.BookRecord
-import example.spring.boot.jdbc.utils.RunWithDockerizedPostgreSQL
+import example.spring.boot.jdbc.utils.InitializeWithContainerizedPostgreSQL
 import io.mockk.clearMocks
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
+import org.flywaydb.core.Flyway
+import org.h2.jdbcx.JdbcDataSource
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Import
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.util.IdGenerator
 import java.util.UUID.randomUUID
 
-/**
- * This technology integration test uses Spring Boot's [JdbcTest] test slice
- * mechanic to create an application context like it would be in the real
- * running application.
- *
- * All database related components, like Flyway schema migration, are active
- * as well.
- *
- * The actual tests are exactly the same as [BookRecordRepositoryUnitTest].
- */
-internal class BookRecordRepositoryTechnologyIntegrationTest {
+internal class BookRecordRepositoryTests {
+
+    /**
+     * Fastest boostrap, but only simulates PostgreSQL behaviour.
+     */
+    @Nested
+    inner class AsUnitTest : BookRecordRepositoryContract() {
+
+        val dataSource = JdbcDataSource()
+            .apply { setUrl("jdbc:h2:mem:${randomUUID()};MODE=PostgreSQL;DB_CLOSE_DELAY=-1") }
+            .apply { user = "sa"; password = "sa" }
+            .also {
+                Flyway.configure()
+                    .dataSource(it)
+                    .locations("classpath:db/migration")
+                    .load()
+                    .migrate()
+            }
+
+        val jdbcTempalte = NamedParameterJdbcTemplate(dataSource)
+
+        override val idGenerator: IdGenerator = mockk()
+        override val cut = BookRecordRepository(jdbcTempalte, idGenerator)
+
+    }
 
     /**
      * Much faster boostrap, but only simulates PostgreSQL behaviour.
@@ -38,7 +56,7 @@ internal class BookRecordRepositoryTechnologyIntegrationTest {
     @ActiveProfiles("test", "in-memory")
     @MockkBean(IdGenerator::class)
     @Import(BookRecordRepository::class)
-    inner class WithH2InMemoryDatabase(
+    inner class AsTechnologyIntegrationTestWithH2InMemoryDatabase(
         @Autowired override val idGenerator: IdGenerator,
         @Autowired override val cut: BookRecordRepository
     ) : BookRecordRepositoryContract()
@@ -50,12 +68,12 @@ internal class BookRecordRepositoryTechnologyIntegrationTest {
      * column cannot be queries using a String representation of a UUID.
      */
     @Nested
-    @RunWithDockerizedPostgreSQL
     @JdbcTest
     @ActiveProfiles("test", "docker")
     @MockkBean(IdGenerator::class)
     @Import(BookRecordRepository::class)
-    inner class WithDockerizedDatabase(
+    @InitializeWithContainerizedPostgreSQL
+    inner class AsTechnologyIntegrationTestWithDockerizedDatabase(
         @Autowired override val idGenerator: IdGenerator,
         @Autowired override val cut: BookRecordRepository
     ) : BookRecordRepositoryContract()

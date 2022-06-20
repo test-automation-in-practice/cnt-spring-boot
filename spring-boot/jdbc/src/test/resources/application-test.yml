@@ -20,7 +20,3 @@ spring:
   config:
     activate:
       on-profile: "docker"
-  datasource:
-    url: ${POSTGRESQL_URL}
-    username: ${POSTGRESQL_USERNAME}
-    password: ${POSTGRESQL_PASSWORD}
