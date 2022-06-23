@@ -4,7 +4,7 @@ This showcase demonstrates the basics of writing efficient automated tests for S
 
 *Basic principles:*
 
-- Write isolated unit tests for your own code.
+- Write isolated functionality tests for your own code.
 - Write small specific technology-integration tests for _your_ usage of Spring Boot features and other used technologies like databases, message brokers, HTTP clients etc.
 - Write a few very high level application end-to-end smoke tests to verify that everything fits together.
 
@@ -24,10 +24,10 @@ image::../assets/images/starter_app_slice.svg[align="center"]
 This application manages a library of books.
 It offers an HTTP API for consumers and data is stored in an SQL database.
 
-=== Functional Unit Tests
+=== Isolated Functionality Tests
 
-Unit tests are written to make sure that the code _you_ have written does exactly what it is supposed to do.
-Depending on what the code under test actually does, unit tests can be divided into several groups:
+These tests are written to make sure that the code _you_ have written does exactly what it is supposed to do.
+Depending on what the code under test actually does, the scope of these tests can be divided into several groups:
 
 - link:https://en.wikipedia.org/wiki/Pure_function[Pure Functions]: Tests will vary different input parameter combinations and check that the result is equal to what is expected.
 - Stateful Functions: For these functions, the result of their invocation is dependent on the state of their parent component (e.g. objects).
@@ -36,10 +36,10 @@ Other than that the tests themselves are pretty similar to those of pure functio
 - Orchestration Components: These components "orchestrate" the invocation and data transfer of multiple dependency components in order to achieve an overarching functionality.
 Their tests usually involve mocking the behaviour of the different dependencies and are focused on verifying that concerns like error handling, invocation order, correct data transfer etc. are handled as intended.
 
-Because unit tests only refer to your own code and everything else is mocked, they are extremely fast and can be run by the thousands in a very short time.
+Because the tests only refer to your own code and everything else is mocked, they are extremely fast and can be run by the thousands in a very short time.
 This makes them the best tests to get quick feedback on the core components, e.g. the business logic, of your application.
 
-In our example application, unit tests would be used mainly in the _BookCollection_ component.
+In our example application, isolated functionality tests would be used mainly in the _BookCollection_ component.
 
 image::../assets/images/starter_app_slice_unit.svg[align="center"]
 
@@ -71,7 +71,7 @@ As an example, let's assume that you are connecting to a SQL database using JDBC
 You don't need to test that the JDBC driver or the database works.
 What you need to test is whether you have written valid SQL that will return the desired result when used with a particular database.
 
-Since technology integration tests involve bootstrapping some kind of technology (external services, framework features etc.), they are a lot slower that unit tests.
+Since technology integration tests involve bootstrapping some kind of technology (external services, framework features etc.), they are a lot slower that isolated tests.
 At least the initial setup will usually take a couple of seconds, while each single test will most likely take only a couple of milliseconds.
 
 In our example application, technology integration tests would be used to test the in the _BookRestController_ and _BookRepository_ components.
@@ -92,7 +92,7 @@ Frontend single-page applications are usually tested end-to-end using a browser 
 Meanwhile, backend applications, which are our focus here, are tested using their API.
 Any Dependencies, like other services or databases, are either simulated or replaced by test instances.
 
-Questions that end-to-end tests can answer, and a combination of just unit and technology integration tests can't:
+Questions that end-to-end tests can answer, and a combination of just isolated and technology integration tests can't:
 
 - _Does my application start given a default configuration?_
 -> Do all my components fit and are all required compontents part of the application context.
@@ -129,9 +129,9 @@ image::../assets/images/starter_design1.svg[align="center"]
 
 Having a clear separation of concerns with each component focusing on a single job (e.g. translating business logic into SQL), it is very easy to also write tests that focus on that job and do not need to take too much else into consideration.
 
-==== Unit Tests
+==== Isolated Functionality Tests
 
-The _BooksCollection_ can be 100% unit tested, since it does not rely on any outside technology.
+The _BooksCollection_ can be 100% tested in isolation, since it does not rely on any outside technology.
 This component als contains all the important core behaviour for handling books.
 What one might call _business logic_.
 
@@ -140,8 +140,8 @@ So in this architecture our feedback loop for the most important parts of our ap
 
 image::../assets/images/starter_design1_unit.svg[align="center"]
 
-Both the _BooksRestController_ and _BooksRepository_ are such small components, who's only task is to translate business calls from and to a specific technology, that their unit tests would cover the same scenarios that their technology integration will have to cover anyway.
-Therefore, unit tests for these components are not necessary.
+Both the _BooksRestController_ and _BooksRepository_ are such small components, who's only task is to translate business calls from and to a specific technology, that their isolated tests would cover the same scenarios that their technology integration will have to cover anyway.
+Therefore, isolated tests for these components are not necessary.
 
 ==== Technology Integration Tests
 
@@ -159,7 +159,7 @@ Tests for this component should involve a database in order to validate our comm
 
 ==== End-to-End Tests
 
-In this architecture, since everything else is already tested either by unit or by technology integration tests, the only tests remaining are:
+In this architecture, since everything else is already tested either by isolated or by technology integration tests, the only tests remaining are:
 
 - Global security rules.
 - Happy path _smoke_ tests.
@@ -177,23 +177,23 @@ image::../assets/images/starter_design2.svg[align="center"]
 
 This mix of responsibilities for the _BooksRestController_ has an immediate impact on the lower levels of the test automation pyramide.
 
-==== Unit & Technology Integration Tests
+==== Isolated Functionality & Technology Integration Tests
 
 The two remaining components from example #1 contain technology specific code, which needs to be tested with technology integration tests.
-There are no real _purely_ unit testable components left.
+There are no real _purely_ isolated testable components left.
 But because the _business logic_ has to go somewhere, it is more than likely that all of that code would now be part of the _BooksRestController_.
 
 This makes _BooksRestController_ the one component that now does two things: Translating our _public language_ from HTTP and executing _business logic_ upon these requests.
-Therefore, it might be useful to write both unit and technology integration tests for this component.
+Therefore, it might be useful to write both isolated and technology integration tests for this component.
 
 image::../assets/images/starter_design2_unit.svg[align="center"]
 
-Writing those unit tests in a sustainable manner can be hard though.
+Writing those tests in a sustainable manner can be hard though.
 Instead of writing tests which represent business rules and are based on business inputs and outcomes (aka the _value_ of your code), the tests now need to start and end with a technical perspective.
 Technical data (e.g. request headers, query parameters, request / response abstractions etc.) need to be simulated as input.
 That makes it hard to write tests that focus on those business value of your code.
 
-Along with the new challenges for unit tests, the technology integration tests are harder to write as well.
+Along with the new challenges for isolated tests, the technology integration tests are harder to write as well.
 
 image::../assets/images/starter_design2_ti.svg[align="center"]
 
@@ -202,7 +202,7 @@ Just writing an example request and checking if the _BookCollection_ mock is inv
 
 ==== End-to-End Tests
 
-As with example #1, everything else is already tested either by unit or by technology integration tests, the only tests remaining are:
+As with example #1, everything else is already tested either by isolated or technology integration tests, the only tests remaining are:
 
 - Global security rules.
 - Happy path _smoke_ tests.
@@ -220,7 +220,7 @@ Basically there is no architecture, but there is a big ball of mud.
 image::../assets/images/starter_design3.svg[align="center"]
 
 Doing this, kills any hope for writing small and focused tests or having different kinds of tests at all.
-Purely technical white-box unit tests for a single do-it-all component are basically unmaintainable.
+Purely technical white-box isolated tests for a single do-it-all component are basically unmaintainable.
 Each tests setup has to consider which database state to set up based on which logical path will be traversed based on a specific HTTP request.
 This makes the tests fragile, complex to write and hard to understand.
 
@@ -232,6 +232,6 @@ Simply writing everything as end-to-end tests is usually the only option left.
 
 === Conclusion
 
-With less design (e.g. fewer abstractions, bigger multi-use components etc.) in the production code, the ability to write efficient unit tests decreases.
+With less design (e.g. fewer abstractions, bigger multi-use components etc.) in the production code, the ability to write efficient tests decreases.
 From example #1 to #2 the difference is not yet as serious as from #2 to #3, so there is a point at which not all aspects of the application are testable without excessive effort.
-The basic principle is: The better the production code is decomposed / structured, the more of it can be verified purely with unit and individual technology integration tests.
+The basic principle is: The better the production code is decomposed / structured, the more of it can be verified purely with isolated and individual technology integration tests.
