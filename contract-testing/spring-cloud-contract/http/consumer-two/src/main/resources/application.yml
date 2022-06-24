@@ -1,7 +1,0 @@
-services:
-  library:
-    url: "http://localhost:8080"
-
-logging:
-  level:
-    root: INFO

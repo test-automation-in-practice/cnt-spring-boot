@@ -1,4 +1,4 @@
-name: Spring Boot CI-Build
+name: CI-Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 concurrency:
-  group: ci_spring-boot_${{ github.ref }}
+  group: ci_${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       - webmvc
       - webflux
     steps:
-      - run: echo "Spring Boot CI-Build completed!"
+      - run: echo "CI-Build completed!"
 
   advanced_end-to-end:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:advanced:end-to-end:build
+        run: ./gradlew :examples:advanced:end-to-end:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -62,7 +62,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:advanced:scoping:build
+        run: ./gradlew :examples:advanced:scoping:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -80,7 +80,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:basics:build
+        run: ./gradlew :examples:basics:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -98,7 +98,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:caching:build
+        run: ./gradlew :examples:caching:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -116,7 +116,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:data-jdbc:build
+        run: ./gradlew :examples:data-jdbc:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -134,7 +134,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:data-jpa:build
+        run: ./gradlew :examples:data-jpa:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -152,7 +152,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:data-mongodb:build
+        run: ./gradlew :examples:data-mongodb:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -170,7 +170,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:graphql:build
+        run: ./gradlew :examples:graphql:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -188,7 +188,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:http-clients:build
+        run: ./gradlew :examples:http-clients:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -206,7 +206,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:jdbc:build
+        run: ./gradlew :examples:jdbc:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -224,7 +224,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:messaging-jms:build
+        run: ./gradlew :examples:messaging-jms:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -242,7 +242,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:messaging-kafka:build
+        run: ./gradlew :examples:messaging-kafka:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -260,7 +260,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:messaging-rabbitmq:build
+        run: ./gradlew :examples:messaging-rabbitmq:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -278,7 +278,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:security:build
+        run: ./gradlew :examples:security:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -296,7 +296,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:webmvc:build
+        run: ./gradlew :examples:webmvc:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
@@ -314,7 +314,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew :spring-boot:webflux:build
+        run: ./gradlew :examples:webflux:build
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         if: always()
