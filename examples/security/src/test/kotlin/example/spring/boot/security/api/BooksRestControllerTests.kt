@@ -23,15 +23,19 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
-// @WebMvcTests automatically include Web-related components. This also includes any WebSecurityConfigurerAdapter!
-// This means, by default, our own security configuration is found and active during these kinds of tests.
-
-// Since Spring-Security acts before WebMvc it is not possible to use Authentication headers in MockMvc-based tests.
-// @WithMockUser is used on the class-level in order to let all tests access the API.
-
-// The general HTTP security configuration is tests in another test. This class is focused solely on the
-// RestController's functionality.
-
+/**
+ * [WebMvcTest] builds a context that includes web-related as well as security components,
+ * but only the defaults. In order to use our own security configuration we have ti import it.
+ *
+ * Since in our configuration the /api/books namespace requires the [SCOPE_BOOKS] authorization,
+ * we'll be using [WithMockUser] to set a pre-authenticated user with that scope to be used by all
+ * tests.
+ *
+ * Since security rules are already tested by other test classes, and we want to focus on functionality,
+ * these are the only measures taken to make the test run from a security standpoint.
+ * Alternatively we would need to exclude the security autoconfiguration or provide a dummy security configuration
+ * that simply allows all interactions.
+ */
 @MockkBean(BookCollection::class)
 @WebMvcTest(BooksRestController::class)
 @WithMockUser(authorities = [SCOPE_BOOKS])
