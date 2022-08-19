@@ -1,11 +1,27 @@
+scalar PageIndex
+scalar PageSize
+
+type BookPage {
+    content: [Book]
+    index: Int!
+    size: Int!
+    totalPages: Int!,
+    totalElements: Int!
+}
+
 type Book {
     id: ID!
     title: String!
     isbn: String!
 }
 
+input Pagination {
+    index: PageIndex! = 0
+    size: PageSize! = 25
+}
+
 type Query {
-    getAllBooks : [Book]
+    getAllBooks(pagination: Pagination = {}) : BookPage
     getBookById(id: ID!) : Book
 }
 

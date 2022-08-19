@@ -70,8 +70,9 @@ internal class OpenLibraryAccessorTest {
      * - tests would fail if caching would not be enabled by the [CacheConfiguration]
      */
     @Nested
+    @Import(OpenLibraryAccessor::class)
     @MockkBean(OpenLibraryClient::class)
-    @SpringBootTest(classes = [CachingTestsConfiguration::class])
+    @SpringBootTest(classes = [CacheConfiguration::class])
     inner class CachingTests(
         @Autowired val client: OpenLibraryClient,
         @Autowired val cut: OpenLibraryAccessor
@@ -109,8 +110,5 @@ internal class OpenLibraryAccessorTest {
         }
 
     }
-
-    @Import(CacheConfiguration::class, OpenLibraryAccessor::class)
-    private class CachingTestsConfiguration
 
 }

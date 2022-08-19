@@ -86,28 +86,40 @@ internal class ApplicationAcceptanceTest(
             documentationId = "books/get-all/found",
             graphqlQuery = """
                 query {
-                  getAllBooks {
-                    id
-                    title
-                    isbn
+                  getAllBooks(pagination: {index: 0, size: 10}) {
+                    content {
+                      id
+                      title
+                      isbn
+                    }
+                    index
+                    size
+                    totalPages
+                    totalElements
                   }
                 }
                 """,
             expectedResponse = """
                 {
                   "data": {
-                    "getAllBooks": [
-                      {
-                        "id": "b3fc0be8-463e-4875-9629-67921a1e00f4",
-                        "title": "The Martian",
-                        "isbn": "9780804139021"
-                      },
-                      {
-                        "id": "7d823198-2ef3-41a6-b780-29ba6723d8c9",
-                        "title": "Project Hail Mary",
-                        "isbn": "9780593135204"
-                      }
-                    ]
+                    "getAllBooks": {
+                      "content": [
+                        {
+                          "id": "7d823198-2ef3-41a6-b780-29ba6723d8c9",
+                          "title": "Project Hail Mary",
+                          "isbn": "9780593135204"
+                        },
+                        {
+                          "id": "b3fc0be8-463e-4875-9629-67921a1e00f4",
+                          "title": "The Martian",
+                          "isbn": "9780804139021"
+                        }
+                      ],
+                      "index": 0,
+                      "size": 10,
+                      "totalPages": 1,
+                      "totalElements": 2
+                    }
                   }
                 }                
                 """
