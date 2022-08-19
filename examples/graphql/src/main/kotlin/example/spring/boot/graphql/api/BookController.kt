@@ -4,6 +4,8 @@ import example.spring.boot.graphql.business.Book
 import example.spring.boot.graphql.business.BookCollection
 import example.spring.boot.graphql.business.BookRecord
 import example.spring.boot.graphql.business.Isbn
+import example.spring.boot.graphql.business.Page
+import example.spring.boot.graphql.business.Pagination
 import example.spring.boot.graphql.business.Title
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
@@ -21,8 +23,8 @@ class BookController(
         collection.add(Book(title, isbn)).toRepresentation()
 
     @QueryMapping
-    fun getAllBooks(): List<BookRepresentation> =
-        collection.getAll().map(BookRecord::toRepresentation)
+    fun getAllBooks(@Argument pagination: Pagination): Page<BookRepresentation> =
+        collection.getAll(pagination).map(BookRecord::toRepresentation)
 
     @QueryMapping
     fun getBookById(@Argument id: UUID): BookRepresentation? =

@@ -4,8 +4,8 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.1" apply false
-    id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
+    id("org.springframework.boot") version "2.7.3" apply false
+    id("io.spring.dependency-management") version "1.0.13.RELEASE" apply false
     id("org.asciidoctor.jvm.convert") version "3.3.2" apply false
 
     kotlin("jvm") version "1.7.0" apply false

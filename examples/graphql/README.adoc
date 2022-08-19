@@ -4,3 +4,10 @@ This module demonstrates:
 
 - How to test _GraphQL_ `Controller` using `@GraphQlTest` and `GraphQlTester`.
 - How to write high level smoke tests for _GraphQL_ APIs
+
+For a way more complex example of how to define and test a GraphQL API in Spring Boot, take a look at the link:https://github.com/test-automation-in-practice/showcase-skill-manager[SkillManager] showcase.
+Included here are, among other things:
+
+* more complex queries and mutations than this example provides
+* three domains in separate modules each adding parts of the overall GraphQL schema
+* custom Scalar type conversion

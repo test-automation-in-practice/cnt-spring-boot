@@ -24,7 +24,7 @@ class BookCollection(
     fun get(id: UUID): BookRecord? =
         repository.getById(id)
 
-    fun getAll(): List<BookRecord> =
-        repository.findAll()
+    fun getAll(pagination: Pagination): Page<BookRecord> =
+        repository.findAll(pagination)
 
 }
