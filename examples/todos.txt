@@ -18,6 +18,8 @@ Additions to Existing Modules:
 	- Optimistic Locking
 - Data Mongo
 	- Optimistic Locking
+- Data Redis
+	- Serialization of composite data types
 - GraphQL
 	- Validation
 	- Exception Handling
