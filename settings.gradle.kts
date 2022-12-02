@@ -2,6 +2,7 @@ rootProject.name = "cnt-spring-boot"
 
 include("examples:advanced:end-to-end")
 include("examples:advanced:scoping")
+include("examples:async")
 include("examples:basics")
 include("examples:caching")
 include("examples:data-jdbc")
