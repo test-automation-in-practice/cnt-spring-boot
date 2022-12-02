@@ -7,14 +7,16 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
-import java.lang.System.currentTimeMillis
 import java.lang.Thread.currentThread
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit.MILLISECONDS
 
 internal class FooServiceTests {
 
@@ -78,11 +80,12 @@ internal class FooServiceTests {
         fun `invocation is async - comparing thread names of test and invocation within the target method`() {
             val testThread = getThreadName()
             var invocationThread: String? = null
+            val latch = CountDownLatch(1)
 
-            every { barService.doSomething() } answers { invocationThread = getThreadName() }
+            every { barService.doSomething() } answers { invocationThread = getThreadName(); latch.countDown(); Unit }
 
             fooService.triggerDoingSomething()
-            waitUntil(timeout) { invocationThread != null }
+            latch.await(timeout, MILLISECONDS)
 
             assertThat(invocationThread).isNotBlank().isNotEqualTo(testThread)
         }
@@ -93,8 +96,11 @@ internal class FooServiceTests {
     @SpringBootTest(classes = [ExplicitIntegrationTestsConfiguration::class])
     inner class ExplicitIntegrationTests(
         @Autowired val fooService: FooService,
-        @Autowired val configuration: ExplicitIntegrationTestsConfiguration
+        @Autowired val stateHolder: ExplicitIntegrationTestsConfiguration
     ) {
+
+        @BeforeEach
+        fun resetStateHolder() = stateHolder.reset()
 
         /**
          * Initializing the FooService bean as a mock using a bean factory method
@@ -114,9 +120,9 @@ internal class FooServiceTests {
             val testThread = getThreadName()
 
             fooService.triggerDoingSomething()
-            waitUntil(timeout) { configuration.fooServiceInvokationThreadName != null }
+            stateHolder.latch.await(timeout, MILLISECONDS)
 
-            assertThat(configuration.fooServiceInvokationThreadName).isNotBlank().isNotEqualTo(testThread)
+            assertThat(stateHolder.invocationThreadName).isNotBlank().isNotEqualTo(testThread)
         }
 
     }
@@ -124,12 +130,18 @@ internal class FooServiceTests {
     @Import(AsyncConfiguration::class)
     class ExplicitIntegrationTestsConfiguration {
 
-        var fooServiceInvokationThreadName: String? = null
+        var latch = CountDownLatch(1)
+        var invocationThreadName: String? = null
+
+        fun reset() {
+            latch = CountDownLatch(1)
+            invocationThreadName = null
+        }
 
         @Bean
         fun fooServiceMock(): FooService = mockk {
             every { triggerDoingSomething() }
-                .answers { fooServiceInvokationThreadName = getThreadName(); Unit }
+                .answers { invocationThreadName = getThreadName(); latch.countDown(); Unit }
         }
 
     }
@@ -137,10 +149,3 @@ internal class FooServiceTests {
 }
 
 private fun getThreadName(): String = currentThread().name
-
-private fun waitUntil(timeout: Long, condition: () -> Boolean) {
-    val start = currentTimeMillis()
-    while (!condition() && currentTimeMillis() - start < timeout) {
-        Thread.sleep(25)
-    }
-}
