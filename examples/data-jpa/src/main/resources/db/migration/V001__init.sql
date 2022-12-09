@@ -1,4 +1,4 @@
-CREATE TABLE book_records
+CREATE TABLE books
 (
     id      uuid,
     title   text,

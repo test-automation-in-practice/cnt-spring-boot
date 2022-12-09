@@ -21,3 +21,7 @@ dependencies {
     testImplementation("com.h2database:h2")
     testImplementation("org.testcontainers:postgresql")
 }
+
+noArg {
+    annotation("example.spring.boot.data.jpa.model.NoArgConstructor")
+}

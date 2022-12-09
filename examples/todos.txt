@@ -14,8 +14,6 @@ Complete New Modules:
 Additions to Existing Modules:
 -------------------------------
 
-- Data JPA
-	- Optimistic Locking
 - Data Redis
 	- Serialization of composite data types
 - GraphQL
