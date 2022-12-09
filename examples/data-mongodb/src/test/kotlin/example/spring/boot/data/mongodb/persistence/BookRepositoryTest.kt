@@ -1,5 +1,9 @@
 package example.spring.boot.data.mongodb.persistence
 
+import example.spring.boot.data.mongodb.config.CustomMongoDbConfiguration
+import example.spring.boot.data.mongodb.model.Book
+import example.spring.boot.data.mongodb.model.Isbn
+import example.spring.boot.data.mongodb.model.Title
 import example.spring.boot.data.mongodb.utils.InitializeWithContainerizedMongoDB
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -7,11 +11,12 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
+import org.springframework.context.annotation.Import
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.test.context.ActiveProfiles
 import java.util.UUID.randomUUID
 
-internal class BookRecordRepositoryTest {
+internal class BookRepositoryTest {
 
     /**
      * Much faster boostrap after first download, but pollutes local file system.
@@ -20,8 +25,8 @@ internal class BookRecordRepositoryTest {
     @DataMongoTest
     @ActiveProfiles("test", "embedded")
     inner class WithEmbeddedDatabase(
-        @Autowired override val cut: BookRecordRepository
-    ) : BookRecordRepositoryContract()
+        @Autowired override val cut: BookRepository
+    ) : BookRepositoryContract()
 
     /**
      * Takes longer to boostrap, but also provides real MongoDB behaviour.
@@ -31,12 +36,13 @@ internal class BookRecordRepositoryTest {
     @ActiveProfiles("test", "docker")
     @InitializeWithContainerizedMongoDB
     inner class WithDockerizedDatabase(
-        @Autowired override val cut: BookRecordRepository
-    ) : BookRecordRepositoryContract()
+        @Autowired override val cut: BookRepository
+    ) : BookRepositoryContract()
 
-    abstract class BookRecordRepositoryContract {
+    @Import(CustomMongoDbConfiguration::class)
+    abstract class BookRepositoryContract {
 
-        protected abstract val cut: BookRecordRepository
+        protected abstract val cut: BookRepository
 
         @Test
         fun `document can be saved`() {
@@ -89,7 +95,7 @@ internal class BookRecordRepositoryTest {
         }
 
         private fun bookRecordDocument(title: String = "Clean Code") =
-            BookRecordDocument(randomUUID(), title, "9780123456789")
+            BookDocument(randomUUID(), Book(Isbn("9780123456789"), Title(title)))
 
     }
 
