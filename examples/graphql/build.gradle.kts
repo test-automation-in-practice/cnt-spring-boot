@@ -19,7 +19,7 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("io.rest-assured:kotlin-extensions")
-    testImplementation("io.mockk:mockk")
+    testImplementation("io.mockk:mockk-jvm")
     testImplementation("com.ninja-squad:springmockk")
 }
 

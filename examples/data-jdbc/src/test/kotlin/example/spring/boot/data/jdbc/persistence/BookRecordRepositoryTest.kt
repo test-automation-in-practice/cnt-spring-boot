@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
 import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.test.context.ActiveProfiles
 import java.util.UUID.randomUUID
 
@@ -65,8 +64,7 @@ internal class BookRecordRepositoryTest {
             val entityWithLowerVersion = entity.copy(version = entity.version - 1)
 
             assertThatThrownBy { cut.save(entityWithLowerVersion) }
-                .isInstanceOf(DbActionExecutionException::class.java)
-                .hasCauseInstanceOf(OptimisticLockingFailureException::class.java)
+                .isInstanceOf(OptimisticLockingFailureException::class.java)
         }
 
         @Test

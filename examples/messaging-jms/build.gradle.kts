@@ -16,7 +16,7 @@ dependencies {
 
     testImplementation("org.apache.activemq:artemis-jms-server")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.mockk:mockk")
+    testImplementation("io.mockk:mockk-jvm")
     testImplementation("com.ninja-squad:springmockk")
     testImplementation("org.testcontainers:testcontainers")
 }

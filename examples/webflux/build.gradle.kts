@@ -18,7 +18,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient")
-    testImplementation("io.mockk:mockk")
+    testImplementation("io.mockk:mockk-jvm")
     testImplementation("com.ninja-squad:springmockk")
 }
 

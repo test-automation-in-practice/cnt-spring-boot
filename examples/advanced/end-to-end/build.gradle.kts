@@ -18,7 +18,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
     testImplementation("com.ninja-squad:springmockk")
-    testImplementation("io.mockk:mockk")
+    testImplementation("io.mockk:mockk-jvm")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("io.rest-assured:kotlin-extensions")
 }

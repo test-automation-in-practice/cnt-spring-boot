@@ -4,14 +4,14 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.3" apply false
-    id("io.spring.dependency-management") version "1.0.13.RELEASE" apply false
+    id("org.springframework.boot") version "2.7.6" apply false
+    id("io.spring.dependency-management") version "1.0.15.RELEASE" apply false
     id("org.asciidoctor.jvm.convert") version "3.3.2" apply false
 
-    kotlin("jvm") version "1.7.0" apply false
-    kotlin("plugin.spring") version "1.7.0" apply false
-    kotlin("plugin.jpa") version "1.7.0" apply false
-    kotlin("plugin.noarg") version "1.7.0" apply false
+    kotlin("jvm") version "1.7.20" apply false
+    kotlin("plugin.spring") version "1.7.20" apply false
+    kotlin("plugin.jpa") version "1.7.20" apply false
+    kotlin("plugin.noarg") version "1.7.20" apply false
 }
 
 allprojects {
@@ -23,17 +23,17 @@ allprojects {
         }
         the<DependencyManagementExtension>().apply {
             imports {
-                mavenBom("io.github.openfeign:feign-bom:11.8")
-                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.3")
+                mavenBom("io.github.openfeign:feign-bom:12.1")
+                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.5")
                 mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-                mavenBom("org.testcontainers:testcontainers-bom:1.17.2")
+                mavenBom("org.testcontainers:testcontainers-bom:1.17.6")
             }
             dependencies {
-                dependency("com.ninja-squad:springmockk:3.1.1")
-                dependency("io.github.logrecorder:logrecorder-assertions:2.2.0")
-                dependency("io.github.logrecorder:logrecorder-logback:2.2.0")
-                dependency("io.mockk:mockk:1.12.4")
-                dependency("io.rest-assured:kotlin-extensions:4.5.1")
+                dependency("com.ninja-squad:springmockk:3.1.2")
+                dependency("io.github.logrecorder:logrecorder-assertions:2.4.0")
+                dependency("io.github.logrecorder:logrecorder-junit5:2.4.0")
+                dependency("io.github.logrecorder:logrecorder-logback:2.4.0")
+                dependency("io.mockk:mockk-jvm:1.13.3")
             }
         }
     }
