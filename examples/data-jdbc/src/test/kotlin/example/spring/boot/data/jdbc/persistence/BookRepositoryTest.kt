@@ -1,5 +1,9 @@
 package example.spring.boot.data.jdbc.persistence
 
+import example.spring.boot.data.jdbc.config.CustomJdbcConfiguration
+import example.spring.boot.data.jdbc.model.Book
+import example.spring.boot.data.jdbc.model.Isbn
+import example.spring.boot.data.jdbc.model.Title
 import example.spring.boot.data.jdbc.utils.InitializeWithContainerizedPostgreSQL
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -7,11 +11,12 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest
+import org.springframework.context.annotation.Import
 import org.springframework.dao.OptimisticLockingFailureException
 import org.springframework.test.context.ActiveProfiles
 import java.util.UUID.randomUUID
 
-internal class BookRecordRepositoryTest {
+internal class BookRepositoryTest {
 
     /**
      * Much faster boostrap, but only simulates PostgreSQL behaviour.
@@ -20,8 +25,8 @@ internal class BookRecordRepositoryTest {
     @DataJdbcTest
     @ActiveProfiles("test", "in-memory")
     inner class WithH2InMemoryDatabase(
-        @Autowired override val cut: BookRecordRepository
-    ) : BookRecordRepositoryContract()
+        @Autowired override val cut: BookRepository
+    ) : BookRepositoryContract()
 
     /**
      * Takes longer to boostrap, but also provides real PostgreSQL behaviour.
@@ -31,12 +36,13 @@ internal class BookRecordRepositoryTest {
     @ActiveProfiles("test", "docker")
     @InitializeWithContainerizedPostgreSQL
     inner class WithDockerizedDatabase(
-        @Autowired override val cut: BookRecordRepository
-    ) : BookRecordRepositoryContract()
+        @Autowired override val cut: BookRepository
+    ) : BookRepositoryContract()
 
-    abstract class BookRecordRepositoryContract {
+    @Import(CustomJdbcConfiguration::class)
+    abstract class BookRepositoryContract {
 
-        protected abstract val cut: BookRecordRepository
+        protected abstract val cut: BookRepository
 
         @Test
         fun `entity can be saved`() {
@@ -88,7 +94,7 @@ internal class BookRecordRepositoryTest {
         }
 
         private fun bookRecordEntity(title: String = "Clean Code") =
-            BookRecordEntity(randomUUID(), title, "9780123456789")
+            BookEntity(randomUUID(), Book(Isbn("9780123456789"), Title(title)))
 
     }
 
