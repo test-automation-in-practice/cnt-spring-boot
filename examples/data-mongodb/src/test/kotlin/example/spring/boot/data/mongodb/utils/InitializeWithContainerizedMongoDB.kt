@@ -30,7 +30,7 @@ private class ContainerizedMongoDBInitializer : ApplicationContextInitializer<Co
         val listener = StopContainerListener(container)
         applicationContext.addApplicationListener(listener)
 
-        val hostProperty = "spring.data.mongodb.host=localhost"
+        val hostProperty = "spring.data.mongodb.host=${container.host}"
         val portProperty = "spring.data.mongodb.port=${container.getMappedPort(mappedPort)}"
         addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty)
     }

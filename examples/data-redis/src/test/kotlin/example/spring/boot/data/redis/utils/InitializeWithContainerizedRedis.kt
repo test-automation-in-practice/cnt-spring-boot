@@ -30,8 +30,9 @@ private class ContainerizedRedisInitializer : ApplicationContextInitializer<Conf
         val listener = StopContainerListener(container)
         applicationContext.addApplicationListener(listener)
 
-        val portProperty = "spring.redis.port=${container.getMappedPort(mappedPort)}"
-        addInlinedPropertiesToEnvironment(applicationContext, portProperty)
+        val hostProperty = "spring.data.redis.host=${container.host}"
+        val portProperty = "spring.data.redis.port=${container.getMappedPort(mappedPort)}"
+        addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty)
     }
 
     class Container : GenericContainer<Container>("redis:7.0")
