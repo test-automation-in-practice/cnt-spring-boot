@@ -1,12 +1,12 @@
 package example.spring.boot.data.jpa.persistence
 
 import example.spring.boot.data.jpa.model.Book
+import jakarta.persistence.Embedded
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import jakarta.persistence.Version
 import java.util.UUID
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
-import javax.persistence.Version
 
 @Entity
 @Table(name = "books")

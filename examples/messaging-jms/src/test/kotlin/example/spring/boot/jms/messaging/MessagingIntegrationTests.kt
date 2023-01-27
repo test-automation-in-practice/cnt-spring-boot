@@ -11,7 +11,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
-import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration
 import org.springframework.boot.autoconfigure.jms.artemis.ArtemisAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
@@ -64,5 +63,5 @@ internal class MessagingIntegrationTests(
 
 @EnableJms
 @ComponentScan
-@ImportAutoConfiguration(ActiveMQAutoConfiguration::class, ArtemisAutoConfiguration::class)
+@ImportAutoConfiguration(ArtemisAutoConfiguration::class)
 private class MessagingIntegrationTestsConfiguration

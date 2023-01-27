@@ -1,14 +1,14 @@
 package example.spring.boot.jms.messaging
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jakarta.jms.ConnectionFactory
+import jakarta.jms.Session.CLIENT_ACKNOWLEDGE
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter
-import javax.jms.ConnectionFactory
-import javax.jms.Session.CLIENT_ACKNOWLEDGE
 
 @Configuration
 class MessagingConfiguration {

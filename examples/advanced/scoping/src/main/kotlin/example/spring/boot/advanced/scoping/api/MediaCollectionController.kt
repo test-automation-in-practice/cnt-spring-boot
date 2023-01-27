@@ -6,6 +6,8 @@ import example.spring.boot.advanced.scoping.domain.MediaCollection
 import example.spring.boot.advanced.scoping.domain.TypeOfMedia
 import example.spring.boot.advanced.scoping.domain.TypeOfMedia.BOOK
 import example.spring.boot.advanced.scoping.domain.TypeOfMedia.GAME
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Size
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.HttpStatus.ACCEPTED
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-import javax.validation.Valid
-import javax.validation.constraints.Size
 
 @RestController
 @RequestMapping("/api/media")
