@@ -2,9 +2,7 @@ package example.spring.boot.advanced.e2e.gateways.mediacollection
 
 import example.spring.boot.advanced.e2e.gateways.common.ServiceProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConstructorBinding
 
-@ConstructorBinding
 @ConfigurationProperties("services.media-collection")
 class MediaCollectionServiceProperties(
     override val protocol: String,

@@ -14,6 +14,6 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
+	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x")
 	testImplementation("org.testcontainers:mongodb")
 }

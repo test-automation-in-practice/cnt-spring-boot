@@ -33,7 +33,6 @@ class RedisRepositoryConfiguration {
     }
 
     companion object {
-        val bookRecordJsonSerializer = Jackson2JsonRedisSerializer(BookRecord::class.java)
-            .apply { setObjectMapper(jacksonObjectMapper()) }
+        val bookRecordJsonSerializer = Jackson2JsonRedisSerializer(jacksonObjectMapper(), BookRecord::class.java)
     }
 }

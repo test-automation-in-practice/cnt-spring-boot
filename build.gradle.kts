@@ -4,7 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.8" apply false
+    id("org.springframework.boot") version "3.0.2" apply false
     id("io.spring.dependency-management") version "1.1.0" apply false
     id("org.asciidoctor.jvm.convert") version "3.3.2" apply false
 
@@ -24,7 +24,7 @@ allprojects {
         the<DependencyManagementExtension>().apply {
             imports {
                 mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.5")
+                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.1")
 
                 mavenBom("io.github.logrecorder:logrecorder-bom:2.5.0")
                 mavenBom("io.github.openfeign:feign-bom:12.1")
@@ -32,8 +32,12 @@ allprojects {
                 mavenBom("org.testcontainers:testcontainers-bom:1.17.6")
             }
             dependencies {
-                dependency("com.ninja-squad:springmockk:3.1.2")
+                dependency("com.ninja-squad:springmockk:4.0.0")
                 dependency("io.mockk:mockk-jvm:1.13.3")
+
+                // legacy compatibility
+                dependency("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.4.0")
+                dependency("org.apache.activemq:artemis-jms-server:2.27.1")
             }
         }
     }

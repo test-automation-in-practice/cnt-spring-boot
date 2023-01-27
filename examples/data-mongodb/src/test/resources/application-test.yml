@@ -1,19 +1,18 @@
 ---
 
-spring:
-  config:
-    activate:
-      on-profile: "embedded"
-  mongodb:
-    embedded:
-      version: 4.0.12
+spring.config.activate.on-profile: "embedded"
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: "4.0.12"
 
 ---
 
+spring.config.activate.on-profile: "docker"
+
 spring:
-  config:
-    activate:
-      on-profile: "docker"
   autoconfigure:
     exclude:
-      - org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
+      - de.flapdoodle.embed.mongo.spring.autoconfigure.EmbeddedMongoAutoConfiguration

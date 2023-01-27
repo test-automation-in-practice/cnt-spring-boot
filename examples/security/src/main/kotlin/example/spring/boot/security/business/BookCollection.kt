@@ -4,12 +4,12 @@ import example.spring.boot.security.persistence.BookRepository
 import example.spring.boot.security.security.Authorities.ROLE_CURATOR
 import example.spring.boot.security.security.Roles.CURATOR
 import example.spring.boot.security.security.Roles.USER
+import jakarta.annotation.security.RolesAllowed
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Component
 import org.springframework.util.IdGenerator
 import java.util.UUID
-import javax.annotation.security.RolesAllowed
 
 // Security access rules are defined on the main business classes. Doing so will enforce the same rules
 // regardless of what kind of API is used to talk to the overall application.

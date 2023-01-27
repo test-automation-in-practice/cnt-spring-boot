@@ -156,7 +156,7 @@ internal class BookControllerTests(
                 {
                   "errors": [
                     {
-                      "message": "Validation error of type WrongType: argument 'pagination.index' with value 'IntValue{value=-1}' is not a valid 'PageIndex' - Value IntValue{value=-1} is not in range: 0..10000 @ 'getAllBooks'",
+                      "message": "Validation error (WrongType@[getAllBooks]) : argument 'pagination.index' with value 'IntValue{value=-1}' is not a valid 'PageIndex' - Value IntValue{value=-1} is not in range: 0..10000",
                       "extensions": {
                         "classification": "ValidationError"
                       }
@@ -182,7 +182,7 @@ internal class BookControllerTests(
                 {
                   "errors": [
                     {
-                      "message": "Validation error of type WrongType: argument 'pagination.size' with value 'IntValue{value=0}' is not a valid 'PageSize' - Value IntValue{value=0} is not in range: 1..250 @ 'getAllBooks'",
+                      "message": "Validation error (WrongType@[getAllBooks]) : argument 'pagination.size' with value 'IntValue{value=0}' is not a valid 'PageSize' - Value IntValue{value=0} is not in range: 1..250",
                       "extensions": {
                         "classification": "ValidationError"
                       }

@@ -2,8 +2,8 @@ package example.spring.boot.data.jpa.persistence
 
 import example.spring.boot.data.jpa.model.Isbn
 import example.spring.boot.data.jpa.model.Title
-import javax.persistence.AttributeConverter
-import javax.persistence.Converter
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Converter
 
 @Converter(autoApply = true)
 internal object TitleConverter : AttributeConverter<Title, String> {

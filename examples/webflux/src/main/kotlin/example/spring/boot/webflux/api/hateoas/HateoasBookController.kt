@@ -6,6 +6,7 @@ import example.spring.boot.webflux.business.BookCollection
 import example.spring.boot.webflux.business.BookRecordNotFoundException
 import example.spring.boot.webflux.business.Isbn
 import example.spring.boot.webflux.business.Title
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.linkTo
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 import java.util.UUID
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/hateoas-api/books")

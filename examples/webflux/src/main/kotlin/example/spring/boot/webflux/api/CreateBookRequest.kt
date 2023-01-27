@@ -1,6 +1,6 @@
 package example.spring.boot.webflux.api
 
-import javax.validation.constraints.Pattern
+import jakarta.validation.constraints.Pattern
 
 data class CreateBookRequest(
     val title: String,

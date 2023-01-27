@@ -6,6 +6,7 @@ import example.spring.boot.webmvc.business.BookCollection
 import example.spring.boot.webmvc.business.BookRecordNotFoundException
 import example.spring.boot.webmvc.business.Isbn
 import example.spring.boot.webmvc.business.Title
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/hateoas-api/books")

@@ -7,6 +7,7 @@ import example.spring.boot.webflux.business.BookRecord
 import example.spring.boot.webflux.business.BookRecordNotFoundException
 import example.spring.boot.webflux.business.Isbn
 import example.spring.boot.webflux.business.Title
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NOT_FOUND
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.UUID
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/default-api/books")

@@ -7,6 +7,7 @@ import example.spring.boot.webmvc.business.BookRecord
 import example.spring.boot.webmvc.business.BookRecordNotFoundException
 import example.spring.boot.webmvc.business.Isbn
 import example.spring.boot.webmvc.business.Title
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NOT_FOUND
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("/default-api/books")
