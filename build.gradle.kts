@@ -26,7 +26,7 @@ allprojects {
                 mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
                 mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.1")
 
-                mavenBom("io.github.logrecorder:logrecorder-bom:2.5.0")
+                mavenBom("io.github.logrecorder:logrecorder-bom:2.5.1")
                 mavenBom("io.github.openfeign:feign-bom:12.1")
                 mavenBom("org.jetbrains.kotlin:kotlin-bom:1.7.22")
                 mavenBom("org.testcontainers:testcontainers-bom:1.17.6")

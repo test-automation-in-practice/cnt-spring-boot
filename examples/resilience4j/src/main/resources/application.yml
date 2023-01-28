@@ -1,0 +1,43 @@
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
+resilience4j:
+  bulkhead:
+    instances:
+      downstream-service:
+        max-concurrent-calls: 10
+        max-wait-duration: 5s
+  circuitbreaker:
+    instances:
+      downstream-service:
+        failure-rate-threshold: 75
+        wait-duration-in-open-state: 5s
+        sliding-window-size: 10
+        sliding-window-type: count_based
+  ratelimiter:
+    instances:
+      downstream-service:
+        limit-for-period: 100
+        limit-refresh-period: 1m
+        timeout-duration: 0s
+  retry:
+    instances:
+      downstream-service:
+        max-attempts: 3
+        wait-duration: 5s
+  timelimiter:
+    instances:
+      downstream-service:
+        timeout-duration: 30s
+        cancel-running-future: true

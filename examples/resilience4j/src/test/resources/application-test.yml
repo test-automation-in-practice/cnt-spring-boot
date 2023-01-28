@@ -1,0 +1,27 @@
+resilience4j:
+  bulkhead:
+    instances:
+      downstream-service:
+        max-concurrent-calls: 5
+        max-wait-duration: 1ms
+  circuitbreaker:
+    instances:
+      downstream-service:
+        failure-rate-threshold: 100
+        wait-duration-in-open-state: 1s
+        sliding-window-size: 5
+  ratelimiter:
+    instances:
+      downstream-service:
+        limit-for-period: 10
+        limit-refresh-period: 100ms
+        timeout-duration: 0ms
+  retry:
+    instances:
+      downstream-service:
+        max-attempts: 3
+        wait-duration: 10ms
+  timelimiter:
+    instances:
+      downstream-service:
+        timeout-duration: 100ms

@@ -116,7 +116,7 @@ internal class BookCollectionTest {
     @DisplayName("deleting a book record by its ID")
     inner class DeleteById {
 
-        // These tests makes sure that the side effect of publishing an event occurs only if the book record was
+        // These tests make sure that the side effect of publishing an event occurs only if the book record was
         // actually deleted.
 
         @Test
