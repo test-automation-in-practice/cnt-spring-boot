@@ -1,0 +1,14 @@
+= Spring Boot: Resilience4j
+
+This module demonstrates how to implement and test link:https://github.com/resilience4j/resilience4j[Resilience4j] features like:
+
+* *Bulkheads* - limits the maximum number of concurrent calls to an external service.
+* *Circuit-Breaker* - protects a downstream service by restricting the upstream service from calling the downstream service during a partial or complete downtime.
+* *Rate-Limiter* - limits the rate of requests to a resource.
+* *Retry* - provides resiliency to a system by recovering from transient issues.
+* *Time-Limiter* - sets a threshold timeout value for async calls made to external systems.
+
+In general the examples show two kinds of usage of the _Resilience4j_ library:
+
+* Using it integrated into the Spring Application context via Annotations.
+* Using it programmatically by only using the Spring Application context to wire the correct beans into the using class, but actually implementing the usage with _Resilience4j's_ fluent supplier DSL.
