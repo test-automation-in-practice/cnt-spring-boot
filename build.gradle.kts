@@ -1,4 +1,5 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+import org.gradle.api.file.DuplicatesStrategy.INCLUDE
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -43,6 +44,8 @@ allprojects {
     }
 
     tasks {
+        withType<Copy> { duplicatesStrategy = INCLUDE }
+        withType<Jar> { duplicatesStrategy = INCLUDE }
         withType<JavaCompile> {
             sourceCompatibility = "17"
             targetCompatibility = "17"

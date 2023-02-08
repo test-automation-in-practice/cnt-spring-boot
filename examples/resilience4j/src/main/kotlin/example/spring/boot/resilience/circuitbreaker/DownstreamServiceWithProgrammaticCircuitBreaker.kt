@@ -18,15 +18,17 @@ class DownstreamServiceWithProgrammaticCircuitBreaker(
     fun getNumberOfPages(isbn: String): Int? =
         Decorators.ofSupplier { doGetNumberOfPages(isbn) }
             .withCircuitBreaker(circuitBreaker)
+            .decorate()
             .get()
 
     fun getNumberOfPagesWithFallback(isbn: String): Int? =
         Decorators.ofSupplier { doGetNumberOfPages(isbn) }
             .withCircuitBreaker(circuitBreaker)
             .withFallback { ex -> getNumberOfPagesFallback(isbn, ex) }
+            .decorate()
             .get()
 
-    private fun doGetNumberOfPages(isbn: String): Int? {
+    private fun doGetNumberOfPages(isbn: String): Int {
         // imagine an HTTP call here
         tripwire.possiblyThrowException()
         return 42

@@ -18,7 +18,7 @@ class DownstreamServiceWithAnnotationBasedCircuitBreaker(
     @CircuitBreaker(name = "downstream-service", fallbackMethod = "getNumberOfPagesFallback")
     fun getNumberOfPagesWithFallback(isbn: String): Int? = doGetNumberOfPages(isbn)
 
-    private fun doGetNumberOfPages(isbn: String): Int? {
+    private fun doGetNumberOfPages(isbn: String): Int {
         // imagine an HTTP call here
         tripwire.possiblyThrowException()
         return 42

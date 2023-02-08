@@ -15,7 +15,7 @@ class DownstreamServiceWithAnnotationBasedBulkhead {
     @Bulkhead(name = "downstream-service", fallbackMethod = "getNumberOfPagesFallback")
     fun getNumberOfPagesWithFallback(isbn: String): Int? = doGetNumberOfPages(isbn)
 
-    private fun doGetNumberOfPages(isbn: String): Int? {
+    private fun doGetNumberOfPages(isbn: String): Int {
         // imagine an HTTP call here
         Thread.sleep(10)
         return 42

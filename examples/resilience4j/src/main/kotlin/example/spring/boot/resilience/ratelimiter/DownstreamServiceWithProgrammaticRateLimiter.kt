@@ -16,15 +16,17 @@ class DownstreamServiceWithProgrammaticRateLimiter(
     fun getNumberOfPages(isbn: String): Int? =
         Decorators.ofSupplier { doGetNumberOfPages(isbn) }
             .withRateLimiter(rateLimiter)
+            .decorate()
             .get()
 
     fun getNumberOfPagesWithFallback(isbn: String): Int? =
         Decorators.ofSupplier { doGetNumberOfPages(isbn) }
             .withRateLimiter(rateLimiter)
             .withFallback { ex -> getNumberOfPagesFallback(isbn, ex) }
+            .decorate()
             .get()
 
-    private fun doGetNumberOfPages(isbn: String): Int? {
+    private fun doGetNumberOfPages(isbn: String): Int {
         // imagine an HTTP call here
         return 42
     }
