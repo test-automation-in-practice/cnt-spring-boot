@@ -35,6 +35,10 @@ allprojects {
             dependencies {
                 dependency("com.ninja-squad:springmockk:4.0.0")
                 dependency("io.mockk:mockk-jvm:1.13.3")
+                dependency("org.apache.activemq:activemq-broker:5.17.3")
+                dependency("org.apache.activemq:activemq-client:5.17.3")
+                dependency("org.apache.activemq:activemq-jms-pool:5.17.3")
+                dependency("org.apache.activemq:activemq-kahadb-store:5.17.3")
 
                 // legacy compatibility
                 dependency("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.4.0")
