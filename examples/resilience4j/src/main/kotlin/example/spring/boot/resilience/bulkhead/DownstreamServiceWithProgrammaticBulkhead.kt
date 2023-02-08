@@ -16,15 +16,17 @@ class DownstreamServiceWithProgrammaticBulkhead(
     fun getNumberOfPages(isbn: String): Int? =
         Decorators.ofSupplier { doGetNumberOfPages(isbn) }
             .withBulkhead(bulkhead)
+            .decorate()
             .get()
 
     fun getNumberOfPagesWithFallback(isbn: String): Int? =
         Decorators.ofSupplier { doGetNumberOfPages(isbn) }
             .withBulkhead(bulkhead)
             .withFallback { ex -> getNumberOfPagesFallback(isbn, ex) }
+            .decorate()
             .get()
 
-    private fun doGetNumberOfPages(isbn: String): Int? {
+    private fun doGetNumberOfPages(isbn: String): Int {
         // imagine an HTTP call here
         Thread.sleep(10)
         return 42

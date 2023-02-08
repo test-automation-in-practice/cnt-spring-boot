@@ -23,6 +23,7 @@ class DownstreamServiceWithProgrammaticTimeLimiter(
     fun getNumberOfPages(isbn: String): CompletableFuture<Int?> =
         Decorators.ofCompletionStage { doGetNumberOfPages(isbn) }
             .withTimeLimiter(timeLimiter, scheduledExectioner)
+            .decorate()
             .get()
             .toCompletableFuture()
 
@@ -30,6 +31,7 @@ class DownstreamServiceWithProgrammaticTimeLimiter(
         Decorators.ofCompletionStage { doGetNumberOfPages(isbn) }
             .withTimeLimiter(timeLimiter, scheduledExectioner)
             .withFallback { ex -> getNumberOfPagesFallback(isbn, ex) }
+            .decorate()
             .get()
             .toCompletableFuture()
 
