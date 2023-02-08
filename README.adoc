@@ -18,6 +18,7 @@ All examples are based on _our_ experience in different actual small and large s
 ** link:examples/http-clients[HTTP Clients]
 ** link:examples/jdbc[JDBC]
 ** link:examples/messaging-jms[Messaging with JMS]
+** link:examples/messaging-jms-activemq[Messaging with ActiveMQ (JMS)]
 ** link:examples/messaging-kafka[Messaging with Kafka]
 ** link:examples/messaging-rabbitmq[Messaging with RabbitMQ]
 ** link:examples/resilience4j[Resilience4j]

@@ -28,3 +28,6 @@ out/
 
 ### MacOS ###
 .DS_Store
+
+### ActiveMQ ###
+**/activemq-data
