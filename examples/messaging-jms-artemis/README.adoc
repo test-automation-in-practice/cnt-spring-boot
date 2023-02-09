@@ -1,4 +1,4 @@
-= Spring Boot: Messaging with JMS
+= Spring Boot: Messaging with Artemis (JMS)
 
 This module implements asynchronous communication through messaging using JMS via an Artemis broker, both on the sending and the receiving end, using Spring's JMS integration:
 
