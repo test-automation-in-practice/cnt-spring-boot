@@ -22,6 +22,7 @@ jobs:
       - data-jdbc
       - data-jpa
       - data-mongodb
+      - data-redis
       - graphql
       - http-clients
       - jdbc
@@ -179,6 +180,24 @@ jobs:
         if: always()
         with:
           name: test-results_data-mongodb
+          path: "**/build/reports/tests"
+  data-redis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :examples:data-redis:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_data-redis
           path: "**/build/reports/tests"
   graphql:
     runs-on: ubuntu-latest
