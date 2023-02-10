@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.event.AfterTestClassEvent
 import org.springframework.test.context.support.TestPropertySourceUtils.addInlinedPropertiesToEnvironment
 import java.net.ServerSocket
+import java.util.UUID.randomUUID
 import kotlin.annotation.AnnotationTarget.CLASS
 
 @Retention
@@ -24,7 +25,11 @@ private class EmbeddedActiveMqInitializer : ApplicationContextInitializer<Config
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         val port = randomPort()
         val url = "tcp://localhost:$port"
-        val broker = BrokerFactory.createBroker("broker:($url)", true)
+        val broker = BrokerFactory.createBroker("broker:($url)")
+            .apply {
+                setDataDirectory("build/tmp/activemq-data/${randomUUID()}")
+                start()
+            }
 
         val listener = StopBrokerListener(broker)
         applicationContext.addApplicationListener(listener)
@@ -35,8 +40,7 @@ private class EmbeddedActiveMqInitializer : ApplicationContextInitializer<Config
         applicationContext.beanFactory.registerSingleton("embeddedBroker", broker)
     }
 
-    private fun randomPort(): Int =
-        ServerSocket(0).use { it.localPort }
+    private fun randomPort(): Int = ServerSocket(0).use { it.localPort }
 
     class StopBrokerListener(private val broker: BrokerService) : ApplicationListener<AfterTestClassEvent> {
         override fun onApplicationEvent(event: AfterTestClassEvent) = broker.stop()

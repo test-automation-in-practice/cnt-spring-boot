@@ -37,7 +37,7 @@ class MessageListenerContainer(
 
         connection.exceptionListener = ExceptionListener { ex ->
             log.error("Connection Exception: ${ex.message}", ex)
-            handleConnectionLoss(ex)
+            handleConnectionLoss()
         }
         connection.start()
 
@@ -54,7 +54,7 @@ class MessageListenerContainer(
         }
     }
 
-    private fun handleConnectionLoss(ex: JMSException) {
+    private fun handleConnectionLoss() {
         stop()
         while (true) {
             if (tryToReConnect()) {

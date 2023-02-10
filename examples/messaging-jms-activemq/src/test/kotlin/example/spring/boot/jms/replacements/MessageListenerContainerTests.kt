@@ -39,7 +39,7 @@ internal class MessageListenerContainerTests(
         messageListener.collector = initial
 
         repeat(250) { number ->
-            jmsTemplate.send(QUEUE_NAME) { it.createTextMessage("${10_000 + number}") }
+            jmsTemplate.send(QUEUE_NAME) { createTextMessage("${10_000 + number}") }
         }
         stopBroker()
         sleep(1_000)

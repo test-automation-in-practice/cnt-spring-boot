@@ -9,20 +9,19 @@ import javax.jms.MessageConsumer
 import javax.jms.MessageProducer
 import javax.jms.Queue
 import javax.jms.Session
+import javax.jms.Session.AUTO_ACKNOWLEDGE
 
 class JmsTemplate(
     private val connectionFactory: ConnectionFactory,
     private val objectMapper: ObjectMapper,
     private val sessionTransacted: Boolean = false,
-    private val sessionAcknowledgeMode: Int = Session.AUTO_ACKNOWLEDGE,
+    private val sessionAcknowledgeMode: Int = AUTO_ACKNOWLEDGE,
 ) {
 
     fun convertAndSend(queueName: String, body: Any) =
-        send(queueName) { session ->
-            session.createTextMessage(objectMapper.writeValueAsString(body))
-        }
+        send(queueName) { createTextMessage(objectMapper.writeValueAsString(body)) }
 
-    fun send(queueName: String, block: (Session) -> Message) =
+    fun send(queueName: String, block: Session.() -> Message) =
         withQueueInSession(queueName) { session, queue ->
             session.produce(queue) {
                 send(block(session))
@@ -41,6 +40,7 @@ class JmsTemplate(
 
     private fun <T> doWithSession(block: (Session) -> T): T {
         val connection = connectionFactory.createConnection()
+            .apply { start() } // important for consumtion of messages!
         try {
             val session = connection.createSession(sessionTransacted, sessionAcknowledgeMode)
             try {
