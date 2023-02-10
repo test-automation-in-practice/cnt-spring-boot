@@ -19,7 +19,7 @@ import javax.jms.Session.AUTO_ACKNOWLEDGE
 class MessagingConfiguration {
 
     @Bean
-    fun messageSender(
+    fun jmsTemplate(
         connectionFactory: ConnectionFactory,
         objectMapper: ObjectMapper
     ) = JmsTemplate(connectionFactory, objectMapper)

@@ -13,6 +13,8 @@ import javax.jms.Session
 class JmsTemplate(
     private val connectionFactory: ConnectionFactory,
     private val objectMapper: ObjectMapper,
+    private val sessionTransacted: Boolean = false,
+    private val sessionAcknowledgeMode: Int = Session.AUTO_ACKNOWLEDGE,
 ) {
 
     fun convertAndSend(queueName: String, body: Any) =
@@ -40,7 +42,7 @@ class JmsTemplate(
     private fun <T> doWithSession(block: (Session) -> T): T {
         val connection = connectionFactory.createConnection()
         try {
-            val session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE) // TODO configurable
+            val session = connection.createSession(sessionTransacted, sessionAcknowledgeMode)
             try {
                 return block(session)
             } finally {
