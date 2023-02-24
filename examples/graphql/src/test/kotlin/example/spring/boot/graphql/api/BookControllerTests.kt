@@ -65,6 +65,33 @@ internal class BookControllerTests(
     }
 
     @Test
+    fun `addBook returns error for invalid ISBN`() {
+        executeAndExpect(
+            document = """
+                mutation {
+                  addBook(title: "Project Hail Mary", isbn: "12-9780593135204") {
+                    id
+                  }
+                }
+                """,
+            response = """
+                {
+                  "errors": [
+                    {
+                      "message": "Invalid value [12-9780593135204] for 'isbn' in '$'",
+                      "extensions": {
+                        "classification": "ValidationError"
+                      }
+                    }
+                  ],
+                  "data": { "addBook": null }
+                }
+                """,
+            strict = false
+        )
+    }
+
+    @Test
     fun `getAllBooks returns first page of all books`() {
         every { collection.getAll(any()) } returns pageOf(record_theMartian, record_projectHailMary)
         executeAndExpect(
