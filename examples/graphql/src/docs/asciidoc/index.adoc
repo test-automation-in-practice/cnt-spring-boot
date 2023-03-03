@@ -9,6 +9,11 @@ include::../../main/resources/graphql/schema.graphqls[]
 
 === Book Queries
 
+==== Finding Books by Title
+
+include::{snippets}/books/find/title/found/graphql-request.adoc[]
+include::{snippets}/books/find/title/found/http-response.adoc[]
+
 ==== Getting all Books
 
 include::{snippets}/books/get-all/found/graphql-request.adoc[]

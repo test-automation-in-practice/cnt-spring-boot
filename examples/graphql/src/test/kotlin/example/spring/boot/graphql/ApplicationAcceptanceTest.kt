@@ -80,6 +80,36 @@ internal class ApplicationAcceptanceTest(
     }
 
     @Test
+    fun `finding books by title`() {
+        defineAvailableBookRecords(record_theMartian)
+        testGraphQLInteraction(
+            documentationId = "books/find/title/found",
+            graphqlQuery = """
+                query {
+                  findBooks(query: { title: "martian" }) {
+                    id
+                    title
+                    isbn
+                  }
+                }
+                """,
+            expectedResponse = """
+                {
+                  "data": {
+                    "findBooks": [
+                      {
+                        "id": "b3fc0be8-463e-4875-9629-67921a1e00f4",
+                        "title": "The Martian",
+                        "isbn": "9780804139021"
+                      }
+                    ]
+                  }
+                }                
+                """
+        )
+    }
+
+    @Test
     fun `getting all books`() {
         defineAvailableBookRecords(record_theMartian, record_projectHailMary)
         testGraphQLInteraction(

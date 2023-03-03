@@ -3,6 +3,7 @@ package example.spring.boot.graphql.persistence
 import example.spring.boot.graphql.business.BookRecord
 import example.spring.boot.graphql.business.Page
 import example.spring.boot.graphql.business.Pagination
+import example.spring.boot.graphql.business.Query
 import org.springframework.stereotype.Repository
 import java.util.UUID
 import kotlin.math.ceil
@@ -36,6 +37,23 @@ class BookRecordRepository {
             totalElements = database.size
         )
     }
+
+    fun find(query: Query): List<BookRecord> =
+        database.values
+            .filter { record -> titleFilter(query, record) }
+            .filter { record -> isbnFilter(query, record) }
+
+    private fun titleFilter(query: Query, record: BookRecord) =
+        when (query.title) {
+            null -> true
+            else -> record.book.title.value.contains(query.title.value, ignoreCase = true)
+        }
+
+    private fun isbnFilter(query: Query, record: BookRecord) =
+        when (query.isbn) {
+            null -> true
+            else -> record.book.isbn.value.contains(query.isbn.value, ignoreCase = true)
+        }
 
     fun deleteAll() {
         database.clear()
