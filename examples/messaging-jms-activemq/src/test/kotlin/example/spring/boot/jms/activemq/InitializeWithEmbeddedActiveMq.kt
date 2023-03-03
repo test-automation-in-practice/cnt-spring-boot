@@ -23,11 +23,14 @@ annotation class InitializeWithEmbeddedActiveMq
 private class EmbeddedActiveMqInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
+        val brokerName = randomName()
         val port = randomPort()
         val url = "tcp://localhost:$port"
+
         val broker = BrokerFactory.createBroker("broker:($url)")
             .apply {
-                setDataDirectory("build/tmp/activemq-data/${randomUUID()}")
+                setBrokerName(brokerName)
+                setDataDirectory("build/tmp/activemq-data/$brokerName")
                 start()
             }
 
@@ -40,6 +43,8 @@ private class EmbeddedActiveMqInitializer : ApplicationContextInitializer<Config
         applicationContext.beanFactory.registerSingleton("embeddedBroker", broker)
     }
 
+
+    private fun randomName(): String = randomUUID().toString()
     private fun randomPort(): Int = ServerSocket(0).use { it.localPort }
 
     class StopBrokerListener(private val broker: BrokerService) : ApplicationListener<AfterTestClassEvent> {
