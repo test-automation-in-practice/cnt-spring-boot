@@ -2,7 +2,11 @@ package example.spring.boot.graphql.business
 
 import java.util.UUID
 
-private val isbnPattern = Regex("""(\d{3}-?)(\d){10}""")
+const val PATTERN_TITLE = """(?U)\w[\w -]*""" // unicode word characters
+const val PATTERN_ISBN = """(\d){10}|(\d){13}"""
+
+private val titleRegex = Regex(PATTERN_TITLE)
+private val isbnRegex = Regex(PATTERN_ISBN)
 
 data class BookRecord(
     val id: UUID,
@@ -15,13 +19,22 @@ data class Book(
 )
 
 data class Title(val value: String) {
+    init {
+        require(value matches titleRegex) { "Title [$value] does not match $titleRegex" }
+    }
+
     override fun toString() = value
 }
 
 data class Isbn(val value: String) {
     init {
-        require(value matches isbnPattern) { "ISBN [$value] does not match $isbnPattern" }
+        require(value matches isbnRegex) { "ISBN [$value] does not match $isbnRegex" }
     }
 
     override fun toString() = value
 }
+
+data class Query(
+    val title: Title? = null,
+    val isbn: Isbn? = null
+)

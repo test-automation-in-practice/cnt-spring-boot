@@ -20,12 +20,30 @@ input Pagination {
     size: PageSize! = 25
 }
 
+input QueryParameters {
+    title: String
+    isbn: String
+}
+
 type Query {
+
+    # parameters are validated by using custom scalar types
     getAllBooks(pagination: Pagination = {}) : BookPage
+
+    # parameter is validated by being a UUID, which is one of the supported default types
     getBookById(id: ID!) : Book
+
+    # parameter is validated using 'jakarta.validation.constraints'
+    findBooks(query: QueryParameters) : [Book]
+
 }
 
 type Mutation {
+
+    # parameters are validated using custom types and extended exception handling
     addBook(title: String!, isbn: String!) : Book
+
+    # parameter is validated by being a UUID, which is one of the supported default types
     deleteBookById(id: ID!) : Boolean
+
 }

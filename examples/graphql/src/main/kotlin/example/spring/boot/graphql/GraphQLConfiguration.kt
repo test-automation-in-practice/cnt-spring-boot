@@ -13,6 +13,7 @@ import graphql.schema.CoercingSerializeException
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.GraphQLScalarType
 import graphql.schema.idl.RuntimeWiring
+import jakarta.validation.ConstraintViolationException
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.graphql.execution.DataFetcherExceptionResolver
@@ -57,7 +58,8 @@ class GraphQLConfiguration : RuntimeWiringConfigurer {
 
         override fun resolveToSingleError(ex: Throwable, env: DataFetchingEnvironment): GraphQLError? =
             when (ex) {
-                is BindException -> handle(ex, env) // thrown if argument cannot be bound - like in this shocase
+                is BindException -> handle(ex, env) // thrown if argument cannot be bound - like in this showcase
+                is ConstraintViolationException -> handle(ex, env)
                 else -> null
             }
 
@@ -75,6 +77,18 @@ class GraphQLConfiguration : RuntimeWiringConfigurer {
                     else -> null
                 }
             }
+
+        private fun handle(ex: ConstraintViolationException, env: DataFetchingEnvironment): GraphQLError? =
+            GraphqlErrorBuilder.newError()
+                .errorType(ErrorType.ValidationError)
+                .message(
+                    ex.constraintViolations.joinToString(separator = " | ") {
+                        "Invalid value [${it.invalidValue}] for '${it.propertyPath}': ${it.message}"
+                    }
+                )
+                .path(env.executionStepInfo.path)
+                .location(env.field.sourceLocation)
+                .build()
 
     }
 

@@ -8,9 +8,14 @@ import example.spring.boot.graphql.business.Examples.id_projectHailMary
 import example.spring.boot.graphql.business.Examples.id_theMartian
 import example.spring.boot.graphql.business.Examples.record_projectHailMary
 import example.spring.boot.graphql.business.Examples.record_theMartian
+import example.spring.boot.graphql.business.Isbn
 import example.spring.boot.graphql.business.Pagination
+import example.spring.boot.graphql.business.Query
+import example.spring.boot.graphql.business.Title
 import example.spring.boot.graphql.business.pageOf
 import io.mockk.every
+import io.mockk.slot
+import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -65,11 +70,11 @@ internal class BookControllerTests(
     }
 
     @Test
-    fun `addBook returns error for invalid ISBN`() {
+    fun `addBook returns error for invalid Title`() {
         executeAndExpect(
             document = """
                 mutation {
-                  addBook(title: "Project Hail Mary", isbn: "12-9780593135204") {
+                  addBook(title: "Project §{}", isbn: "9780593135204") {
                     id
                   }
                 }
@@ -78,7 +83,34 @@ internal class BookControllerTests(
                 {
                   "errors": [
                     {
-                      "message": "Invalid value [12-9780593135204] for 'isbn' in '$'",
+                      "message": "Invalid value [Project §{}] for 'title' in '$'",
+                      "extensions": {
+                        "classification": "ValidationError"
+                      }
+                    }
+                  ],
+                  "data": { "addBook": null }
+                }
+                """,
+            strict = false
+        )
+    }
+
+    @Test
+    fun `addBook returns error for invalid ISBN`() {
+        executeAndExpect(
+            document = """
+                mutation {
+                  addBook(title: "Project Hail Mary", isbn: "12-0593135204") {
+                    id
+                  }
+                }
+                """,
+            response = """
+                {
+                  "errors": [
+                    {
+                      "message": "Invalid value [12-0593135204] for 'isbn' in '$'",
                       "extensions": {
                         "classification": "ValidationError"
                       }
@@ -263,6 +295,124 @@ internal class BookControllerTests(
                 }
               }  
               """
+        )
+    }
+
+    @Test
+    fun `findBooks for title returns matching books`() {
+        val querySlot = slot<Query>()
+        every { collection.find(capture(querySlot)) } returns listOf(record_theMartian)
+
+        executeAndExpect(
+            document = """
+                query {
+                  findBooks(query: { title: "martian" }) {
+                      id
+                      isbn
+                      title
+                  }
+                }
+                """,
+            response = """
+                {
+                  "data": {
+                    "findBooks": [
+                      {
+                        "id": "b3fc0be8-463e-4875-9629-67921a1e00f4",
+                        "isbn": "9780804139021",
+                        "title": "The Martian"
+                      }
+                    ]
+                  }
+                }
+                """
+        )
+
+        assertThat(querySlot.captured).isEqualTo(Query(title = Title("martian")))
+    }
+
+    @Test
+    fun `findBooks for ISBN returns matching books`() {
+        val querySlot = slot<Query>()
+        every { collection.find(capture(querySlot)) } returns listOf(record_projectHailMary)
+
+        executeAndExpect(
+            document = """
+                query {
+                  findBooks(query: { isbn: "9780593135204" }) {
+                      id
+                      isbn
+                      title
+                  }
+                }
+                """,
+            response = """
+                {
+                  "data": {
+                    "findBooks": [
+                      {
+                        "id": "7d823198-2ef3-41a6-b780-29ba6723d8c9",
+                        "isbn": "9780593135204",
+                        "title": "Project Hail Mary"
+                      }
+                    ]
+                  }
+                }
+                """
+        )
+
+        assertThat(querySlot.captured).isEqualTo(Query(isbn = Isbn("9780593135204")))
+    }
+
+    @Test
+    fun `findBooks for malformed Title returns error`() {
+        executeAndExpect(
+            document = """
+                query {
+                  findBooks(query: { title: "Project %{}" }) {
+                      id
+                  }
+                }
+                """,
+            response = """
+                {
+                  "errors": [
+                    {
+                      "message": "Invalid value [Project %{}] for 'findBooks.query.title': must match \"(?U)\\w[\\w -]*\"",
+                      "extensions": {
+                        "classification": "ValidationError"
+                      }
+                    }
+                  ]
+                }
+                """,
+            strict = false
+        )
+    }
+
+    @Test
+    fun `findBooks for malformed ISBN returns error`() {
+        executeAndExpect(
+            document = """
+                query {
+                  findBooks(query: { isbn: "3135204" }) {
+                      id
+                  }
+                }
+                """,
+            response = """
+                {
+                  "errors": [
+                    {
+                      "message": "Invalid value [3135204] for 'findBooks.query.isbn': must match \"(\\d){10}|(\\d){13}\"",
+                      "extensions": {
+                        "classification": "ValidationError"
+                      }
+                    }
+                  ]
+                }
+                """,
+            strict = false
         )
     }
 
