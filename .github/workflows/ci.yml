@@ -30,6 +30,7 @@ jobs:
       - messaging-jms-artemis
       - messaging-kafka
       - messaging-rabbitmq
+      - micrometer
       - resilience4j
       - security
       - webflux
@@ -324,6 +325,24 @@ jobs:
         if: always()
         with:
           name: test-results_messaging-rabbitmq
+          path: "**/build/reports/tests"
+  micrometer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build
+        run: ./gradlew :examples:micrometer:build
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-results_micrometer
           path: "**/build/reports/tests"
   resilience4j:
     runs-on: ubuntu-latest
