@@ -9,11 +9,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.scheduling.config.ScheduledTaskRegistrar
 
-internal class BooksByStatusGaugeBinderTests {
+internal class BooksGaugeBinderTests {
 
     private val registry = SimpleMeterRegistry()
-    private val getGaugeUpdateData: BooksByStatusGaugeDataSupplier = mockk()
-    private val cut = BooksByStatusGaugeBinder(registry, getGaugeUpdateData)
+    private val getGaugeUpdateData: BooksGaugeDataSupplier = mockk()
+    private val cut = BooksGaugeBinder(registry, getGaugeUpdateData)
 
     @Test
     fun `registers itself if scheduling is enabled`() {
@@ -31,7 +31,7 @@ internal class BooksByStatusGaugeBinderTests {
     @Test
     fun `after updating there is a gauge if there was some data`() {
         stubUpdateAndRun(
-            BooksByStatusGaugeKey(Available) to 42,
+            BooksGaugeKey(Available) to 42,
         )
         assertGaugeValues(available = 42)
     }
@@ -39,20 +39,20 @@ internal class BooksByStatusGaugeBinderTests {
     @Test
     fun `after updating stale gauges are set to zero`() {
         stubUpdateAndRun(
-            BooksByStatusGaugeKey(Available) to 39,
-            BooksByStatusGaugeKey(Borrowed) to 2,
-            BooksByStatusGaugeKey(Archived) to 1,
+            BooksGaugeKey(Available) to 39,
+            BooksGaugeKey(Borrowed) to 2,
+            BooksGaugeKey(Archived) to 1,
         )
         assertGaugeValues(available = 39, borrowed = 2, archived = 1)
 
         stubUpdateAndRun(
-            BooksByStatusGaugeKey(Available) to 40,
-            BooksByStatusGaugeKey(Archived) to 2,
+            BooksGaugeKey(Available) to 40,
+            BooksGaugeKey(Archived) to 2,
         )
         assertGaugeValues(available = 40, borrowed = 0, archived = 2)
     }
 
-    private fun stubUpdateAndRun(vararg data: Pair<BooksByStatusGaugeKey, Long>) {
+    private fun stubUpdateAndRun(vararg data: Pair<BooksGaugeKey, Long>) {
         every { getGaugeUpdateData() } returns data.toMap()
         cut.run()
     }
