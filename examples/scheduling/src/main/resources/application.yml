@@ -1,0 +1,13 @@
+tasks:
+  annotation:
+    enabled: true
+    rate: PT1H
+    initial-delay: PT5M
+  externally-scheduled:
+    enabled: true
+    rate: PT30M
+    initial-delay: PT5M
+  self-scheduling:
+    enabled: true
+    rate: PT1M
+    initial-delay: PT5M
