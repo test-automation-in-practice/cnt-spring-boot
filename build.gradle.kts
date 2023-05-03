@@ -5,7 +5,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.0.2" apply false
+    id("org.springframework.boot") version "3.0.6" apply false
     id("io.spring.dependency-management") version "1.1.0" apply false
     id("org.asciidoctor.jvm.convert") version "3.3.2" apply false
 
@@ -25,24 +25,24 @@ allprojects {
         the<DependencyManagementExtension>().apply {
             imports {
                 mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.1")
+                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
 
-                mavenBom("io.github.logrecorder:logrecorder-bom:2.5.1")
-                mavenBom("io.github.openfeign:feign-bom:12.1")
+                mavenBom("io.github.logrecorder:logrecorder-bom:2.6.0")
+                mavenBom("io.github.openfeign:feign-bom:12.3")
                 mavenBom("org.jetbrains.kotlin:kotlin-bom:1.7.22")
-                mavenBom("org.testcontainers:testcontainers-bom:1.17.6")
+                mavenBom("org.testcontainers:testcontainers-bom:1.18.0")
             }
             dependencies {
-                dependency("com.ninja-squad:springmockk:4.0.0")
-                dependency("io.mockk:mockk-jvm:1.13.3")
+                dependency("com.ninja-squad:springmockk:4.0.2")
+                dependency("io.mockk:mockk-jvm:1.13.5")
                 dependency("org.apache.activemq:activemq-broker:5.17.3")
                 dependency("org.apache.activemq:activemq-client:5.17.3")
                 dependency("org.apache.activemq:activemq-jms-pool:5.17.3")
                 dependency("org.apache.activemq:activemq-kahadb-store:5.17.3")
 
                 // legacy compatibility
-                dependency("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.4.0")
-                dependency("org.apache.activemq:artemis-jms-server:2.27.1")
+                dependency("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.6.2")
+                dependency("org.apache.activemq:artemis-jms-server:2.28.0")
             }
         }
     }
