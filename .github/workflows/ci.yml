@@ -10,6 +10,10 @@ concurrency:
   group: ci_${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  javaVersion: "17"
+  javaDistribution: "liberica"
+
 jobs:
   ci-spring-boot:
     runs-on: ubuntu-latest
@@ -43,17 +47,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:advanced:end-to-end:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:advanced:end-to-end:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_advanced_end-to-end
@@ -62,17 +62,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:advanced:scoping:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:advanced:scoping:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_advanced_scoping
@@ -81,17 +77,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:async:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:async:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_async
@@ -100,17 +92,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:basics:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:basics:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_basics
@@ -119,17 +107,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:caching:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:caching:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_caching
@@ -138,17 +122,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:data-jdbc:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:data-jdbc:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_data-jdbc
@@ -157,17 +137,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:data-jpa:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:data-jpa:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_data-jpa
@@ -176,17 +152,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:data-mongodb:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:data-mongodb:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_data-mongodb
@@ -195,17 +167,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:data-redis:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:data-redis:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_data-redis
@@ -214,17 +182,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:graphql:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:graphql:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_graphql
@@ -233,17 +197,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:http-clients:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:http-clients:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_http-clients
@@ -252,17 +212,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:jdbc:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:jdbc:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_jdbc
@@ -271,17 +227,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:messaging-jms-activemq:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:messaging-jms-activemq:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_messaging-jms-activemq
@@ -290,17 +242,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:messaging-jms-artemis:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:messaging-jms-artemis:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_messaging-jms-artemis
@@ -309,17 +257,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:messaging-kafka:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:messaging-kafka:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_messaging-kafka
@@ -328,17 +272,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:messaging-rabbitmq:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:messaging-rabbitmq:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_messaging-rabbitmq
@@ -347,17 +287,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:micrometer:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:micrometer:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_micrometer
@@ -366,17 +302,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:resilience4j:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:resilience4j:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_resilience4j
@@ -385,17 +317,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:scheduling:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:scheduling:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_scheduling
@@ -404,17 +332,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:security:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:security:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_security
@@ -423,17 +347,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:webmvc:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:webmvc:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_webmvc
@@ -442,17 +362,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: liberica
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build
-        run: ./gradlew :examples:webflux:build
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+          java-version: ${{ env.javaVersion }}
+          distribution: ${{ env.javaDistribution }}
+      - run: chmod +x gradlew
+      - run: ./gradlew :examples:webflux:build
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-results_webflux
