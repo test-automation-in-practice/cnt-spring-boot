@@ -30,9 +30,10 @@ allprojects {
                 mavenBom("io.github.logrecorder:logrecorder-bom:2.6.0")
                 mavenBom("io.github.openfeign:feign-bom:12.3")
                 mavenBom("org.jetbrains.kotlin:kotlin-bom:1.7.22")
-                mavenBom("org.testcontainers:testcontainers-bom:1.18.0")
+                mavenBom("org.testcontainers:testcontainers-bom:1.18.1")
             }
             dependencies {
+                dependency("com.github.dasniko:testcontainers-keycloak:2.5.0")
                 dependency("com.ninja-squad:springmockk:4.0.2")
                 dependency("io.mockk:mockk-jvm:1.13.5")
                 dependency("org.apache.activemq:activemq-broker:5.17.3")

@@ -1,0 +1,67 @@
+{
+  "realm": "cnt-sb",
+  "enabled": true,
+  "users": [
+    {
+      "username": "johndoe",
+      "email": "john.doe@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "s3cret"
+        }
+      ],
+      "realmRoles": [
+        "user"
+      ]
+    },
+    {
+      "username": "janedoe",
+      "email": "jane.doe@example.com",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "secr3t"
+        }
+      ],
+      "realmRoles": [
+        "user",
+        "curator"
+      ]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "user"
+      },
+      {
+        "name": "curator"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "cnt-sb-client",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "/*"
+      ],
+      "webOrigins": [
+        "/*"
+      ]
+    }
+  ]
+}

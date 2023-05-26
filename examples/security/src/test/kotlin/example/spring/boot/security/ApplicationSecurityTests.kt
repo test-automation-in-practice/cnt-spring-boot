@@ -2,8 +2,14 @@ package example.spring.boot.security
 
 import com.ninjasquad.springmockk.MockkBean
 import example.spring.boot.security.persistence.BookRepository
+import example.spring.boot.security.utils.InitializeWithContainerizedKeycloak
+import example.spring.boot.security.utils.getCuratorToken
+import example.spring.boot.security.utils.getUserToken
 import io.mockk.every
 import io.restassured.RestAssured
+import io.restassured.module.kotlin.extensions.Given
+import io.restassured.module.kotlin.extensions.Then
+import io.restassured.module.kotlin.extensions.When
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
@@ -21,8 +27,9 @@ import org.springframework.http.HttpStatus.UNAUTHORIZED
 import java.util.UUID.randomUUID
 
 @MockkBean(BookRepository::class)
+@InitializeWithContainerizedKeycloak
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-internal class ApplicationSecurtiyTests {
+internal class ApplicationSecurityTests {
 
     @BeforeEach
     fun setupRestAssured(@LocalServerPort port: Int) {
@@ -42,18 +49,23 @@ internal class ApplicationSecurtiyTests {
         // This would be the end-2-end testing alternative to the WebSecurityConfigurationTests.
 
         @Test
-        fun `book API endpoints are not accessible without credentials`() {
-            assertThatUserOnPathReturnsStatus("/api/books/${randomUUID()}", UNAUTHORIZED)
+        fun `endpoints are not accessible without credentials`() {
+            assertThatOAuthUserReturnsStatus("/api/books/${randomUUID()}", UNAUTHORIZED)
         }
 
         @Test
-        fun `user with just scope BOOKS can access book API endpoints`() {
-            assertThatUserOnPathReturnsStatus("/api/books/${randomUUID()}", NO_CONTENT, "user")
+        fun `endpoints are accessible with tokens and role 'user'`() {
+            assertThatOAuthUserReturnsStatus("/api/books/${randomUUID()}", NO_CONTENT, getUserToken())
         }
 
         @Test
-        fun `user with just scope ACTUATOR cannot access book API endpoints`() {
-            assertThatUserOnPathReturnsStatus("/api/books/${randomUUID()}", FORBIDDEN, "actuator")
+        fun `endpoints are accessible with tokens and role 'curator'`() {
+            assertThatOAuthUserReturnsStatus("/api/books/${randomUUID()}", NO_CONTENT, getCuratorToken())
+        }
+
+        @Test
+        fun `endpoints are not accessible with basic-auth`() {
+            assertThatBasicAuthUserReturnsStatus("/api/books/${randomUUID()}", UNAUTHORIZED, "user")
         }
 
     }
@@ -67,19 +79,19 @@ internal class ApplicationSecurtiyTests {
         @TestFactory
         fun `without credentials only public endpoints are available`() =
             dynamicTests(publicEndpoints to OK, privateEndpoints to UNAUTHORIZED) { endpoint, status ->
-                assertThatUserOnPathReturnsStatus(endpoint, status)
+                assertThatBasicAuthUserReturnsStatus(endpoint, status)
             }
 
         @TestFactory
         fun `with credentials of user with ACTUATOR scope all endpoints are available`() =
             dynamicTests(publicEndpoints to OK, privateEndpoints to OK) { endpoint, status ->
-                assertThatUserOnPathReturnsStatus(endpoint, status, "actuator")
+                assertThatBasicAuthUserReturnsStatus(endpoint, status, "actuator")
             }
 
         @TestFactory
         fun `with credentials of user without ACTUATOR scope only public endpoints are available`() =
             dynamicTests(publicEndpoints to OK, privateEndpoints to FORBIDDEN) { endpoint, status ->
-                assertThatUserOnPathReturnsStatus(endpoint, status, "user")
+                assertThatBasicAuthUserReturnsStatus(endpoint, status, "user")
             }
 
         private fun dynamicTests(
@@ -91,11 +103,15 @@ internal class ApplicationSecurtiyTests {
 
     }
 
-    private fun assertThatUserOnPathReturnsStatus(path: String, status: HttpStatus, username: String? = null) {
-        RestAssured.given()
-            .apply { if (username != null) auth().preemptive().basic(username, username.reversed()) }
-            .`when`().get(path)
-            .then().statusCode(status.value())
-    }
+    private fun assertThatBasicAuthUserReturnsStatus(path: String, status: HttpStatus, username: String? = null) =
+        Given {
+            if (username != null) auth().preemptive().basic(username, username.reversed()) else this
+        } When { get(path) } Then { statusCode(status.value()) }
+
+    private fun assertThatOAuthUserReturnsStatus(path: String, status: HttpStatus, token: String? = null) =
+        Given {
+            apply { if (token != null) auth().preemptive().oauth2(token) }
+            apply { println(token) }
+        } When { get(path) } Then { statusCode(status.value()) }
 
 }
