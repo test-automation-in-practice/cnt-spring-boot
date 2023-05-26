@@ -1,5 +1,17 @@
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 management:
   endpoints:
     web:
       exposure:
         include: '*'
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8083/auth/realms/cnt-sb
+          jwk-set-uri: http://localhost:8083/auth/realms/cnt-sb/protocol/openid-connect/certs

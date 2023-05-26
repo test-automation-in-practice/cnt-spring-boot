@@ -9,13 +9,19 @@ import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.boot.actuate.info.InfoEndpoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
+import org.springframework.core.convert.converter.Converter
+import org.springframework.security.config.annotation.web.HttpSecurityDsl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.security.web.SecurityFilterChain
 
@@ -39,21 +45,16 @@ class WebSecurityConfiguration {
     private val passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    @Order(1)
+    fun actuatorSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
-            cors { disable() }
-            csrf { disable() }
-
-            sessionManagement {
-                sessionCreationPolicy = STATELESS
-            }
+            securityMatcher(EndpointRequest.toAnyEndpoint())
+            applyDefaults()
 
             httpBasic {}
             authorizeRequests {
                 authorize(EndpointRequest.to(InfoEndpoint::class.java, HealthEndpoint::class.java), permitAll)
                 authorize(EndpointRequest.toAnyEndpoint(), hasAuthority(SCOPE_ACTUATOR))
-
-                authorize("/api/books/**", hasAuthority(SCOPE_BOOKS))
                 authorize(anyRequest, denyAll)
             }
         }
@@ -61,10 +62,33 @@ class WebSecurityConfiguration {
     }
 
     @Bean
+    @Order(2)
+    fun generalSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http {
+            securityMatcher("/**")
+            applyDefaults()
+
+            oauth2ResourceServer { jwt { jwtAuthenticationConverter = CustomJwtAuthenticationConverter } }
+            authorizeRequests {
+                authorize("/api/books/**", hasAuthority(SCOPE_BOOKS))
+                authorize(anyRequest, denyAll)
+            }
+        }
+        return http.build()
+    }
+
+    private fun HttpSecurityDsl.applyDefaults() {
+        cors { disable() }
+        csrf { disable() }
+        sessionManagement {
+            sessionCreationPolicy = STATELESS
+        }
+    }
+
+    @Bean
     fun userDetailService(): UserDetailsService =
         InMemoryUserDetailsManager(
-            user("user", SCOPE_BOOKS, ROLE_USER),
-            user("curator", SCOPE_BOOKS, ROLE_USER, ROLE_CURATOR),
+            user("user"),
             user("actuator", SCOPE_ACTUATOR)
         )
 
@@ -72,5 +96,28 @@ class WebSecurityConfiguration {
         .password(passwordEncoder.encode(username.reversed()))
         .authorities(*authorities)
         .build()
+
+    object CustomJwtAuthenticationConverter : Converter<Jwt, JwtAuthenticationToken> {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun convert(source: Jwt): JwtAuthenticationToken {
+            val realmAccess = source.claims["realm_access"] as? Map<String, Any>
+            val roles = realmAccess?.get("roles") as? Collection<String> ?: emptyList()
+
+            val authorities = roles
+                .flatMap { role ->
+                    when (role) {
+                        "user" -> listOf(SCOPE_BOOKS, ROLE_USER)
+                        "curator" -> listOf(SCOPE_BOOKS, ROLE_CURATOR)
+                        else -> emptyList()
+                    }
+                }
+                .map(::SimpleGrantedAuthority)
+                .toSet()
+
+            return JwtAuthenticationToken(source, authorities)
+        }
+
+    }
 
 }
