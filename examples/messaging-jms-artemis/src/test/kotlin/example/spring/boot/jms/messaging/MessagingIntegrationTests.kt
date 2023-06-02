@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.jms.artemis.ArtemisAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.jms.annotation.EnableJms
 import org.springframework.jms.core.JmsTemplate
 
 @SpykBean(EventHandler::class, DeadLetterHandler::class)
@@ -61,7 +60,6 @@ internal class MessagingIntegrationTests(
     data class DummyEvent(val foo: String)
 }
 
-@EnableJms
 @ComponentScan
 @ImportAutoConfiguration(ArtemisAutoConfiguration::class)
 private class MessagingIntegrationTestsConfiguration
