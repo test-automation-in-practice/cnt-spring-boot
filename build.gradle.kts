@@ -24,13 +24,14 @@ allprojects {
         }
         the<DependencyManagementExtension>().apply {
             imports {
-                mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
-
                 mavenBom("io.github.logrecorder:logrecorder-bom:2.6.0")
                 mavenBom("io.github.openfeign:feign-bom:12.3")
                 mavenBom("org.jetbrains.kotlin:kotlin-bom:1.7.22")
                 mavenBom("org.testcontainers:testcontainers-bom:1.18.1")
+                mavenBom("org.zalando:logbook-bom:3.0.0")
+
+                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
+                mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
             }
             dependencies {
                 dependency("com.github.dasniko:testcontainers-keycloak:2.5.0")
