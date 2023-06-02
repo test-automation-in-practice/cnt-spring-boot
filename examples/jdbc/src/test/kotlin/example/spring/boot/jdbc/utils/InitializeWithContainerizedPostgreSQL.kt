@@ -1,42 +1,59 @@
 package example.spring.boot.jdbc.utils
 
 import org.springframework.context.ApplicationContextInitializer
-import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.event.AfterTestClassEvent
 import org.springframework.test.context.support.TestPropertySourceUtils.addInlinedPropertiesToEnvironment
 import org.testcontainers.containers.PostgreSQLContainer
+import java.util.UUID.randomUUID
 import kotlin.annotation.AnnotationTarget.CLASS
 
 @Retention
 @Target(CLASS)
-@DirtiesContext(classMode = AFTER_CLASS)
-@ContextConfiguration(initializers = [ContainerizedPostgreSQLInitializer::class])
+@ContextConfiguration(initializers = [PostgreSQLInitializer::class])
 annotation class InitializeWithContainerizedPostgreSQL
 
-private class ContainerizedPostgreSQLInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+/**
+ * Initializes a new PostgreSQL container for the first test that needs it.
+ * All subsequent tests will use the same container.
+ *
+ * In order to prevent cross pollution between tests, a new random database is created and used for each
+ * application context. So each test class should get its own database.
+ */
+class PostgreSQLInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+    companion object {
+        private val container: PostgreSQLContainer<*> by lazy {
+            PostgreSQLContainer("postgres:15.3-alpine")
+                .apply { start() }
+        }
+    }
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        val container = Container().apply {
-            start()
-        }
+        val database = randomDatabaseName()
+        val jdbcUrl = "jdbc:postgresql://${container.host}:${container.firstMappedPort}/$database"
 
-        val listener = StopContainerListener(container)
-        applicationContext.addApplicationListener(listener)
+        initializeDatabase(database)
 
-        val urlProperty = "spring.datasource.url=${container.jdbcUrl}"
+        val urlProperty = "spring.datasource.url=$jdbcUrl"
         val usernameProperty = "spring.datasource.username=${container.username}"
         val passwordProperty = "spring.datasource.password=${container.password}"
+
         addInlinedPropertiesToEnvironment(applicationContext, urlProperty, usernameProperty, passwordProperty)
     }
 
-    class Container : PostgreSQLContainer<Container>("postgres:14.3")
-
-    class StopContainerListener(private val container: Container) : ApplicationListener<AfterTestClassEvent> {
-        override fun onApplicationEvent(event: AfterTestClassEvent) = container.stop()
+    private fun initializeDatabase(database: String) {
+        container.createConnection("")
+            .use { connection ->
+                connection.createStatement()
+                    .use { statement ->
+                        statement.execute("CREATE DATABASE $database")
+                    }
+            }
     }
+
+    private fun randomDatabaseName() = "test_${randomUUID()}".replace("-", "")
 
 }
