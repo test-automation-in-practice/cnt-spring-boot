@@ -53,6 +53,8 @@ internal class ApplicationAcceptanceTest {
             body("""{ "title": "Clean Architecture", "isbn": "9780134494166" }""")
         } When {
             post("/default-api/books")
+        } Then {
+            statusCode(201)
         }
         assertThat(log) containsExactly {
             trace(startsWith("Incoming Request:"), contains("authorization: XXX"))
