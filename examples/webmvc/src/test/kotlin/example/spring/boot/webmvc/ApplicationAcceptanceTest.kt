@@ -1,5 +1,9 @@
 package example.spring.boot.webmvc
 
+import io.github.logrecorder.api.LogRecord
+import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
+import io.github.logrecorder.assertion.containsExactly
+import io.github.logrecorder.logback.junit5.RecordLoggers
 import io.restassured.RestAssured
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -10,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalServerPort
-
+import org.zalando.logbook.Logbook
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 internal class ApplicationAcceptanceTest {
@@ -37,6 +41,22 @@ internal class ApplicationAcceptanceTest {
             body("title", equalTo("Clean Code"))
             body("isbn", equalTo("9780132350884"))
             body("_links.self.href", startsWith("http://localhost:$port/hateoas-api/books/"))
+        }
+    }
+
+    @Test
+    @RecordLoggers(Logbook::class)
+    fun `request and response are logged with obfuscated authorization header`(log: LogRecord) {
+        Given {
+            header("Content-Type", "application/json")
+            header("Authorization", "some-token")
+            body("""{ "title": "Clean Architecture", "isbn": "9780134494166" }""")
+        } When {
+            post("/default-api/books")
+        }
+        assertThat(log) containsExactly {
+            trace(startsWith("Incoming Request:"), contains("authorization: XXX"))
+            trace(startsWith("Outgoing Response:"))
         }
     }
 

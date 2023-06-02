@@ -6,11 +6,11 @@ object Examples {
 
     val book_cleanCode = Book(
         isbn = Isbn("9780132350884"),
-        title = Title("Clean Code")
+        title = Title("Clean Code"),
     )
     val book_cleanArchitecture = Book(
+        isbn = Isbn("9780134494166"),
         title = Title("Clean Architecture"),
-        isbn = Isbn("9780134494166")
     )
 
     val id_cleanCode = UUID.fromString("b3fc0be8-463e-4875-9629-67921a1e00f4")
