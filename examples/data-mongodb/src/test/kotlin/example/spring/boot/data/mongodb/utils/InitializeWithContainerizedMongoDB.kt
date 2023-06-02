@@ -1,44 +1,37 @@
 package example.spring.boot.data.mongodb.utils
 
 import org.springframework.context.ApplicationContextInitializer
-import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.event.AfterTestClassEvent
 import org.springframework.test.context.support.TestPropertySourceUtils.addInlinedPropertiesToEnvironment
 import org.testcontainers.containers.MongoDBContainer
+import java.util.UUID
 import kotlin.annotation.AnnotationTarget.CLASS
 
 @Retention
 @Target(CLASS)
-@DirtiesContext(classMode = AFTER_CLASS)
-@ContextConfiguration(initializers = [ContainerizedMongoDBInitializer::class])
+@ContextConfiguration(initializers = [MongoDBInitializer::class])
 annotation class InitializeWithContainerizedMongoDB
 
-private class ContainerizedMongoDBInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+class MongoDBInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private val mappedPort = 27017
+    companion object {
+        private val container: MongoDBContainer by lazy {
+            MongoDBContainer("mongo:6.0.6")
+                .apply { start() }
+        }
+    }
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        val container = Container().apply {
-            addExposedPort(mappedPort)
-            start()
-        }
-
-        val listener = StopContainerListener(container)
-        applicationContext.addApplicationListener(listener)
+        val database = randomDatabaseName()
 
         val hostProperty = "spring.data.mongodb.host=${container.host}"
-        val portProperty = "spring.data.mongodb.port=${container.getMappedPort(mappedPort)}"
-        addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty)
+        val portProperty = "spring.data.mongodb.port=${container.firstMappedPort}"
+        val databaseProperty = "spring.data.mongodb.database=$database"
+
+        addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty, databaseProperty)
     }
 
-    class Container : MongoDBContainer("mongo:4.0.10")
-
-    class StopContainerListener(private val container: Container) : ApplicationListener<AfterTestClassEvent> {
-        override fun onApplicationEvent(event: AfterTestClassEvent) = container.stop()
-    }
+    private fun randomDatabaseName() = "test_${UUID.randomUUID()}".replace("-", "")
 
 }
