@@ -5,11 +5,13 @@ import jakarta.jms.ConnectionFactory
 import jakarta.jms.Session.CLIENT_ACKNOWLEDGE
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.jms.annotation.EnableJms
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter
 
+@EnableJms
 @Configuration
 class MessagingConfiguration {
 
