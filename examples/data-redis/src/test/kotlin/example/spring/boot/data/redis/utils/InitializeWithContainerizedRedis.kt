@@ -1,44 +1,51 @@
 package example.spring.boot.data.redis.utils
 
 import org.springframework.context.ApplicationContextInitializer
-import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.event.AfterTestClassEvent
 import org.springframework.test.context.support.TestPropertySourceUtils.addInlinedPropertiesToEnvironment
+import org.testcontainers.containers.Container
 import org.testcontainers.containers.GenericContainer
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.annotation.AnnotationTarget.CLASS
 
 @Retention
 @Target(CLASS)
-@DirtiesContext(classMode = AFTER_CLASS)
-@ContextConfiguration(initializers = [ContainerizedRedisInitializer::class])
+@ContextConfiguration(initializers = [RedisInitializer::class])
 annotation class InitializeWithContainerizedRedis
 
-private class ContainerizedRedisInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+class RedisInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private val mappedPort = 6379
+    // This approach will only scale up to 16 test application contexts because Redis only supports 16 databases.
+    // If more are needed alternative approaches would be:
+    //  - Switch to clearing the whole database before or after each test (class) and rotate indices after 15 back to 0
+    //  - Switch to clearing the whole database before or after each test (class) and don't rotate at all
+    //  - Switch to initializing a Redis container for each context - like in older implementations of this class
+    //    you would likely need to kill those containers using an application listener to prevent too many Redis
+    //    containers running at the same time and wasting resources.
 
-    override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        val container = Container().apply {
-            addExposedPort(mappedPort)
-            start()
+    companion object {
+        private val nextDatabaseIndex = AtomicInteger(0)
+        private val container: Container<*> by lazy {
+            GenericContainer("redis:7.0")
+                .apply { addExposedPort(6379); start() }
         }
-
-        val listener = StopContainerListener(container)
-        applicationContext.addApplicationListener(listener)
-
-        val hostProperty = "spring.data.redis.host=${container.host}"
-        val portProperty = "spring.data.redis.port=${container.getMappedPort(mappedPort)}"
-        addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty)
     }
 
-    class Container : GenericContainer<Container>("redis:7.0")
+    override fun initialize(applicationContext: ConfigurableApplicationContext) {
+        val databaseIndex = getNextDatabaseIndex()
 
-    class StopContainerListener(private val container: Container) : ApplicationListener<AfterTestClassEvent> {
-        override fun onApplicationEvent(event: AfterTestClassEvent) = container.stop()
+        val hostProperty = "spring.data.redis.host=${container.host}"
+        val portProperty = "spring.data.redis.port=${container.firstMappedPort}"
+        val databaseProperty = "spring.data.redis.database=$databaseIndex"
+
+        addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty, databaseProperty)
+    }
+
+    private fun getNextDatabaseIndex(): Int {
+        val index = nextDatabaseIndex.getAndIncrement()
+        check(index in 0..15) { "Invalid Redis database index: $index | too many tests?" }
+        return index
     }
 
 }
