@@ -71,6 +71,7 @@ class WebSecurityConfiguration {
             oauth2ResourceServer { jwt { jwtAuthenticationConverter = CustomJwtAuthenticationConverter } }
             authorizeRequests {
                 authorize("/api/books/**", hasAuthority(SCOPE_BOOKS))
+                authorize("/error", permitAll)
                 authorize(anyRequest, denyAll)
             }
         }

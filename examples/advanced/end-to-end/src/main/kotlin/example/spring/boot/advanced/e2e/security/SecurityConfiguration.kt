@@ -28,6 +28,7 @@ class SecurityConfiguration(
             }
             authorizeRequests {
                 authorize("/api/**", hasAuthority(SCOPE_API))
+                authorize("/error", permitAll)
                 authorize("/**", denyAll)
             }
         }
