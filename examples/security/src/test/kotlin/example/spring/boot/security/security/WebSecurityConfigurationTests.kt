@@ -38,7 +38,7 @@ internal class WebSecurityConfigurationTests(
     @Autowired private val mockMvc: MockMvc
 ) {
 
-    // This RestController will not picked up by regular component scans and needs to be imported explicitly
+    // This RestController will not picked-up by regular component scans and needs to be imported explicitly
     // to be used as part of these tests.
 
     @RestController
