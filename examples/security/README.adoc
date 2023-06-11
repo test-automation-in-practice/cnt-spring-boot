@@ -1,3 +1,60 @@
 = Spring Boot: Security
 
-This module demonstrates how to use and test Spring Security.
+This module demonstrates how to apply and test Spring Security and other basic security precautions.
+
+== Spring Security
+
+=== Web-Security
+
+This showcase implements general web-level security with two different authentication methods:
+
+- link:https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/basic.html[Basic-Auth] with a simple in-memory user database for the Actuator endpoints.
+- link:https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html[OAuth 2.0 with JWT] for the service's API.
+
+We use two different 'scopes' - `SCOPE_ACTUATOR` and `SCOPE_BOOKS` - to provide users with general access.
+These are 'authorities' assigned to a user inside the authorization process.
+
+The detailed configuration is implemented in the link:src/main/kotlin/example/spring/boot/security/security/WebSecurityConfiguration.kt[`WebSecurityConfiguration`] class.
+
+=== Method-Security
+
+This showcase implements method-level security using the following annotations:
+
+- `@RolesAllowed` - JEE default annotation.
+Uses simple 'role' names to grant access to the annotated method.
+Spring will be mapping the provided `name` to an 'authority' with the name `ROLE_$name`!
+- `@PreAuthorize` - Powerful Spring annotation.
+Allows us to use Spring Expression Language to define the criteria needed to be granted access to a method.
+This includes accessing method parameters and including their values into the expression.
+- `@Secured` - old school Java 5 annotation.
+Uses its value as the name of an 'authority' that grants access to the annotated method.
+
+There is also the less commonly used `@PostAuthorize` annotation.
+Like `@PreAuthorization` it allows for more complex rules.
+The difference being that it will be evaluated after the method was executed.
+This allows the expressions to access return values.
+But it is not useful in preventing unauthorized execution of code.
+The main use is in preventing data leakage, not actions.
+
+The method-level security is configured in the link:src/main/kotlin/example/spring/boot/security/security/MethodSecurityConfiguration.kt[`MethodSecurityConfiguration`] class and used in the link:src/main/kotlin/example/spring/boot/security/business/BookCollection.kt[`BookCollection`] component.
+
+=== Testing
+
+The most useful feature of Spring Security - for integration testing - is the `@WithMockUser` annotation.
+It allows tests to declare the characteristics of an authenticated user for the scope of the annotated test / class.
+
+This is used for method-level (see link:src/test/kotlin/example/spring/boot/security/business/BookCollectionTests.kt[BookCollectionTests]) as well as web-level (see link:src/test/kotlin/example/spring/boot/security/api/BooksRestControllerTests.kt[BooksRestControllerTests]) security.
+
+In addition to incorporating security tests with you usual functional testing, there should always be a more general security test for your web-level security rules.
+This is implemented in link:src/test/kotlin/example/spring/boot/security/security/WebSecurityConfigurationTests.kt[WebSecurityConfigurationTests] as an example.
+
+[NOTE]
+====
+Be aware that Spring Actuator does have web endpoints, but they are not part of the usual WebMVC or WebFlux technology stack.
+Therefore, they cannot be tested using mid-level integration slices like `@WebMvcTest`!
+====
+
+You can - and should - include security tests in your general smoke testing efforts.
+See link:src/test/kotlin/example/spring/boot/security/ApplicationSecurityTests.kt[ApplicationSecurityTests] as an example.
+Note that you do not need duplicated testing effort.
+If you test all of your web-level configuration security rules in an application-level test (like a general smoke test), you do not need a separate `@WebMvcTest` based integration test for the `WebSecurityConfiguration`!
