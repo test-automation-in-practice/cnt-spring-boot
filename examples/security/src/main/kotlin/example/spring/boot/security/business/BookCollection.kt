@@ -47,6 +47,11 @@ class BookCollection(
         return repository.findById(id)
     }
 
+    @PreAuthorize("hasAnyRole('$USER', '$CURATOR')")
+    fun getBooksByIsbn(isbn: Isbn): List<BookRecord> {
+        return repository.findByIsbn(isbn)
+    }
+
     // @Secured takes the name of one or more authorities which are allowed to invoke the annotated method.
 
     @Secured(ROLE_CURATOR)

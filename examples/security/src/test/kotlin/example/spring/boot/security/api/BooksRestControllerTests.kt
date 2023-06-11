@@ -5,6 +5,7 @@ import example.spring.boot.security.business.BookCollection
 import example.spring.boot.security.business.Examples.book_refactoring
 import example.spring.boot.security.business.Examples.id_refactoring
 import example.spring.boot.security.business.Examples.record_refactoring
+import example.spring.boot.security.business.Isbn
 import example.spring.boot.security.security.Authorities.SCOPE_BOOKS
 import example.spring.boot.security.security.WebSecurityConfiguration
 import io.mockk.clearAllMocks
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import java.util.UUID.fromString
 
 /**
  * [WebMvcTest] builds a context that includes web-related as well as security components,
@@ -40,7 +42,7 @@ import org.springframework.test.web.servlet.post
 @WebMvcTest(BooksRestController::class)
 @WithMockUser(authorities = [SCOPE_BOOKS])
 @Import(WebSecurityConfiguration::class)
-internal class BooksRestControllerTest(
+internal class BooksRestControllerTests(
     @Autowired val bookCollection: BookCollection,
     @Autowired val mockMvc: MockMvc
 ) {
@@ -83,6 +85,23 @@ internal class BooksRestControllerTest(
     }
 
     @Test
+    fun `invalid book data during creation is rejected with a 400 Bad Request`() {
+        // no specific exception handler present and default will handle it outside the scope of this test
+        // so no content specific assertions are executed
+        mockMvc
+            .post("/api/books") {
+                contentType = APPLICATION_JSON
+                content = """
+                    {
+                      "isbn": "123456789",
+                      "title": "Refactoring: Improving the Design of Existing Code"
+                    }
+                    """
+            }
+            .andExpect { status { isBadRequest() } }
+    }
+
+    @Test
     fun `getting a non-existing book by ID responds with a 204 No Content`() {
         every { bookCollection.getBookById(id_refactoring) } returns null
 
@@ -116,6 +135,53 @@ internal class BooksRestControllerTest(
                     )
                 }
             }
+    }
+
+    @Test
+    fun `getting existing books by their ISBN responds with a 200 Ok`() {
+        every { bookCollection.getBooksByIsbn(Isbn("978-0134757599")) } returns listOf(
+            record_refactoring.copy(id = fromString("d6c40676-be06-475d-855c-5a32a3a626fa")),
+            record_refactoring.copy(id = fromString("f213f2a1-1d73-4572-8a92-e537382f3345")),
+        )
+
+        mockMvc
+            .get("/api/books/_search") {
+                param("isbn", "978-0134757599")
+            }
+            .andExpect {
+                status { isOk() }
+                content {
+                    contentTypeCompatibleWith(APPLICATION_JSON)
+                    json(
+                        jsonContent = """
+                            [
+                                {
+                                  "id": "d6c40676-be06-475d-855c-5a32a3a626fa",
+                                  "isbn": "978-0134757599",
+                                  "title": "Refactoring: Improving the Design of Existing Code"
+                                },
+                                {
+                                  "id": "f213f2a1-1d73-4572-8a92-e537382f3345",
+                                  "isbn": "978-0134757599",
+                                  "title": "Refactoring: Improving the Design of Existing Code"
+                                }
+                            ]
+                            """,
+                        strict = true
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `invalid ISBN search parameter is rejected with a 400 Bad Request`() {
+        // no specific exception handler present and default will handle it outside the scope of this test
+        // so no content specific assertions are executed
+        mockMvc
+            .get("/api/books/_search") {
+                param("isbn", "123456789")
+            }
+            .andExpect { status { isBadRequest() } }
     }
 
     @ValueSource(booleans = [true, false])
