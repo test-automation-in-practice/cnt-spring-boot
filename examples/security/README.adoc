@@ -58,3 +58,34 @@ You can - and should - include security tests in your general smoke testing effo
 See link:src/test/kotlin/example/spring/boot/security/ApplicationSecurityTests.kt[ApplicationSecurityTests] as an example.
 Note that you do not need duplicated testing effort.
 If you test all of your web-level configuration security rules in an application-level test (like a general smoke test), you do not need a separate `@WebMvcTest` based integration test for the `WebSecurityConfiguration`!
+
+== Input Validation
+
+One important factor in establishing a basic application security level is to never trust data that is provided externally.
+We'll refer to this as input validation.
+The basic principle is easy.
+Validate all data that comes into your application.
+
+This includes request bodies, query and path parameters, headers etc. - everything your application actually reads and uses in some way.
+It is also not limited to HTTP APIs.
+If you consume events or other types of messages, the same principle applies.
+
+In this showcase input validation is done using simple domain types for everything:
+
+- link:src/main/kotlin/example/spring/boot/security/business/model.kt[`Isbn`]
+- link:src/main/kotlin/example/spring/boot/security/business/model.kt[`Title`]
+
+Be it the request body to create a new book or to query for existing books using an ISBN (see link:src/main/kotlin/example/spring/boot/security/api/BooksRestController.kt[BooksRestController]).
+These domain types are self-validating, meaning an instance of them cannot be created without validating the data.
+Providing invalid data (wrong format, too long, etc.) will fail to convert / de-serialize the data and result in a `400 Bad Request` response by the framework (see link:src/test/kotlin/example/spring/boot/security/api/BooksRestControllerTests.kt[BooksRestControllerTests]).
+
+[NOTE]
+====
+An alternative approach would be to activate and use JEE validation annotations on parameters and request bodies.
+
+The reason we are using domain types comes down (mostly) to preference.
+Domain types can be used throughout the application's code and guarantee that only valid values can be used anywhere.
+This improves type-safety, reduces code that checks for formats or constraints and leads to better test example data as well.
+
+Annotation-driven validation however needs to be actively triggered and does nothing to distinguish one `String` parameter from any other.
+====

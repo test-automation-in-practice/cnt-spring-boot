@@ -3,6 +3,8 @@ package example.spring.boot.security.api
 import example.spring.boot.security.business.Book
 import example.spring.boot.security.business.BookCollection
 import example.spring.boot.security.business.BookRecord
+import example.spring.boot.security.business.Isbn
+import example.spring.boot.security.business.Title
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.http.ResponseEntity
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
@@ -38,6 +41,11 @@ class BooksRestController(
             ?.let { ok().body(it.toRepresentation()) }
             ?: noContent().build()
 
+    @GetMapping("/_search")
+    fun getByIsbn(@RequestParam isbn: Isbn): List<BookRepresentation> =
+        bookCollection.getBooksByIsbn(isbn)
+            .map { it.toRepresentation() }
+
     @ResponseStatus(NO_CONTENT)
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: UUID) {
@@ -46,8 +54,8 @@ class BooksRestController(
 
     data class BookRepresentation(
         val id: UUID,
-        val isbn: String,
-        val title: String
+        val isbn: Isbn,
+        val title: Title
     )
 
     private fun BookRecord.toRepresentation() =
