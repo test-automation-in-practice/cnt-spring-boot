@@ -13,6 +13,11 @@ logging:
     root: info
     org.zalando.logbook: trace
 
+spring:
+  mvc:
+    problemdetails:
+      enabled: true
+
 ---
 spring.config.activate.on-profile: json-logging
 

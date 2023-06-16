@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE
 import org.zalando.logbook.Logbook
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -59,6 +60,25 @@ internal class ApplicationAcceptanceTest {
         assertThat(log) containsExactly {
             trace(startsWith("Incoming Request:"), contains("authorization: XXX"))
             trace(startsWith("Outgoing Response:"))
+        }
+    }
+
+    @Test
+    fun `errors are returned as RFC 7807 problem details with traceId`() {
+        Given {
+            header("Content-Type", "application/json")
+            header("X-Trace-ID", "d18ade213f84")
+            body("{}") // empty body -> Bad Request
+        } When {
+            post("/default-api/books")
+        } Then {
+            statusCode(400)
+            contentType(APPLICATION_PROBLEM_JSON_VALUE)
+            body("title", equalTo("Bad Request"))
+            body("status", equalTo(400))
+            body("detail", equalTo("Failed to read request"))
+            body("instance", equalTo("/default-api/books"))
+            body("traceId", equalTo("d18ade213f84"))
         }
     }
 

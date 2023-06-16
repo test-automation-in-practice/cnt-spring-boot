@@ -1,19 +1,16 @@
 package example.spring.boot.webmvc.api.default
 
+import example.spring.boot.webmvc.api.BookNotFoundProblem
 import example.spring.boot.webmvc.api.CreateBookRequest
 import example.spring.boot.webmvc.business.Book
 import example.spring.boot.webmvc.business.BookCollection
 import example.spring.boot.webmvc.business.BookRecord
-import example.spring.boot.webmvc.business.BookRecordNotFoundException
 import example.spring.boot.webmvc.business.Isbn
 import example.spring.boot.webmvc.business.Title
 import jakarta.validation.Valid
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -28,8 +25,6 @@ import java.util.UUID
 class DefaultBooksController(
     private val bookCollection: BookCollection
 ) {
-
-    private val log = LoggerFactory.getLogger(javaClass)
 
     @PostMapping
     @ResponseStatus(CREATED)
@@ -48,18 +43,13 @@ class DefaultBooksController(
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id: UUID): BookRepresentation =
-        bookCollection.get(id).toRepresentation()
+        bookCollection.get(id)?.toRepresentation()
+            ?: throw BookNotFoundProblem(id) // throw to trigger correct extended error-handling+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     fun deleteById(@PathVariable id: UUID) {
         bookCollection.delete(id)
-    }
-
-    @ResponseStatus(NOT_FOUND)
-    @ExceptionHandler(BookRecordNotFoundException::class)
-    fun handleNotFoundException(e: BookRecordNotFoundException) {
-        log.debug("Could not find Book [${e.id}], responding with '404 Not Found'.")
     }
 
 }
