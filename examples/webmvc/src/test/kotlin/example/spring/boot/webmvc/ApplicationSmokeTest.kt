@@ -18,7 +18,7 @@ import org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE
 import org.zalando.logbook.Logbook
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-internal class ApplicationAcceptanceTest {
+internal class ApplicationSmokeTest {
 
     var port: Int = 0
 
