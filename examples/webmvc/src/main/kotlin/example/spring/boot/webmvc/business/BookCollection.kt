@@ -19,15 +19,7 @@ class BookCollection {
         database.remove(id)
     }
 
-    // throws only to demonstrate exception handling in controller / tests
-    // would normally simply return `BookRecord?`
-    @Throws(BookRecordNotFoundException::class)
-    fun get(id: UUID): BookRecord {
-        return database[id] ?: throw BookRecordNotFoundException(id)
-    }
-
-    fun getAll(): List<BookRecord> {
-        return database.values.toList()
-    }
+    fun get(id: UUID): BookRecord? = database[id]
+    fun getAll(): List<BookRecord> = database.values.toList()
 
 }

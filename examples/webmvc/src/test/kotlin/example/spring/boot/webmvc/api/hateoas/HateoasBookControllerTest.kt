@@ -2,7 +2,6 @@ package example.spring.boot.webmvc.api.hateoas
 
 import com.ninjasquad.springmockk.MockkBean
 import example.spring.boot.webmvc.business.BookCollection
-import example.spring.boot.webmvc.business.BookRecordNotFoundException
 import example.spring.boot.webmvc.business.Examples.book_cleanCode
 import example.spring.boot.webmvc.business.Examples.id_cleanArchitecture
 import example.spring.boot.webmvc.business.Examples.id_cleanCode
@@ -23,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.MediaTypes.HAL_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
@@ -209,12 +209,31 @@ internal class HateoasBookControllerTest(
 
         @Test
         fun `getting an unknown book by its id responds with status 404`() {
-            every { bookCollection.get(id_cleanCode) } throws BookRecordNotFoundException(id_cleanCode)
+            every { bookCollection.get(id_cleanCode) } returns null
 
-            mockMvc.get("/hateoas-api/books/$id_cleanCode")
+            mockMvc
+                .get("/hateoas-api/books/$id_cleanCode") {
+                    header("X-Trace-ID", "cfd9a84dc12d")
+                }
                 .andExpect {
                     status { isNotFound() }
-                    content { string("") }
+                    content {
+                        contentType(APPLICATION_PROBLEM_JSON)
+                        json(
+                            jsonContent = """
+                                {
+                                  "type": "urn:problem-type:book-not-found",
+                                  "title": "Not Found",
+                                  "status": 404,
+                                  "detail": "Book with ID 'b3fc0be8-463e-4875-9629-67921a1e00f4' was not found!",
+                                  "instance": "/hateoas-api/books/b3fc0be8-463e-4875-9629-67921a1e00f4",
+                                  "bookId": "b3fc0be8-463e-4875-9629-67921a1e00f4",
+                                  "traceId": "cfd9a84dc12d"
+                                }
+                                """,
+                            strict = true
+                        )
+                    }
                 }
                 .andDo { document("by-id/get/not-found") }
         }
