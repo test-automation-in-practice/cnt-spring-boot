@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.TestComponent
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.FORBIDDEN
@@ -38,9 +39,19 @@ internal class WebSecurityConfigurationTests(
     @Autowired private val mockMvc: MockMvc
 ) {
 
-    // This RestController will not picked-up by regular component scans and needs to be imported explicitly
-    // to be used as part of these tests.
-
+    /**
+     * Because this [RestController] should only be usable in this test, we annotate it with [TestComponent].
+     * Doing so will exclude it from any component scanning!
+     * Because of that, we'll have to actively import it at the top of the class.
+     *
+     * If this is classification is not done, there is a fallback mechanism that is not common knowledge and prone to
+     * very specific and strange errors: If the component is specified within a test class with at least one test
+     * spring will classify it as a test component. But if all the tests of that class are part of `@Nested` classes,
+     * spring will no longer classify it as a test component. If that happens the component (e.g. this rest controller)
+     * would be picked up by all component scans executed in other tests! This might lead to all kinds of strange
+     * behaviour in other tests, while for this test everything would be fine.
+     */
+    @TestComponent
     @RestController
     class SecurityTestController {
 
