@@ -9,8 +9,8 @@ object GraphQLRequestSnippet : TemplatedSnippet("graphql-request", null) {
     private val objectMapper = jacksonObjectMapper()
 
     override fun createModel(operation: Operation): Map<String, Any> =
-        mapOf("query" to getRequestBody(operation.request))
+        mapOf("query" to getQueryFromRequestBody(operation.request))
 
-    private fun getRequestBody(request: OperationRequest): String =
+    private fun getQueryFromRequestBody(request: OperationRequest): String =
         objectMapper.readTree(request.content).get("query").textValue().trimIndent()
 }
