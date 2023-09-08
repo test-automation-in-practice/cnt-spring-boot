@@ -8,7 +8,12 @@ plugins {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.zalando:logbook-logstash")
+    implementation("org.zalando:logbook-netty")
+    implementation("org.zalando:logbook-okhttp")
+    implementation("org.zalando:logbook-spring-boot-starter")
 
     implementation("com.squareup.okhttp3:okhttp")
 
