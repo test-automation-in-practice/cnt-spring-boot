@@ -15,9 +15,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    implementation("org.zalando:logbook-logstash")
+    implementation("org.zalando:logbook-spring-boot-starter")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient")
+    testImplementation("io.github.logrecorder:logrecorder-assertions")
+    testImplementation("io.github.logrecorder:logrecorder-junit5")
+    testImplementation("io.github.logrecorder:logrecorder-logback")
     testImplementation("io.mockk:mockk-jvm")
     testImplementation("com.ninja-squad:springmockk")
 }
