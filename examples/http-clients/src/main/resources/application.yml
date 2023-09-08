@@ -3,3 +3,23 @@ client:
 
 library-service:
   base-url: "http://localhost:8081"
+
+logbook:
+  format.style: http
+  strategy: without-body
+  obfuscate:
+    headers:
+      - Authorization
+
+logging:
+  level:
+    root: info
+    org.zalando.logbook: trace
+
+---
+spring.config.activate.on-profile: json-logging
+
+logbook.format.style: json
+
+logging:
+  config: classpath:logback-json-logging.xml

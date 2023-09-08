@@ -1,18 +1,26 @@
 package example.spring.boot.http.clients.gateways.libraryservice
 
+import ch.qos.logback.classic.Level.convertAnSLF4JLevel
+import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.MappingBuilder
-import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.containing
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.slf4j.Logger.ROOT_LOGGER_NAME
+import org.slf4j.LoggerFactory.getLogger
+import org.slf4j.event.Level
+import org.slf4j.event.Level.INFO
+import org.slf4j.event.Level.TRACE
+import org.springframework.http.HttpHeaders.ACCEPT
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import java.io.IOException
 
 /**
  * When testing HTTP interaction, in this case calling another service's API, the tests should be written as
@@ -26,16 +34,32 @@ import java.io.IOException
  * Trying to write these tests as unit tests using mocking to simulate the underlying client technology only
  * makes them harder to write, understand and maintain in case we want to change which client we use.
  */
-internal interface LibraryServiceContract {
+internal abstract class LibraryServiceContract(
+    private val wireMockInfo: WireMockRuntimeInfo
+) {
 
-    val wireMock: WireMock
-    val cut: LibraryService
+    private val cut: LibraryService by lazy {
+        createClassUnderTest(LibraryServiceProperties(baseUrl = wireMockInfo.httpBaseUrl))
+    }
+
+    protected abstract fun createClassUnderTest(properties: LibraryServiceProperties): LibraryService
+
+    @BeforeEach
+    fun setLogLevels() {
+        setLogLevel(ROOT_LOGGER_NAME, INFO)
+        setLogLevel("org.zalando.logbook", TRACE)
+    }
+
+    private fun setLogLevel(loggerName: String, level: Level) {
+        (getLogger(loggerName) as Logger).level = convertAnSLF4JLevel(level)
+    }
 
     @ParameterizedTest
     @ValueSource(ints = [200, 201])
     fun `sends correct request and parses successful responses`(status: Int) {
         stub {
             post("/api/books")
+                .withHeader(ACCEPT, containing(APPLICATION_JSON_VALUE))
                 .withHeader(CONTENT_TYPE, containing(APPLICATION_JSON_VALUE))
                 .withRequestBody(
                     equalToJson(
@@ -56,10 +80,11 @@ internal interface LibraryServiceContract {
                             {
                               "id": "be64192f-879c-4346-8aff-76582117a42d",
                               "title": "Clean Code",
-                              "isbn": "9780132350884"
+                              "isbn": "9780132350884",
+                              "unknown": true
                             }
                             """
-                        )
+                        ) // includes unknown property to make sure, that our clients are parsing leniently
                 )
         }
 
@@ -84,11 +109,11 @@ internal interface LibraryServiceContract {
             title = "Clean Architecture",
             isbn = "9780134494166"
         )
-        assertThrows<IOException> { cut.addBook(book) }
+        assertThrows<LibraryServiceException> { cut.addBook(book) }
     }
 
     private fun stub(supplier: () -> MappingBuilder) {
-        wireMock.register(supplier())
+        wireMockInfo.wireMock.register(supplier())
     }
 
 }
