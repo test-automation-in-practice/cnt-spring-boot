@@ -1,0 +1,22 @@
+logbook:
+  include:
+    - /default-api/**
+    - /hateoas-api/**
+  format.style: http
+  strategy: without-body
+  obfuscate:
+    headers:
+      - Authorization
+
+logging:
+  level:
+    root: info
+    org.zalando.logbook: trace
+
+---
+spring.config.activate.on-profile: json-logging
+
+logbook.format.style: json
+
+logging:
+  config: classpath:logback-json-logging.xml
