@@ -51,6 +51,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:advanced:end-to-end:build
       - uses: actions/upload-artifact@v3
@@ -66,6 +69,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:advanced:scoping:build
       - uses: actions/upload-artifact@v3
@@ -81,6 +87,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:async:build
       - uses: actions/upload-artifact@v3
@@ -96,6 +105,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:basics:build
       - uses: actions/upload-artifact@v3
@@ -111,6 +123,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:caching:build
       - uses: actions/upload-artifact@v3
@@ -126,6 +141,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:data-jdbc:build
       - uses: actions/upload-artifact@v3
@@ -141,6 +159,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:data-jpa:build
       - uses: actions/upload-artifact@v3
@@ -156,6 +177,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:data-mongodb:build
       - uses: actions/upload-artifact@v3
@@ -171,6 +195,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:data-redis:build
       - uses: actions/upload-artifact@v3
@@ -186,6 +213,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:graphql:build
       - uses: actions/upload-artifact@v3
@@ -201,6 +231,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:http-clients:build
       - uses: actions/upload-artifact@v3
@@ -216,6 +249,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:jdbc:build
       - uses: actions/upload-artifact@v3
@@ -231,6 +267,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:messaging-jms-activemq:build
       - uses: actions/upload-artifact@v3
@@ -246,6 +285,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:messaging-jms-artemis:build
       - uses: actions/upload-artifact@v3
@@ -261,6 +303,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:messaging-kafka:build
       - uses: actions/upload-artifact@v3
@@ -276,6 +321,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:messaging-rabbitmq:build
       - uses: actions/upload-artifact@v3
@@ -291,6 +339,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:micrometer:build
       - uses: actions/upload-artifact@v3
@@ -306,6 +357,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:resilience4j:build
       - uses: actions/upload-artifact@v3
@@ -321,6 +375,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:scheduling:build
       - uses: actions/upload-artifact@v3
@@ -336,6 +393,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:security:build
       - uses: actions/upload-artifact@v3
@@ -351,6 +411,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:webmvc:build
       - uses: actions/upload-artifact@v3
@@ -366,6 +429,9 @@ jobs:
         with:
           java-version: ${{ env.javaVersion }}
           distribution: ${{ env.javaDistribution }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
       - run: chmod +x gradlew
       - run: ./gradlew :examples:webflux:build
       - uses: actions/upload-artifact@v3
