@@ -6,10 +6,6 @@ import example.spring.boot.security.utils.InitializeWithContainerizedKeycloak
 import example.spring.boot.security.utils.getCuratorToken
 import example.spring.boot.security.utils.getUserToken
 import io.mockk.every
-import io.restassured.RestAssured
-import io.restassured.module.kotlin.extensions.Given
-import io.restassured.module.kotlin.extensions.Then
-import io.restassured.module.kotlin.extensions.When
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
@@ -18,23 +14,20 @@ import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.test.web.reactive.server.WebTestClient
 import java.util.UUID.randomUUID
 
 @MockkBean(BookRepository::class)
 @InitializeWithContainerizedKeycloak
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-internal class ApplicationSecurityTests {
-
-    @BeforeEach
-    fun setupRestAssured(@LocalServerPort port: Int) {
-        RestAssured.port = port
-    }
+internal class ApplicationSecurityTests(
+    @Autowired val webTestClient: WebTestClient
+) {
 
     @BeforeEach
     fun stubRepository(@Autowired repository: BookRepository) {
@@ -104,14 +97,17 @@ internal class ApplicationSecurityTests {
     }
 
     private fun assertThatBasicAuthUserReturnsStatus(path: String, status: HttpStatus, username: String? = null) =
-        Given {
-            if (username != null) auth().preemptive().basic(username, username.reversed()) else this
-        } When { get(path) } Then { statusCode(status.value()) }
+        webTestClient.get()
+            .uri(path)
+            .headers { if (username != null) it.setBasicAuth(username, username.reversed()) }
+            .exchange()
+            .expectStatus().isEqualTo(status)
 
     private fun assertThatOAuthUserReturnsStatus(path: String, status: HttpStatus, token: String? = null) =
-        Given {
-            apply { if (token != null) auth().preemptive().oauth2(token) }
-            apply { println(token) }
-        } When { get(path) } Then { statusCode(status.value()) }
+        webTestClient.get()
+            .uri(path)
+            .headers { if (token != null) it.setBearerAuth(token) }
+            .exchange()
+            .expectStatus().isEqualTo(status)
 
 }
