@@ -1,0 +1,22 @@
+:data-uri:
+
+= Spring Modulith Example - Architecture Documentation
+
+== Module Overview
+
+Lorem Ipsum
+
+[plantuml,components,svg,align="left"]
+....
+include::{snippets}/../spring-modulith-docs/components.puml[]
+....
+
+== Modules
+
+=== Employee
+
+include::{snippets}/../spring-modulith-docs/module-employee.adoc[]
+
+=== Skills
+
+include::{snippets}/../spring-modulith-docs/module-skill.adoc[]

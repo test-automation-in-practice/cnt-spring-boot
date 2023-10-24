@@ -38,6 +38,7 @@ allprojects {
             dependencies {
                 dependency("com.github.dasniko:testcontainers-keycloak:2.6.0")
                 dependency("com.ninja-squad:springmockk:4.0.2")
+                dependency("io.kotest:kotest-assertions-core:5.6.2")
                 dependency("io.mockk:mockk-jvm:1.13.7")
 
                 // currently using older version because of issues updating to Jakarta based version

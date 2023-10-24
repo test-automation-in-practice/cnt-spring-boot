@@ -1,0 +1,7 @@
+PUT http://{{host}}:{{port}}/api/skills/{{currentSkillId}}
+Content-Type: application/json
+Authorization: {{authorization}}
+
+{
+  "label": "Kotlin (JVM)"
+}
