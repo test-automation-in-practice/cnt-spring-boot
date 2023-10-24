@@ -18,7 +18,7 @@ plugins {
 }
 
 allprojects {
-    repositories { mavenCentral(); mavenLocal() }
+    repositories { mavenCentral() }
 
     if (project.childProjects.isEmpty()) {
         apply {
