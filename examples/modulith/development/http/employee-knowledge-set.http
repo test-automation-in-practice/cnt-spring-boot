@@ -1,0 +1,7 @@
+PUT http://{{host}}:{{port}}/api/employees/{{currentEmployeeId}}/knowledge/{{currentSkillId}}
+Content-Type: application/json
+Authorization: {{authorization}}
+
+{
+  "level": 10
+}

@@ -1,0 +1,12 @@
+POST http://{{host}}:{{port}}/api/employees
+Content-Type: application/json
+Authorization: {{authorization}}
+
+{
+  "firstName": "Stefan",
+  "lastName": "Ludwig"
+}
+
+> {%
+    client.global.set("currentEmployeeId", `${response.body["id"]}`);
+%}

@@ -1,0 +1,28 @@
+server:
+  shutdown: graceful
+
+spring:
+  application:
+    name: spring-modulith-example
+  data:
+    mongodb:
+      uuid-representation: standard
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/database"
+    username: "user"
+    password: "password"
+  jackson:
+    default-property-inclusion: non_null
+  modulith:
+    default-async-termination: false
+    events:
+      jdbc:
+        schema-initialization:
+          enabled: true
+    moments:
+      enable-time-machine: false
+      granularity: hours
+      locale: de_DE
+      quarter-start-month: january
+      zone-id: Europe/Berlin
+    republish-outstanding-events-on-restart: false

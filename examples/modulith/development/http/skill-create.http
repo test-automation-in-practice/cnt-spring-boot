@@ -1,0 +1,11 @@
+POST http://{{host}}:{{port}}/api/skills
+Content-Type: application/json
+Authorization: {{authorization}}
+
+{
+  "label": "Kotlin"
+}
+
+> {%
+    client.global.set("currentSkillId", `${response.body["id"]}`);
+%}
