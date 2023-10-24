@@ -29,8 +29,12 @@ dependencies {
 
 tasks {
     asciidoctor {
-        dependsOn("test")
+        inputs.dir(file("build/generated-snippets"))
+        dependsOn(test)
         baseDirFollowsSourceDir()
+        forkOptions {
+            jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
+        }
         options(
             mapOf(
                 "doctype" to "book",
@@ -39,7 +43,7 @@ tasks {
         )
         attributes(
             mapOf(
-                "snippets" to file("$buildDir/generated-snippets"),
+                "snippets" to file("build/generated-snippets"),
                 "source-highlighter" to "coderay",
                 "toclevels" to "3",
                 "sectlinks" to "true",
@@ -47,17 +51,18 @@ tasks {
                 "nofooter" to "true"
             )
         )
-
     }
-
-    asciidoctorj {
-        fatalWarnings("include file not found")
-    }
-
     bootJar {
-        dependsOn("asciidoctor")
+        dependsOn(asciidoctor)
         from(file("build/docs/asciidoc/index.html")) {
             into("BOOT-INF/classes/static/docs")
         }
     }
+    test {
+        outputs.dir(file("build/generated-snippets"))
+    }
+}
+
+asciidoctorj {
+    fatalWarnings("include file not found")
 }
