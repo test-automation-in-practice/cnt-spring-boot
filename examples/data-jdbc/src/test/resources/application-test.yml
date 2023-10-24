@@ -5,10 +5,9 @@ spring:
 
 ---
 
+spring.config.activate.on-profile: "in-memory"
+
 spring:
-  config:
-    activate:
-      on-profile: "in-memory"
   datasource:
     url: "jdbc:h2:mem:database-${random.uuid};MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;"
     username: "sa"
@@ -16,7 +15,14 @@ spring:
 
 ---
 
+spring.config.activate.on-profile: "docker"
+
+# Default PostgreSQL container has a connection limit of 100.
+# We'll limit our pooling defaults to not go over that limit if we create multiple test contexts.
+
 spring:
-  config:
-    activate:
-      on-profile: "docker"
+  datasource:
+    hikari:
+      maximum-pool-size: 2 # tests will fail with max = 1, not quite sure why
+      minimum-idle: 0 # reduce minimum pool size to 0
+      idle-timeout: 1000 # drop idle connections after 1 second
