@@ -1,14 +1,10 @@
 package example.spring.modulith.employee
 
-import com.ninjasquad.springmockk.MockkBean
+import com.fasterxml.jackson.databind.JsonNode
 import example.spring.modulith.employee.internal.EmployeeRepresentation
 import example.spring.modulith.employee.internal.KnowledgeRepresentation
-import example.spring.modulith.skill.SkillAccessor
-import example.spring.modulith.skill.SkillDto
 import example.spring.modulith.utils.InitializeWithContainers
 import io.kotest.matchers.shouldBe
-import io.mockk.every
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.MethodOrderer.MethodName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -21,29 +17,20 @@ import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.WebTestClient.RequestHeadersSpec
+import java.lang.Thread.sleep
 import java.util.UUID
-import java.util.UUID.randomUUID
 
 @ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @InitializeWithContainers
-@MockkBean(SkillAccessor::class)
 @TestMethodOrder(MethodName::class)
-@ApplicationModuleTest(webEnvironment = RANDOM_PORT)
+@ApplicationModuleTest(extraIncludes = ["skill"], webEnvironment = RANDOM_PORT)
 class EmployeeModuleTests(
-    @Autowired private val webTestClient: WebTestClient,
-    @Autowired private val skillAccessor: SkillAccessor
+    @Autowired private val webTestClient: WebTestClient
 ) {
 
-    private val skillId = randomUUID()
-    private val skillDto = SkillDto(skillId, "Kotlin")
-
     private lateinit var employeeId: UUID
-
-    @BeforeEach
-    fun setupMocks() {
-        every { skillAccessor.getById(skillId) } returns skillDto
-    }
+    private lateinit var skillId: UUID
 
     @Test
     fun `01 create employee`() {
@@ -107,7 +94,19 @@ class EmployeeModuleTests(
     }
 
     @Test
-    fun `04 set employee knowledge`() {
+    fun `04-1 create skill`() {
+        val skill = executeAndReturn<JsonNode> {
+            post()
+                .uri("/api/skills")
+                .contentType(APPLICATION_JSON)
+                .bodyValue("""{ "label": "Kotlin" }""")
+        }
+
+        skillId = skill!!["id"].asText().let(UUID::fromString)
+    }
+
+    @Test
+    fun `04-2 set employee knowledge`() {
         val employee = executeAndReturn<EmployeeRepresentation> {
             put()
                 .uri("/api/employees/$employeeId/knowledge/$skillId")
@@ -121,7 +120,29 @@ class EmployeeModuleTests(
     }
 
     @Test
-    fun `05 delete employee knowledge`() {
+    fun `05-1 change skill`() {
+        execute {
+            put()
+                .uri("/api/skills/$skillId")
+                .contentType(APPLICATION_JSON)
+                .bodyValue("""{ "label": "Kotlin (JVM)" }""")
+        }
+    }
+
+    @Test
+    fun `05-2 get updated knowledge`() {
+        sleep(100) // update needs time to propagate
+        val employee = executeAndReturn<EmployeeRepresentation> {
+            get().uri("/api/employees/$employeeId")
+        }
+
+        with(employee!!) {
+            knowledge shouldBe listOf(KnowledgeRepresentation(skillId, "Kotlin (JVM)", 10))
+        }
+    }
+
+    @Test
+    fun `06 delete employee knowledge`() {
         val employee = executeAndReturn<EmployeeRepresentation> {
             delete().uri("/api/employees/$employeeId/knowledge/$skillId")
         }
@@ -132,7 +153,7 @@ class EmployeeModuleTests(
     }
 
     @Test
-    fun `06 delete employee`() {
+    fun `07 delete employee`() {
         val employee = executeAndReturn<EmployeeRepresentation> {
             delete().uri("/api/employees/$employeeId")
         }
@@ -141,7 +162,7 @@ class EmployeeModuleTests(
     }
 
     @Test
-    fun `07 get deleted employee`() {
+    fun `08 get deleted employee`() {
         val employee = executeAndReturn<EmployeeRepresentation> {
             get().uri("/api/employees/$employeeId")
         }
@@ -150,11 +171,14 @@ class EmployeeModuleTests(
     }
 
     private inline fun <reified T> executeAndReturn(block: WebTestClient.() -> RequestHeadersSpec<*>): T? =
-        block(webTestClient)
-            .exchange()
-            .expectStatus().is2xxSuccessful()
+        execute(block)
             .returnResult(T::class.java)
             .getResponseBody()
             .blockFirst()
+
+    private inline fun execute(block: WebTestClient.() -> RequestHeadersSpec<*>) =
+        block(webTestClient)
+            .exchange()
+            .expectStatus().is2xxSuccessful()
 
 }
