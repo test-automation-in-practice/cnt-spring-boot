@@ -14,6 +14,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.WebTestClient.RequestHeadersSpec
 import java.util.UUID
 
 @ActiveProfiles("test")
@@ -33,13 +34,7 @@ class SkillModuleTests(
             post()
                 .uri("/api/skills")
                 .contentType(APPLICATION_JSON)
-                .bodyValue(
-                    """
-                    {
-                      "label": "Kotlin"
-                    }
-                    """
-                )
+                .bodyValue("""{ "label": "Kotlin" }""")
         }
 
         with(skill!!) {
@@ -66,13 +61,7 @@ class SkillModuleTests(
             put()
                 .uri("/api/skills/$skillId")
                 .contentType(APPLICATION_JSON)
-                .bodyValue(
-                    """
-                    {
-                      "label": "Kotlin (JVM)"
-                    }
-                    """
-                )
+                .bodyValue("""{ "label": "Kotlin (JVM)" }""")
         }
 
         with(skill!!) {
@@ -98,7 +87,7 @@ class SkillModuleTests(
         skill shouldBe null
     }
 
-    private inline fun <reified T> executeAndReturn(block: WebTestClient.() -> WebTestClient.RequestHeadersSpec<*>): T? =
+    private inline fun <reified T> executeAndReturn(block: WebTestClient.() -> RequestHeadersSpec<*>): T? =
         block(webTestClient)
             .exchange()
             .expectStatus().is2xxSuccessful()

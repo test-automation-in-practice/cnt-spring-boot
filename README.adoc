@@ -22,6 +22,7 @@ All examples are based on _our_ experience in different actual small and large s
 ** link:examples/messaging-kafka[Messaging with Kafka]
 ** link:examples/messaging-rabbitmq[Messaging with RabbitMQ]
 ** link:examples/micrometer[Micrometer]
+** link:examples/modulith[Modulith]
 ** link:examples/resilience4j[Resilience4j]
 ** link:examples/scheduling[Scheduling]
 ** link:examples/security[Spring Security]
