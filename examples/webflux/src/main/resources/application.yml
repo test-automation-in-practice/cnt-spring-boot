@@ -1,7 +1,8 @@
 logbook:
-  include:
-    - /default-api/**
-    - /hateoas-api/**
+  predicate:
+    include:
+      - path: /default-api/**
+      - path: /hateoas-api/**
   format.style: http
   strategy: without-body
   obfuscate:
