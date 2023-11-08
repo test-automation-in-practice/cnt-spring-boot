@@ -10,7 +10,7 @@ _Employees_ can have _Knowledge_ which links them to the _Skills_.
 The dependency between the domains goes from _Employee_ to _Skill_:
 
 .generated module overview diagram
-image::build/docs/asciidoc/components.svg[]
+image::components.svg[]
 
 == Features of Spring Modulith
 
