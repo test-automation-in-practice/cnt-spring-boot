@@ -7,7 +7,7 @@ import example.spring.boot.basics.Examples.record_cleanCode
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsExactly
-import io.github.logrecorder.logback.junit5.RecordLoggers
+import io.github.logrecorder.junit5.RecordLoggers
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every

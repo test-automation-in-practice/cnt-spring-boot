@@ -4,7 +4,7 @@ import example.spring.boot.resilience.Tripwire
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsExactly
-import io.github.logrecorder.logback.junit5.RecordLoggers
+import io.github.logrecorder.junit5.RecordLoggers
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.kotlin.circuitbreaker.CircuitBreakerConfig
