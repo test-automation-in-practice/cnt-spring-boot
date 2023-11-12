@@ -16,7 +16,7 @@ import example.spring.boot.advanced.scoping.domain.TypeOfMedia.BOOK
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsExactly
-import io.github.logrecorder.logback.junit5.RecordLoggers
+import io.github.logrecorder.junit5.RecordLoggers
 import io.restassured.RestAssured
 import io.restassured.http.ContentType.JSON
 import io.restassured.module.kotlin.extensions.Given

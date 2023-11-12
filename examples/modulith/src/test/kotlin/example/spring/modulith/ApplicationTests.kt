@@ -4,7 +4,7 @@ import example.spring.modulith.ApplicationTests.TestEventListener
 import example.spring.modulith.utils.InitializeWithContainers
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.shouldContain
-import io.github.logrecorder.logback.junit5.RecordLoggers
+import io.github.logrecorder.junit5.RecordLoggers
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

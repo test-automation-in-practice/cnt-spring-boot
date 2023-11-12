@@ -26,7 +26,7 @@ allprojects {
         }
         the<DependencyManagementExtension>().apply {
             imports {
-                mavenBom("io.github.logrecorder:logrecorder-bom:2.7.0")
+                mavenBom("io.github.logrecorder:logrecorder-bom:2.9.0")
                 mavenBom("io.github.openfeign:feign-bom:13.0")
                 mavenBom("org.jetbrains.kotlin:kotlin-bom:1.8.22")
                 mavenBom("org.testcontainers:testcontainers-bom:1.19.1")

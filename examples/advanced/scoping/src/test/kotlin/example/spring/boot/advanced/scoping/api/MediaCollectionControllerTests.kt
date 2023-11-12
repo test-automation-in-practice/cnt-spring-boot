@@ -12,7 +12,7 @@ import example.spring.boot.advanced.scoping.domain.MediaCollection
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
 import io.github.logrecorder.assertion.containsOnly
-import io.github.logrecorder.logback.junit5.RecordLoggers
+import io.github.logrecorder.junit5.RecordLoggers
 import io.mockk.verify
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
