@@ -27,7 +27,7 @@ internal class DeclarativeWebClientConfiguration(
             .baseUrl(properties.baseUrl)
             .clientConnector(ReactorClientHttpConnector(httpClient(logbook)))
             .build()
-        val proxyFactory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(webClient)).build()
+        val proxyFactory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(webClient)).build()
         val client = proxyFactory.createClient(LibraryServiceClient::class.java)
 
         return DeclarativeWebClientBasedLibraryService(client)
