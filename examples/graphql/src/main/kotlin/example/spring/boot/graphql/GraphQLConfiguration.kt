@@ -3,9 +3,12 @@ package example.spring.boot.graphql
 import example.spring.boot.graphql.business.pageIndexRange
 import example.spring.boot.graphql.business.pageSizeRange
 import graphql.ErrorType
+import graphql.GraphQLContext
 import graphql.GraphQLError
 import graphql.GraphqlErrorBuilder
+import graphql.execution.CoercedVariables
 import graphql.language.IntValue
+import graphql.language.Value
 import graphql.schema.Coercing
 import graphql.schema.CoercingParseLiteralException
 import graphql.schema.CoercingParseValueException
@@ -20,6 +23,7 @@ import org.springframework.graphql.execution.DataFetcherExceptionResolver
 import org.springframework.graphql.execution.DataFetcherExceptionResolverAdapter
 import org.springframework.graphql.execution.RuntimeWiringConfigurer
 import org.springframework.validation.BindException
+import java.util.Locale
 
 @Configuration
 class GraphQLConfiguration : RuntimeWiringConfigurer {
@@ -38,17 +42,22 @@ class GraphQLConfiguration : RuntimeWiringConfigurer {
         GraphQLScalarType.newScalar().name(name).coercing(coercing).build()
 
     private class IntRangeCoercing(private val range: IntRange) : Coercing<Int, Int> {
-        override fun serialize(dataFetcherResult: Any): Int {
+        override fun serialize(dataFetcherResult: Any, graphQLContext: GraphQLContext, locale: Locale): Int {
             if (dataFetcherResult is Int) return dataFetcherResult
             throw CoercingSerializeException("Unable to serialize [$dataFetcherResult] as an Int")
         }
 
-        override fun parseValue(input: Any): Int {
+        override fun parseValue(input: Any, graphQLContext: GraphQLContext, locale: Locale): Int {
             if (input is Number && input.toInt() in range) return input.toInt()
             throw CoercingParseValueException("Value [$input] is not in range: $range")
         }
 
-        override fun parseLiteral(input: Any): Int {
+        override fun parseLiteral(
+            input: Value<*>,
+            variables: CoercedVariables,
+            graphQLContext: GraphQLContext,
+            locale: Locale
+        ): Int {
             if (input is IntValue && input.value.toInt() in range) return input.value.toInt()
             throw CoercingParseLiteralException("Value $input is not in range: $range")
         }
