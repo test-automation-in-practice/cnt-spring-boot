@@ -17,18 +17,18 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Import
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.util.IdGenerator
 import java.util.UUID.randomUUID
 
-internal class BookRecordRepositoryTests {
+internal class ClientBasedBookRecordRepositoryTests {
 
     /**
      * Fastest boostrap, but only simulates PostgreSQL behaviour.
      */
     @Nested
-    inner class AsUnitTest : BookRecordRepositoryContract() {
+    inner class AsUnitTest : ClientBasedBookRecordRepositoryContract() {
 
         val dataSource = JdbcDataSource()
             .apply { setUrl("jdbc:h2:mem:${randomUUID()};MODE=PostgreSQL;DB_CLOSE_DELAY=-1") }
@@ -41,10 +41,8 @@ internal class BookRecordRepositoryTests {
                     .migrate()
             }
 
-        val jdbcTempalte = NamedParameterJdbcTemplate(dataSource)
-
         override val idGenerator: IdGenerator = mockk()
-        override val cut = BookRecordRepository(jdbcTempalte, idGenerator)
+        override val cut = ClientBasedBookRecordRepository(JdbcClient.create(dataSource), idGenerator)
 
     }
 
@@ -55,11 +53,11 @@ internal class BookRecordRepositoryTests {
     @JdbcTest
     @ActiveProfiles("test", "in-memory")
     @MockkBean(IdGenerator::class)
-    @Import(BookRecordRepository::class)
+    @Import(ClientBasedBookRecordRepository::class)
     inner class AsTechnologyIntegrationTestWithH2InMemoryDatabase(
         @Autowired override val idGenerator: IdGenerator,
-        @Autowired override val cut: BookRecordRepository
-    ) : BookRecordRepositoryContract()
+        @Autowired override val cut: ClientBasedBookRecordRepository
+    ) : ClientBasedBookRecordRepositoryContract()
 
     /**
      * Takes longer to boostrap, but also provides real PostgreSQL behaviour.
@@ -71,17 +69,17 @@ internal class BookRecordRepositoryTests {
     @JdbcTest
     @ActiveProfiles("test", "docker")
     @MockkBean(IdGenerator::class)
-    @Import(BookRecordRepository::class)
+    @Import(ClientBasedBookRecordRepository::class)
     @InitializeWithContainerizedPostgreSQL
     inner class AsTechnologyIntegrationTestWithDockerizedDatabase(
         @Autowired override val idGenerator: IdGenerator,
-        @Autowired override val cut: BookRecordRepository
-    ) : BookRecordRepositoryContract()
+        @Autowired override val cut: ClientBasedBookRecordRepository
+    ) : ClientBasedBookRecordRepositoryContract()
 
-    abstract class BookRecordRepositoryContract {
+    abstract class ClientBasedBookRecordRepositoryContract {
 
         protected abstract val idGenerator: IdGenerator
-        protected abstract val cut: BookRecordRepository
+        protected abstract val cut: ClientBasedBookRecordRepository
 
         val cleanCode = Book("Clean Code", "9780132350884")
         val cleanArchitecture = Book("Clean Architecture", "9780134494166")

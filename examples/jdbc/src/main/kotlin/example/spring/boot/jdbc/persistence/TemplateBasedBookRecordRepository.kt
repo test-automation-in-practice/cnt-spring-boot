@@ -12,7 +12,7 @@ import org.springframework.util.IdGenerator
 import java.util.UUID
 
 @Repository
-class BookRecordRepository(
+class TemplateBasedBookRecordRepository(
     private val jdbcTemplate: NamedParameterJdbcTemplate,
     private val idGenerator: IdGenerator
 ) {
