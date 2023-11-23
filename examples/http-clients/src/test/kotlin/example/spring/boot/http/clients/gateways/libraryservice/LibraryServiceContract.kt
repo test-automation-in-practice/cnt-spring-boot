@@ -10,6 +10,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -21,6 +22,7 @@ import org.slf4j.event.Level.TRACE
 import org.springframework.http.HttpHeaders.ACCEPT
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.TEXT_PLAIN_VALUE
 
 /**
  * When testing HTTP interaction, in this case calling another service's API, the tests should be written as
@@ -101,9 +103,24 @@ internal abstract class LibraryServiceContract(
     }
 
     @ParameterizedTest
-    @ValueSource(ints = [204, 400, 401, 403, 404, 500, 502, 504])
+    @ValueSource(ints = [400, 401, 403, 404, 500, 502, 504])
     fun `throws exception for failed responses`(status: Int) {
-        stub { post("/api/books").willReturn(aResponse().withStatus(status).withBody("")) }
+        stub { post("/api/books").willReturn(aResponse().withStatus(status)) }
+
+        val book = Book(
+            title = "Clean Architecture",
+            isbn = "9780134494166"
+        )
+        assertThrows<LibraryServiceException> { cut.addBook(book) }
+    }
+
+    @Test
+    fun `throws exception for no-content response`() {
+        stub {
+            post("/api/books").willReturn(
+                aResponse().withHeader(CONTENT_TYPE, TEXT_PLAIN_VALUE).withStatus(204)
+            )
+        }
 
         val book = Book(
             title = "Clean Architecture",
