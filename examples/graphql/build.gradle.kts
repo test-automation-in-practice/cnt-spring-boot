@@ -36,7 +36,7 @@ tasks {
         )
         attributes(
             mapOf(
-                "snippets" to file("$buildDir/generated-snippets"),
+                "snippets" to file("build/generated-snippets"),
                 "source-highlighter" to "coderay",
                 "toclevels" to "3",
                 "sectlinks" to "true",
