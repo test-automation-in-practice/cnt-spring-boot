@@ -68,6 +68,10 @@ class DownstreamServiceWithProgrammaticBulkheadTests {
         assertThat(results).containsOnly(42, null)
     }
 
+    // Default CompletableFuture.supplyAsync(..) without an executor relies on the default ForkJoinPool.
+    // That pool scales according to the available CPU cores.
+    // This test would not run on our CI environment because we only have 1 available core.
+    // Under those conditions, the bulkhead threshold would never be reached.
     private fun <T> supplyAsyncWithExecutor(block: () -> T): CompletableFuture<T> =
         supplyAsync(block, executor)
 }
