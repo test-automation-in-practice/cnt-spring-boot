@@ -7,14 +7,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_METHOD
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletableFuture.supplyAsync
+import java.util.concurrent.Executors
 
 @TestInstance(PER_METHOD) // this way no reset mechanic is needed
 class DownstreamServiceWithProgrammaticBulkheadTests {
 
-    val cut = DownstreamServiceWithProgrammaticBulkhead(
+    private val executor = Executors.newFixedThreadPool(10)
+    private val cut = DownstreamServiceWithProgrammaticBulkhead(
         bulkhead = Bulkhead.of(
             /* name = */ "downstream-service",
             /* config = */ BulkheadConfig {
@@ -24,7 +26,7 @@ class DownstreamServiceWithProgrammaticBulkheadTests {
         )
     )
 
-    val isbn = "978-1804941836"
+    private val isbn = "978-1804941836"
 
     @Test
     fun `sequential calls always return the result`() {
@@ -36,21 +38,16 @@ class DownstreamServiceWithProgrammaticBulkheadTests {
     @Test
     fun `parallel calls return the result as long as they don't exceed the threshold`() {
         val results = (1..5)
-            .map { CompletableFuture.supplyAsync { cut.getNumberOfPages(isbn) } }
+            .map { supplyAsyncWithExecutor { cut.getNumberOfPages(isbn) } }
             .map(CompletableFuture<Int?>::join)
         assertThat(results).containsOnly(42)
     }
 
     @Test
-    @DisabledIfEnvironmentVariable(
-        named = "CI",
-        matches = "true",
-        disabledReason = "Does not work in CI build for currently unknown reason. Bulkhead is just not triggered."
-    )
     fun `without fallback an exception is thrown when the threshold is reached`() {
         val results = (1..10)
             .map {
-                CompletableFuture.supplyAsync { cut.getNumberOfPages(isbn) }
+                supplyAsyncWithExecutor { cut.getNumberOfPages(isbn) }
                     .exceptionally { ex ->
                         when (ex.cause) {
                             is BulkheadFullException -> -1
@@ -64,16 +61,13 @@ class DownstreamServiceWithProgrammaticBulkheadTests {
     }
 
     @Test
-    @DisabledIfEnvironmentVariable(
-        named = "CI",
-        matches = "true",
-        disabledReason = "Does not work in CI build for currently unknown reason. Bulkhead is just not triggered."
-    )
     fun `with fallback when the threshold is reached returns the fallback`() {
         val results = (1..10)
-            .map { CompletableFuture.supplyAsync { cut.getNumberOfPagesWithFallback(isbn) } }
+            .map { supplyAsyncWithExecutor { cut.getNumberOfPagesWithFallback(isbn) } }
             .map(CompletableFuture<Int?>::join)
         assertThat(results).containsOnly(42, null)
     }
 
+    private fun <T> supplyAsyncWithExecutor(block: () -> T): CompletableFuture<T> =
+        supplyAsync(block, executor)
 }
