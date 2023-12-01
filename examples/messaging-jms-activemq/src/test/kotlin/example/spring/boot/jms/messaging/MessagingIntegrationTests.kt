@@ -1,30 +1,30 @@
 package example.spring.boot.jms.messaging
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.ninjasquad.springmockk.MockkBean
-import example.spring.boot.jms.activemq.InitializeWithEmbeddedActiveMq
+import com.ninjasquad.springmockk.SpykBean
 import example.spring.boot.jms.business.Examples.cleanCode
 import example.spring.boot.jms.business.createdEvent
 import example.spring.boot.jms.business.deletedEvent
 import example.spring.boot.jms.events.EventHandler
 import example.spring.boot.jms.events.PublishEventFunction
-import example.spring.boot.jms.replacements.JmsTemplate
+import example.spring.boot.jms.utils.InitializeWithContainerizedActiveMq
 import io.mockk.every
 import io.mockk.verify
+import jakarta.annotation.PostConstruct
+import jakarta.jms.ConnectionFactory
+import org.apache.activemq.ActiveMQConnectionFactory
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
+import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.context.ActiveProfiles
+import org.springframework.jms.connection.CachingConnectionFactory
+import org.springframework.jms.core.JmsTemplate
 
-@ActiveProfiles("test")
-@InitializeWithEmbeddedActiveMq
-@MockkBean(EventHandler::class, DeadLetterHandler::class, relaxed = true)
+@InitializeWithContainerizedActiveMq
+@SpykBean(EventHandler::class, DeadLetterHandler::class)
 @SpringBootTest(classes = [MessagingIntegrationTestsConfiguration::class])
 internal class MessagingIntegrationTests(
-    @Autowired val objectMapper: ObjectMapper,
     @Autowired val eventHandler: EventHandler,
     @Autowired val deadLetterHandler: DeadLetterHandler,
     @Autowired val publishEvent: PublishEventFunction,
@@ -51,13 +51,13 @@ internal class MessagingIntegrationTests(
         every { eventHandler.handleDeletedEvent(deletedEvent) } throws RuntimeException("oops")
         publishEvent(deletedEvent)
         verify(timeout = 1_000) { eventHandler.handleDeletedEvent(deletedEvent) }
-        verify(timeout = 1_000) { deadLetterHandler.onMessage(any()) }
+        verify(timeout = 1_000) { deadLetterHandler.handleDeadLetter(any()) }
     }
 
     @Test
     fun `dead letter queue is used in case a message cannot be read`() {
         manuallySendEventMessage(DummyEvent("bar"))
-        verify(timeout = 1_000) { deadLetterHandler.onMessage(any()) }
+        verify(timeout = 1_000) { deadLetterHandler.handleDeadLetter(any()) }
     }
 
     fun manuallySendEventMessage(event: Any) =
@@ -67,5 +67,17 @@ internal class MessagingIntegrationTests(
 }
 
 @ComponentScan
-@ImportAutoConfiguration(JacksonAutoConfiguration::class)
-private class MessagingIntegrationTestsConfiguration
+@ImportAutoConfiguration(ActiveMQAutoConfiguration::class)
+private class MessagingIntegrationTestsConfiguration(
+    private val connectionFactory: ConnectionFactory
+) {
+
+    @PostConstruct
+    fun init() {
+        // reduce redelivery to 0 to trigger dead letter delivery
+        val cf = connectionFactory as CachingConnectionFactory
+        val tcf = cf.targetConnectionFactory as ActiveMQConnectionFactory
+        tcf.redeliveryPolicy.maximumRedeliveries = 0
+    }
+
+}

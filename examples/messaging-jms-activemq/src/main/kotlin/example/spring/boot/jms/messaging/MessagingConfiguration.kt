@@ -1,71 +1,46 @@
 package example.spring.boot.jms.messaging
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import example.spring.boot.jms.activemq.ActiveMqConfiguration
-import example.spring.boot.jms.business.BookCreatedEvent
-import example.spring.boot.jms.business.BookDeletedEvent
-import example.spring.boot.jms.events.EventHandler
-import example.spring.boot.jms.replacements.JmsTemplate
-import example.spring.boot.jms.replacements.JsonMessageListener
-import example.spring.boot.jms.replacements.MessageListenerContainer
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jakarta.jms.ConnectionFactory
+import jakarta.jms.Session
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
-import javax.jms.ConnectionFactory
-import javax.jms.Session.AUTO_ACKNOWLEDGE
+import org.springframework.jms.annotation.EnableJms
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory
+import org.springframework.jms.core.JmsTemplate
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter
+import org.springframework.jms.support.converter.MessageConverter
 
+@EnableJms
 @Configuration
-@Import(ActiveMqConfiguration::class)
 class MessagingConfiguration {
 
     @Bean
     fun jmsTemplate(
         connectionFactory: ConnectionFactory,
-        objectMapper: ObjectMapper
-    ) = JmsTemplate(connectionFactory, objectMapper)
+        messageConverter: MessageConverter
+    ) = JmsTemplate()
+        .apply {
+            setMessageConverter(messageConverter)
+            setConnectionFactory(connectionFactory)
+        }
 
     @Bean
-    fun bookCreatedEventMessageConsumer(
+    fun jmsListenerContainerFactory(
         connectionFactory: ConnectionFactory,
-        objectMapper: ObjectMapper,
-        eventHandler: EventHandler
-    ) = MessageListenerContainer(
-        connectionFactory = connectionFactory,
-        messageListener = JsonMessageListener(
-            objectMapper = objectMapper,
-            payloadType = BookCreatedEvent::class,
-            handler = eventHandler::handleCreatedEvent
-        ),
-        queueName = "queues.events.book-created",
-        sessionAcknowledgeMode = AUTO_ACKNOWLEDGE
-    )
+        messageConverter: MessageConverter
+    ) = DefaultJmsListenerContainerFactory()
+        .apply {
+            setMessageConverter(messageConverter)
+            setConnectionFactory(connectionFactory)
+            setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE)
+        }
 
     @Bean
-    fun bookDeletedEventMessageConsumer(
-        connectionFactory: ConnectionFactory,
-        objectMapper: ObjectMapper,
-        handler: EventHandler
-    ) = MessageListenerContainer(
-        connectionFactory = connectionFactory,
-        messageListener = JsonMessageListener(
-            objectMapper = objectMapper,
-            payloadType = BookDeletedEvent::class,
-            handler = handler::handleDeletedEvent
-        ),
-        queueName = "queues.events.book-deleted",
-        sessionAcknowledgeMode = AUTO_ACKNOWLEDGE
-    )
-
-    @Bean
-    fun deadLetterMessageConsumer(
-        connectionFactory: ConnectionFactory,
-        objectMapper: ObjectMapper,
-        handler: DeadLetterHandler
-    ) = MessageListenerContainer(
-        connectionFactory = connectionFactory,
-        messageListener = handler,
-        queueName = "ActiveMQ.DLQ",
-        sessionAcknowledgeMode = AUTO_ACKNOWLEDGE
-    )
+    fun messageConverter(): MessageConverter =
+        MappingJackson2MessageConverter().apply {
+            setTypeIdPropertyName("_type")
+            setObjectMapper(jacksonObjectMapper())
+        }
 
 }

@@ -1,7 +1,0 @@
-activemq:
-  broker:
-    url: tcp://localhost:61616
-    username: null
-    password: null
-  redelivery:
-    maximum-redeliveries: 0
