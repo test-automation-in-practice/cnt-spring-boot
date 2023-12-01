@@ -1,7 +1,7 @@
 package example.spring.boot.rabbitmq.messaging
 
 import com.ninjasquad.springmockk.SpykBean
-import example.spring.boot.rabbitmq.business.Examples
+import example.spring.boot.rabbitmq.business.Examples.cleanCode
 import example.spring.boot.rabbitmq.business.createdEvent
 import example.spring.boot.rabbitmq.business.deletedEvent
 import example.spring.boot.rabbitmq.events.EventHandler
@@ -27,8 +27,8 @@ internal class MessagingIntegrationTests(
     @Autowired val rabbitTemplate: RabbitTemplate
 ) {
 
-    val createdEvent = Examples.cleanCode.createdEvent()
-    val deletedEvent = Examples.cleanCode.deletedEvent()
+    val createdEvent = cleanCode.createdEvent()
+    val deletedEvent = cleanCode.deletedEvent()
 
     @Test
     fun `book created events are dispatched and received`() {
@@ -64,5 +64,4 @@ internal class MessagingIntegrationTests(
 
 @ComponentScan
 @ImportAutoConfiguration(RabbitAutoConfiguration::class)
-private class MessagingIntegrationTestsConfiguration {
-}
+private class MessagingIntegrationTestsConfiguration
