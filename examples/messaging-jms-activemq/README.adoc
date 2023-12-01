@@ -1,8 +1,8 @@
 = Spring Boot: Messaging with ActiveMQ (JMS)
 
-This module implements asynchronous communication through messaging using JMS via an ActiveMQ broker, both on the sending and the receiving end, using custom beans because there is no official support for ActiveMQ in Spring Boot 3.x.
+This module implements asynchronous communication through messaging using JMS via a ActiveMQ (classic) broker, both on the sending and the receiving end, using Spring's JMS integration:
 
-- custom `JmsTemplate` like class to send messages
-- custom `MessageListenerContainer` to receive messages
+- `JmsTemplate` to send messages
+- `@JmsListener` to receive messages
 - Error handling and dead-letter queues
-- Testing with an embedded ActiveMQ JMS server
+- Testing with a containerized broker

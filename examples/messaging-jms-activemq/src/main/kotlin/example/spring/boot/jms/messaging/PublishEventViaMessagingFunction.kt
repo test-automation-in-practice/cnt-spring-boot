@@ -4,7 +4,7 @@ import example.spring.boot.jms.business.BookCreatedEvent
 import example.spring.boot.jms.business.BookDeletedEvent
 import example.spring.boot.jms.business.BookEvent
 import example.spring.boot.jms.events.PublishEventFunction
-import example.spring.boot.jms.replacements.JmsTemplate
+import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
 
 @Component

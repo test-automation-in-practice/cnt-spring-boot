@@ -1,16 +1,17 @@
 package example.spring.boot.jms.messaging
 
+import jakarta.jms.Message
 import org.slf4j.LoggerFactory.getLogger
+import org.springframework.jms.annotation.JmsListener
 import org.springframework.stereotype.Component
-import javax.jms.Message
-import javax.jms.MessageListener
 
 @Component
-class DeadLetterHandler : MessageListener {
+class DeadLetterHandler {
 
     private val log = getLogger(javaClass)
 
-    override fun onMessage(message: Message) {
+    @JmsListener(destination = "ActiveMQ.DLQ") // can only be configured on the broker - using default
+    fun handleDeadLetter(message: Message) {
         log.error("Dead letter message arrived: $message")
     }
 
