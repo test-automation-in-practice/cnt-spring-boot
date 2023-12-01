@@ -1,8 +1,8 @@
 = Spring Boot: Messaging with Artemis (JMS)
 
-This module implements asynchronous communication through messaging using JMS via an Artemis broker, both on the sending and the receiving end, using Spring's JMS integration:
+This module implements asynchronous communication through messaging using JMS via an ActiveMQ (Artemis) broker, both on the sending and the receiving end, using Spring's JMS integration:
 
 - `JmsTemplate` to send messages
 - `@JmsListener` to receive messages
 - Error handling and dead-letter queues
-- Testing with an embedded Artemis JMS server
+- Testing with a containerized broker

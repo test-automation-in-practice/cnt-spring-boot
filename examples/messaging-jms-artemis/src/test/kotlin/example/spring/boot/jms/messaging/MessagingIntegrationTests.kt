@@ -6,6 +6,7 @@ import example.spring.boot.jms.business.createdEvent
 import example.spring.boot.jms.business.deletedEvent
 import example.spring.boot.jms.events.EventHandler
 import example.spring.boot.jms.events.PublishEventFunction
+import example.spring.boot.jms.utils.InitializeWithContainerizedArtemis
 import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.jms.core.JmsTemplate
 
+@InitializeWithContainerizedArtemis
 @SpykBean(EventHandler::class, DeadLetterHandler::class)
 @SpringBootTest(classes = [MessagingIntegrationTestsConfiguration::class])
 internal class MessagingIntegrationTests(

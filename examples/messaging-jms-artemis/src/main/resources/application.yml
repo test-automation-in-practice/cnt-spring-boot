@@ -1,0 +1,3 @@
+spring:
+  artemis:
+    mode: native
