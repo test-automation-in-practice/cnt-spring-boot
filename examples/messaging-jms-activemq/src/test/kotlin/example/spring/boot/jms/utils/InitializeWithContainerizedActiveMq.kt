@@ -34,7 +34,7 @@ class ActiveMqInitializer : ApplicationContextInitializer<ConfigurableApplicatio
     //  - Find some way to drop all queues of the broker programmatically after each test (class).
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        val container: GenericContainer<*> = GenericContainer("apache/activemq-classic:5.18.2")
+        val container: GenericContainer<*> = GenericContainer("apache/activemq-classic:5.18.3")
             .withEnv("ACTIVEMQ_CONNECTION_USER", "tester")
             .withEnv("ACTIVEMQ_CONNECTION_PASSWORD", "test-password")
             .withExposedPorts(61616)

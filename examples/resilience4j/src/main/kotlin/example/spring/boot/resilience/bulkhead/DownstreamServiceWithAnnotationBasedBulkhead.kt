@@ -21,7 +21,8 @@ class DownstreamServiceWithAnnotationBasedBulkhead {
         return 42
     }
 
-    private fun getNumberOfPagesFallback(isbn: String, ex: Throwable): Int? {
+    // Needs to be public because otherwise a CGLIB proxy is used where the `log` is null
+    fun getNumberOfPagesFallback(isbn: String, ex: Throwable): Int? {
         log.warn("retrieval of number of pages for ISBN [$isbn] failed - falling back to null", ex)
         return null
     }
