@@ -1,53 +1,63 @@
 package example.spring.boot.rabbitmq.utils
 
 import org.springframework.context.ApplicationContextInitializer
-import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.event.AfterTestClassEvent
 import org.springframework.test.context.support.TestPropertySourceUtils.addInlinedPropertiesToEnvironment
 import org.testcontainers.containers.RabbitMQContainer
+import java.net.Authenticator
+import java.net.PasswordAuthentication
+import java.net.URI.create
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpRequest.BodyPublishers.noBody
+import java.net.http.HttpResponse.BodyHandlers.discarding
+import java.util.UUID.randomUUID
 import kotlin.annotation.AnnotationTarget.CLASS
 
 @Retention
 @Target(CLASS)
-@DirtiesContext(classMode = AFTER_CLASS)
 @ContextConfiguration(initializers = [RabbitMQInitializer::class])
 annotation class InitializeWithContainerizedRabbitMQ
 
 class RabbitMQInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    // Unlike other initializers of this kind (e.g. our PostgreSQL and MongoDB examples) RabbitMQ does not have
-    // anything like separated databases, namespaces or other easy to access / configure mechanisms for isolating
-    // test (classes) from each other.
-
-    // That is why we are using a new container for each test application context.
-
-    // To safe on resources the test application contexts should be stopped after each test class in order for the
-    // running container to be stopped as soon as possible. (see @DirtiesContext for how to do that)
-
-    // Alternatives to this approach might be:
-    //  - Use a single container like in the other examples and make sure that each test uses new random topics and
-    //    queues to manually isolate the test from each other.
-    //  - Find some way to drop all queues and topics of the broker programmatically after each test (class).
+    companion object {
+        private val container: RabbitMQContainer by lazy {
+            RabbitMQContainer("rabbitmq:3.13-management")
+                .apply { start() }
+        }
+        private val httpClient: HttpClient by lazy {
+            HttpClient.newBuilder()
+                .authenticator(BasicAuthenticator(container.adminUsername, container.adminPassword))
+                .build()
+        }
+    }
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        val container: RabbitMQContainer = RabbitMQContainer("rabbitmq:3.11")
-            .apply { start() }
+        val virtualHost = createVirtualHost()
 
-        val listener = StopContainerListener(container)
-        applicationContext.addApplicationListener(listener)
-
-        val hostProperty = "spring.rabbitmq.host=${container.host}"
-        val portProperty = "spring.rabbitmq.port=${container.amqpPort}"
-
-        addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty)
+        addInlinedPropertiesToEnvironment(
+            applicationContext,
+            "spring.rabbitmq.host=${container.host}",
+            "spring.rabbitmq.port=${container.amqpPort}",
+            "spring.rabbitmq.username=${container.adminUsername}",
+            "spring.rabbitmq.password=${container.adminPassword}",
+            "spring.rabbitmq.virtual-host=$virtualHost",
+        )
     }
 
-    class StopContainerListener(private val container: RabbitMQContainer) : ApplicationListener<AfterTestClassEvent> {
-        override fun onApplicationEvent(event: AfterTestClassEvent) = container.stop()
+    private fun createVirtualHost(): String {
+        val virtualHost = "${randomUUID()}"
+        val request = HttpRequest.newBuilder()
+            .PUT(noBody())
+            .uri(create("http://${container.host}:${container.httpPort}/api/vhosts/$virtualHost"))
+            .build()
+        httpClient.send(request, discarding())
+        return virtualHost
     }
 
+    private class BasicAuthenticator(val username: String, val password: String) : Authenticator() {
+        override fun getPasswordAuthentication() = PasswordAuthentication(username, password.toCharArray())
+    }
 }
