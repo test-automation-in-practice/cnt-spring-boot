@@ -100,5 +100,4 @@ internal class BookRepositoryTest {
         private fun BookEntity.changeTitle(): BookEntity =
             apply { book = book.copy(title = Title("Change Title #${nextInt(1_000)}")) }
     }
-
 }
