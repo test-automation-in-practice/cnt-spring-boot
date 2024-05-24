@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Import
 import org.springframework.kafka.core.KafkaTemplate
 import java.lang.Thread.sleep
 
@@ -76,5 +77,6 @@ class MessagingIntegrationTests(
 }
 
 @ComponentScan
+@Import(EventHandler::class)
 @ImportAutoConfiguration(KafkaAutoConfiguration::class)
 private class MessagingIntegrationTestsConfiguration
