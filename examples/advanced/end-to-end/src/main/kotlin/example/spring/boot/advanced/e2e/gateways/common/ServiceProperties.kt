@@ -1,5 +1,6 @@
 package example.spring.boot.advanced.e2e.gateways.common
 
+import java.net.URI
 import java.net.URL
 
 interface ServiceProperties {
@@ -9,6 +10,6 @@ interface ServiceProperties {
 
     fun url(path: String): URL {
         val absolutePath = if (path.startsWith('/')) path else "/$path"
-        return URL("$protocol://$host:$port$absolutePath")
+        return URI.create("$protocol://$host:$port$absolutePath").toURL()
     }
 }

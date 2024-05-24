@@ -2,7 +2,7 @@ package example.spring.modulith.employee.internal
 
 import example.spring.modulith.skill.SkillDataUpdated
 import example.spring.modulith.skill.SkillDeleted
-import org.springframework.modulith.ApplicationModuleListener
+import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 
 @Component

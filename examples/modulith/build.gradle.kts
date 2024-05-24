@@ -1,5 +1,3 @@
-import java.net.URI
-
 plugins {
     id("org.springframework.boot")
     id("org.asciidoctor.jvm.convert")
@@ -11,15 +9,11 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven {
-        name = "Spring Milestones"
-        url = URI("https://repo.spring.io/milestone")
-    }
 }
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.modulith:spring-modulith-bom:1.1.0-M1")
+        mavenBom("org.springframework.modulith:spring-modulith-bom:1.1.5")
     }
 }
 

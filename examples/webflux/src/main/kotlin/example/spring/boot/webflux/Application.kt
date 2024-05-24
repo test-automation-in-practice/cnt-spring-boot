@@ -16,7 +16,7 @@ class Application {
     @Bean
     @Profile("json-logging")
     fun jsonLoggingSinkForLogbook(formatter: HttpLogFormatter) =
-        LogstashLogbackSink(formatter, "http")
+        LogstashLogbackSink(formatter)
 }
 
 fun main(args: Array<String>) {
