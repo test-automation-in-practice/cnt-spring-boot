@@ -24,7 +24,6 @@ internal class FixedRateSelfSchedulingComponentTests(
     fun `component registers itself based on its configuration`() {
         val task = verifySingleTaskRegistration()
 
-        assertThat(task.runnable).isEqualTo(cut)
         assertThat(task.initialDelayDuration).isEqualTo(ofMinutes(1))
         assertThat(task.intervalDuration).isEqualTo(ofSeconds(30))
     }

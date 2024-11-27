@@ -8,19 +8,20 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.3.2" apply false
+    id("org.springframework.boot") version "3.4.0" apply false
     id("io.spring.dependency-management") version "1.1.6" apply false
     id("org.asciidoctor.jvm.convert") version "3.3.2" apply false
 
-    kotlin("jvm") version "2.0.0" apply false
-    kotlin("plugin.spring") version "2.0.0" apply false
-    kotlin("plugin.jpa") version "2.0.0" apply false
-    kotlin("plugin.noarg") version "2.0.0" apply false
+    kotlin("jvm") version "2.0.21" apply false
+    kotlin("plugin.spring") version "2.0.21" apply false
+    kotlin("plugin.jpa") version "2.0.21" apply false
+    kotlin("plugin.noarg") version "2.0.21" apply false
 }
 
 allprojects {
     repositories {
         mavenCentral()
+        maven { url = uri("https://repo.spring.io/milestone") }
     }
 
     if (project.childProjects.isEmpty()) {
@@ -31,18 +32,19 @@ allprojects {
             imports {
                 mavenBom("io.github.logrecorder:logrecorder-bom:2.10.0")
                 mavenBom("io.github.openfeign:feign-bom:13.3")
-                mavenBom("org.jetbrains.kotlin:kotlin-bom:2.0.0")
+                mavenBom("org.jetbrains.kotlin:kotlin-bom:2.0.21")
                 mavenBom("org.testcontainers:testcontainers-bom:1.20.1")
                 mavenBom("org.zalando:logbook-bom:3.9.0")
 
-                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.3")
+                mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.0-RC1") // TODO update
                 mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
             }
             dependencies {
                 dependency("com.github.dasniko:testcontainers-keycloak:2.6.0")
                 dependency("com.ninja-squad:springmockk:4.0.2")
                 dependency("io.kotest:kotest-assertions-core:5.9.1")
-                dependency("io.mockk:mockk-jvm:1.13.12")
+                dependency("io.mockk:mockk-jvm:1.13.13")
+                dependency("com.squareup.okhttp3:okhttp:4.12.0")
             }
         }
     }

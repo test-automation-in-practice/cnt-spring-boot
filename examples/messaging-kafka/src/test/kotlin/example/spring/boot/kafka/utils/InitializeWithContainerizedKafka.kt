@@ -8,7 +8,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.event.AfterTestClassEvent
 import org.springframework.test.context.support.TestPropertySourceUtils.addInlinedPropertiesToEnvironment
-import org.testcontainers.containers.KafkaContainer
+import org.testcontainers.kafka.ConfluentKafkaContainer
 import org.testcontainers.utility.DockerImageName.parse
 import kotlin.annotation.AnnotationTarget.CLASS
 
@@ -35,7 +35,7 @@ class KafkaInitializer : ApplicationContextInitializer<ConfigurableApplicationCo
     //  - Find some way to drop all consumers, topics etc. of the broker programmatically after each test (class).
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        val container: KafkaContainer = KafkaContainer(parse("confluentinc/cp-kafka:7.4.0"))
+        val container = ConfluentKafkaContainer(parse("confluentinc/cp-kafka:7.4.0"))
             .apply { start() }
 
         val listener = StopContainerListener(container)
@@ -45,7 +45,9 @@ class KafkaInitializer : ApplicationContextInitializer<ConfigurableApplicationCo
         addInlinedPropertiesToEnvironment(applicationContext, serversProperty)
     }
 
-    class StopContainerListener(private val container: KafkaContainer) : ApplicationListener<AfterTestClassEvent> {
+    class StopContainerListener(
+        private val container: ConfluentKafkaContainer
+    ) : ApplicationListener<AfterTestClassEvent> {
         override fun onApplicationEvent(event: AfterTestClassEvent) = container.stop()
     }
 

@@ -26,7 +26,7 @@ class SecurityConfiguration(
             oauth2ResourceServer {
                 opaqueToken { introspector = tokenIntrospector }
             }
-            authorizeRequests {
+            authorizeHttpRequests {
                 authorize("/api/**", hasAuthority(SCOPE_API))
                 authorize("/error", permitAll)
                 authorize("/**", denyAll)

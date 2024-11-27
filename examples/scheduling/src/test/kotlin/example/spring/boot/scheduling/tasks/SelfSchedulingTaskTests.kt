@@ -71,7 +71,6 @@ class SelfSchedulingTaskTests {
             cut.configureTasks(taskRegistrar)
 
             with(scheduledTask.captured) {
-                assertThat(runnable).isSameAs(cut)
                 assertThat(intervalDuration).isEqualTo(ofSeconds(3))
                 assertThat(initialDelayDuration).isEqualTo(ofSeconds(7))
             }

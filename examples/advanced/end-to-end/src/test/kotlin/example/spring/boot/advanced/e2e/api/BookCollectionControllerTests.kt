@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders.LOCATION
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.test.json.JsonCompareMode.STRICT
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import kotlin.Result.Companion.failure
@@ -49,7 +50,7 @@ internal class BookCollectionControllerTests(
                           "title": "We Are Legion (We Are Bob)"
                         }
                         """,
-                    strict = true
+                    compareMode = STRICT
                 )
             }
         }

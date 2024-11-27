@@ -10,7 +10,7 @@ import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.UnknownContentTypeException
 import org.springframework.web.client.body
-import org.springframework.web.util.UriComponentsBuilder.fromHttpUrl
+import org.springframework.web.util.UriComponentsBuilder.fromUriString
 
 internal class RestClientBasedLibraryService(
     private val client: RestClient,
@@ -36,7 +36,7 @@ internal class RestClientBasedLibraryService(
             throw LibraryServiceException(cause = e)
         }
 
-    private fun booksUri() = fromHttpUrl(properties.baseUrl)
+    private fun booksUri() = fromUriString(properties.baseUrl)
         .pathSegment("api", "books")
         .toUriString()
 }
