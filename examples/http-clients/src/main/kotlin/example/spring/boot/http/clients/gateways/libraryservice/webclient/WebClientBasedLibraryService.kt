@@ -9,7 +9,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import org.springframework.web.reactive.function.client.bodyToMono
-import org.springframework.web.util.UriComponentsBuilder.fromHttpUrl
+import org.springframework.web.util.UriComponentsBuilder.fromUriString
 
 internal class WebClientBasedLibraryService(
     private val client: WebClient,
@@ -30,7 +30,7 @@ internal class WebClientBasedLibraryService(
             throw LibraryServiceException(cause = e)
         }
 
-    private fun booksUri() = fromHttpUrl(properties.baseUrl)
+    private fun booksUri() = fromUriString(properties.baseUrl)
         .pathSegment("api", "books")
         .toUriString()
 }

@@ -21,6 +21,7 @@ import org.springframework.restdocs.operation.preprocess.Preprocessors.preproces
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
+import org.springframework.test.json.JsonCompareMode.STRICT
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -189,7 +190,7 @@ internal class DefaultBookControllerTest(
 
     }
 
-    fun WebTestClient.BodyContentSpec.strictJson(@Language("json") json: String) = json(json, true)
+    fun WebTestClient.BodyContentSpec.strictJson(@Language("json") json: String) = json(json, STRICT)
 
     fun WebTestClient.BodyContentSpec.andDocument(identifier: String) =
         consumeWith(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))

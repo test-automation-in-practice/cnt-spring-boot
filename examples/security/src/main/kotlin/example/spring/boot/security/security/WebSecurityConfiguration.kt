@@ -52,7 +52,7 @@ class WebSecurityConfiguration {
             applyDefaults()
 
             httpBasic {}
-            authorizeRequests {
+            authorizeHttpRequests {
                 authorize(EndpointRequest.to(InfoEndpoint::class.java, HealthEndpoint::class.java), permitAll)
                 authorize(EndpointRequest.toAnyEndpoint(), hasAuthority(SCOPE_ACTUATOR))
                 authorize(anyRequest, denyAll)
@@ -69,7 +69,7 @@ class WebSecurityConfiguration {
             applyDefaults()
 
             oauth2ResourceServer { jwt { jwtAuthenticationConverter = CustomJwtAuthenticationConverter } }
-            authorizeRequests {
+            authorizeHttpRequests {
                 authorize("/api/books/**", hasAuthority(SCOPE_BOOKS))
                 authorize("/error", permitAll)
                 authorize(anyRequest, denyAll)

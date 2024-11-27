@@ -25,6 +25,7 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
+import org.springframework.test.json.JsonCompareMode.STRICT
 import org.springframework.test.web.servlet.MockHttpServletRequestDsl
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MockMvcResultHandlersDsl
@@ -193,7 +194,7 @@ internal class DefaultBookControllerTest(
                                   "traceId": "7a69bebc3718"
                                 }
                                 """,
-                            strict = true
+                            compareMode = STRICT
                         )
                     }
                 }
@@ -226,7 +227,7 @@ internal class DefaultBookControllerTest(
     }
 
     fun ContentResultMatchersDsl.strictJson(@Language("json") json: String) =
-        json(jsonContent = json, strict = true)
+        json(jsonContent = json, compareMode = STRICT)
 
     fun MockMvcResultHandlersDsl.document(identifier: String) =
         handle(document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))

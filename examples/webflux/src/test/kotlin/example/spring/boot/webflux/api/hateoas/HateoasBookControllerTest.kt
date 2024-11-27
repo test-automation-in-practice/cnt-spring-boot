@@ -21,6 +21,7 @@ import org.springframework.hateoas.MediaTypes.HAL_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.restdocs.operation.preprocess.Preprocessors
 import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
+import org.springframework.test.json.JsonCompareMode.STRICT
 import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -225,7 +226,7 @@ internal class HateoasBookControllerTest(
 
     }
 
-    fun WebTestClient.BodyContentSpec.strictJson(@Language("json") json: String) = json(json, true)
+    fun WebTestClient.BodyContentSpec.strictJson(@Language("json") json: String) = json(json, STRICT)
 
     fun WebTestClient.BodyContentSpec.andDocument(identifier: String) =
         consumeWith(

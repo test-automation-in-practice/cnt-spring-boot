@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.json.JsonCompareMode.STRICT
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -78,7 +79,7 @@ internal class BooksRestControllerTests(
                               "title": "Refactoring: Improving the Design of Existing Code"
                             }
                             """,
-                        strict = true
+                        compareMode = STRICT
                     )
                 }
             }
@@ -131,7 +132,7 @@ internal class BooksRestControllerTests(
                               "title": "Refactoring: Improving the Design of Existing Code"
                             }
                             """,
-                        strict = true
+                        compareMode = STRICT
                     )
                 }
             }
@@ -167,7 +168,7 @@ internal class BooksRestControllerTests(
                                 }
                             ]
                             """,
-                        strict = true
+                        compareMode = STRICT
                     )
                 }
             }

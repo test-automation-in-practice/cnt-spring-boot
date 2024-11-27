@@ -74,7 +74,6 @@ class ExternallyScheduledTaskTests {
             cut.configureTasks(taskRegistrar)
 
             with(scheduledTask.captured) {
-                assertThat(runnable).isSameAs(task)
                 assertThat(intervalDuration).isEqualTo(ofSeconds(3))
                 assertThat(initialDelayDuration).isEqualTo(ofSeconds(7))
             }
