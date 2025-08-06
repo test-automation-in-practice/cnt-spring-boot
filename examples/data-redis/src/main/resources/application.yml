@@ -1,0 +1,5 @@
+spring:
+  data:
+    redis:
+      connectTimeout: 1s
+      timeout: 1s
