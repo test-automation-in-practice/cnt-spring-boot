@@ -1,6 +1,7 @@
 package example.spring.boot.resilience.circuitbreaker
 
 import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.resilience.Resilience4JConfiguration
 import example.spring.boot.resilience.Tripwire
 import io.github.logrecorder.api.LogRecord
 import io.github.logrecorder.assertion.LogRecordAssertion.Companion.assertThat
@@ -72,7 +73,6 @@ class DownstreamServiceWithAnnotationBasedCircuitBreakerTests(
 
 }
 
-@EnableAspectJAutoProxy
 @ImportAutoConfiguration(CircuitBreakerAutoConfiguration::class)
-@Import(DownstreamServiceWithAnnotationBasedCircuitBreaker::class)
+@Import(Resilience4JConfiguration::class, DownstreamServiceWithAnnotationBasedCircuitBreaker::class)
 private class DownstreamServiceWithAnnotationBasedCircuitBreakerTestsConfiguration
