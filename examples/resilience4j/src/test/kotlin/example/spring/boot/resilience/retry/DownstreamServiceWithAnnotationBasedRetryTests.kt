@@ -1,6 +1,7 @@
 package example.spring.boot.resilience.retry
 
 import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.resilience.Resilience4JConfiguration
 import example.spring.boot.resilience.Tripwire
 import io.github.resilience4j.springboot3.retry.autoconfigure.RetryAutoConfiguration
 import io.mockk.andThenJust
@@ -71,7 +72,6 @@ class DownstreamServiceWithAnnotationBasedRetryTests(
 
 }
 
-@EnableAspectJAutoProxy
 @ImportAutoConfiguration(RetryAutoConfiguration::class)
-@Import(DownstreamServiceWithAnnotationBasedRetry::class)
+@Import(Resilience4JConfiguration::class, DownstreamServiceWithAnnotationBasedRetry::class)
 private class DownstreamServiceWithAnnotationBasedRetryTestsConfiguration

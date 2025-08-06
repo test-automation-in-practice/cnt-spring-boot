@@ -1,6 +1,7 @@
 package example.spring.boot.resilience.timelimiter
 
 import com.ninjasquad.springmockk.MockkBean
+import example.spring.boot.resilience.Resilience4JConfiguration
 import example.spring.boot.resilience.Tripwire
 import io.github.resilience4j.springboot3.timelimiter.autoconfigure.TimeLimiterAutoConfiguration
 import io.mockk.every
@@ -54,7 +55,6 @@ class DownstreamServiceWithAnnotationBasedTimeLimiterTests(
 
 }
 
-@EnableAspectJAutoProxy
 @ImportAutoConfiguration(TimeLimiterAutoConfiguration::class)
-@Import(DownstreamServiceWithAnnotationBasedTimeLimiter::class, Tripwire::class)
+@Import(Resilience4JConfiguration::class, DownstreamServiceWithAnnotationBasedTimeLimiter::class, Tripwire::class)
 private class DownstreamServiceWithAnnotationBasedTimeLimiterTestsConfiguration

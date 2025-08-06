@@ -1,5 +1,6 @@
 package example.spring.boot.resilience.ratelimiter
 
+import example.spring.boot.resilience.Resilience4JConfiguration
 import io.github.resilience4j.ratelimiter.RateLimiterRegistry
 import io.github.resilience4j.ratelimiter.RequestNotPermitted
 import io.github.resilience4j.springboot3.ratelimiter.autoconfigure.RateLimiterAutoConfiguration
@@ -55,7 +56,6 @@ class DownstreamServiceWithAnnotationBasedRateLimiterTests(
 
 }
 
-@EnableAspectJAutoProxy
 @ImportAutoConfiguration(RateLimiterAutoConfiguration::class)
-@Import(DownstreamServiceWithAnnotationBasedRateLimiter::class)
+@Import(Resilience4JConfiguration::class, DownstreamServiceWithAnnotationBasedRateLimiter::class)
 private class DownstreamServiceWithAnnotationBasedRateLimiterTestsConfiguration

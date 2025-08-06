@@ -1,14 +1,13 @@
 package example.spring.boot.resilience.bulkhead
 
+import example.spring.boot.resilience.Resilience4JConfiguration
 import io.github.resilience4j.bulkhead.BulkheadFullException
 import io.github.resilience4j.springboot3.bulkhead.autoconfigure.BulkheadAutoConfiguration
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import java.util.concurrent.CompletableFuture
@@ -71,7 +70,6 @@ class DownstreamServiceWithAnnotationBasedBulkheadTests(
         supplyAsync(block, executor)
 }
 
-@EnableAspectJAutoProxy
 @ImportAutoConfiguration(BulkheadAutoConfiguration::class)
-@Import(DownstreamServiceWithAnnotationBasedBulkhead::class)
+@Import(Resilience4JConfiguration::class, DownstreamServiceWithAnnotationBasedBulkhead::class)
 private class DownstreamServiceWithAnnotationBasedBulkheadTestsConfiguration
