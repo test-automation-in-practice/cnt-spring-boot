@@ -13,7 +13,7 @@ import example.spring.boot.advanced.e2e.security.TestTokenIntrospector
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders.LOCATION
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -24,7 +24,7 @@ import kotlin.Result.Companion.failure
 import kotlin.Result.Companion.success
 
 @WebMvcTest(BookCollectionController::class)
-@MockkBean(BookCollection::class)
+@MockkBean(types = [BookCollection::class])
 @Import(TestTokenIntrospector::class, SecurityConfiguration::class)
 internal class BookCollectionControllerTests(
     @Autowired val collection: BookCollection,

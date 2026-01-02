@@ -1,6 +1,6 @@
 package example.spring.boot.jms.messaging
 
-import com.ninjasquad.springmockk.SpykBean
+import com.ninjasquad.springmockk.MockkSpyBean
 import example.spring.boot.jms.business.Examples.cleanCode
 import example.spring.boot.jms.business.createdEvent
 import example.spring.boot.jms.business.deletedEvent
@@ -11,14 +11,15 @@ import io.mockk.every
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.artemis.autoconfigure.ArtemisAutoConfiguration
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
-import org.springframework.boot.autoconfigure.jms.artemis.ArtemisAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Import
 import org.springframework.jms.core.JmsTemplate
 
 @InitializeWithContainerizedArtemis
-@SpykBean(EventHandler::class, DeadLetterHandler::class)
+@MockkSpyBean(types = [EventHandler::class, DeadLetterHandler::class])
 @SpringBootTest(classes = [MessagingIntegrationTestsConfiguration::class])
 internal class MessagingIntegrationTests(
     @Autowired val eventHandler: EventHandler,
@@ -64,4 +65,5 @@ internal class MessagingIntegrationTests(
 
 @ComponentScan
 @ImportAutoConfiguration(ArtemisAutoConfiguration::class)
+@Import(EventHandler::class, DeadLetterHandler::class)
 private class MessagingIntegrationTestsConfiguration

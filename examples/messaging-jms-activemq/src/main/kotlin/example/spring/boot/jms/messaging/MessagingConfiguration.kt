@@ -1,6 +1,5 @@
 package example.spring.boot.jms.messaging
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.jms.ConnectionFactory
 import jakarta.jms.Session
 import org.springframework.context.annotation.Bean
@@ -8,8 +7,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.jms.annotation.EnableJms
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory
 import org.springframework.jms.core.JmsTemplate
-import org.springframework.jms.support.converter.MappingJackson2MessageConverter
+import org.springframework.jms.support.converter.JacksonJsonMessageConverter
 import org.springframework.jms.support.converter.MessageConverter
+import tools.jackson.module.kotlin.jacksonMapperBuilder
 
 @EnableJms
 @Configuration
@@ -38,9 +38,7 @@ class MessagingConfiguration {
 
     @Bean
     fun messageConverter(): MessageConverter =
-        MappingJackson2MessageConverter().apply {
-            setTypeIdPropertyName("_type")
-            setObjectMapper(jacksonObjectMapper())
-        }
+        JacksonJsonMessageConverter(jacksonMapperBuilder())
+            .apply { setTypeIdPropertyName("_type") }
 
 }

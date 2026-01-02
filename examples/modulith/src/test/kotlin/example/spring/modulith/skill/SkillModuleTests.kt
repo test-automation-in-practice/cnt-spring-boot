@@ -9,21 +9,24 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.WebTestClient.RequestHeadersSpec
+import org.springframework.test.web.servlet.client.RestTestClient
+import org.springframework.test.web.servlet.client.RestTestClient.RequestHeadersSpec
 import java.util.UUID
+import kotlin.reflect.KClass
 
 @ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @InitializeWithContainers
+@AutoConfigureRestTestClient
 @TestMethodOrder(MethodName::class)
 @ApplicationModuleTest(webEnvironment = RANDOM_PORT)
 class SkillModuleTests(
-    @Autowired private val webTestClient: WebTestClient
+    @Autowired private val testClient: RestTestClient
 ) {
 
     private lateinit var skillId: UUID
@@ -34,7 +37,7 @@ class SkillModuleTests(
             post()
                 .uri("/api/skills")
                 .contentType(APPLICATION_JSON)
-                .bodyValue("""{ "label": "Kotlin" }""")
+                .body("""{ "label": "Kotlin" }""")
         }
 
         with(skill!!) {
@@ -61,7 +64,7 @@ class SkillModuleTests(
             put()
                 .uri("/api/skills/$skillId")
                 .contentType(APPLICATION_JSON)
-                .bodyValue("""{ "label": "Kotlin (JVM)" }""")
+                .body("""{ "label": "Kotlin (JVM)" }""")
         }
 
         with(skill!!) {
@@ -87,12 +90,16 @@ class SkillModuleTests(
         skill shouldBe null
     }
 
-    private inline fun <reified T> executeAndReturn(block: WebTestClient.() -> RequestHeadersSpec<*>): T? =
-        block(webTestClient)
-            .exchange()
-            .expectStatus().is2xxSuccessful()
-            .returnResult(T::class.java)
-            .getResponseBody()
-            .blockFirst()
+    private inline fun <reified T : Any> executeAndReturn(block: RestTestClient.() -> RequestHeadersSpec<*>): T? =
+        executeAndReturn(T::class, block)
+
+    private inline fun <T : Any> executeAndReturn(
+        type: KClass<T>,
+        block: RestTestClient.() -> RequestHeadersSpec<*>
+    ): T? = block(testClient)
+        .exchange()
+        .expectStatus().is2xxSuccessful()
+        .returnResult(type.java)
+        .getResponseBody()
 
 }

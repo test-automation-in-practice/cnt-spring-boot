@@ -41,7 +41,7 @@ internal class FooServiceTests {
     /// #####
 
     @Nested
-    @MockkBean(BarService::class)
+    @MockkBean(types = [BarService::class])
     @SpringBootTest(classes = [FooService::class, AsyncConfiguration::class])
     inner class ImplicitIntegrationTests(
         @Autowired val fooService: FooService,

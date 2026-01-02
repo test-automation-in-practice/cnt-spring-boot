@@ -1,6 +1,5 @@
 package example.spring.boot.advanced.e2e.gateways.mediacollection
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import example.spring.boot.advanced.e2e.domain.BookRecord
 import example.spring.boot.advanced.e2e.domain.MediaCollection
 import example.spring.boot.advanced.e2e.gateways.common.defaultHttpClient
@@ -9,6 +8,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.stereotype.Component
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.io.IOException
 
 @Component
@@ -32,7 +32,7 @@ class MediaCollectionClient(
         client.newCall(request).execute()
             .use { response ->
                 if (!response.isSuccessful) {
-                    val body = response.body?.string() ?: ""
+                    val body = response.body.string()
                     throw IOException("Failed call [status=${response.code}]: $body")
                 }
             }

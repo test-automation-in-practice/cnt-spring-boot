@@ -1,12 +1,12 @@
 package example.spring.boot.advanced.scoping
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import example.spring.boot.advanced.scoping.api.MediaCollectionController.MediaRegistration
 import example.spring.boot.advanced.scoping.domain.Book
 import example.spring.boot.advanced.scoping.domain.Game
 import example.spring.boot.advanced.scoping.domain.TypeOfMedia
 import example.spring.boot.advanced.scoping.domain.TypeOfMedia.BOOK
 import example.spring.boot.advanced.scoping.domain.TypeOfMedia.GAME
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.util.UUID
 
 object Examples {

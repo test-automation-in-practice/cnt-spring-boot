@@ -1,7 +1,7 @@
 package example.spring.boot.scheduling.tasks
 
 import com.ninjasquad.springmockk.MockkBean
-import com.ninjasquad.springmockk.SpykBean
+import com.ninjasquad.springmockk.MockkSpyBean
 import example.spring.boot.scheduling.config.SchedulingConfiguration
 import example.spring.boot.scheduling.services.SomeOtherService
 import example.spring.boot.scheduling.services.SomeService
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import java.lang.Thread.sleep
 
 class AnnotationScheduledTaskTests {
@@ -51,15 +52,15 @@ class AnnotationScheduledTaskTests {
 
     @Nested
     @SpringBootTest(
-        classes = [SchedulingConfiguration::class],
+        classes = [SchedulingConfiguration::class, AnnotationScheduledTask::class],
         properties = [
             "tasks.annotation.enabled=true",
             "tasks.annotation.rate=PT0.033S", // 33ms
             "tasks.annotation.initial-delay=PT0S", // immediately
         ]
     )
-    @SpykBean(AnnotationScheduledTask::class) // TODO why does @MockkBean not work for this?
-    @MockkBean(SomeService::class, SomeOtherService::class)
+    @MockkSpyBean(types = [AnnotationScheduledTask::class]) // TODO why does @MockkBean not work for this?
+    @MockkBean(types = [SomeService::class, SomeOtherService::class])
     inner class SchedulingIntegrationTests(
         @Autowired val someService: SomeService,
         @Autowired val someOtherService: SomeOtherService,

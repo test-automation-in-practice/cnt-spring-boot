@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-@MockkBean(SomeService::class, SomeOtherService::class)
+@MockkBean(types = [SomeService::class, SomeOtherService::class])
 class ApplicationTests {
 
     // @MockkBean is used because this example does not have an implementation for these services

@@ -1,11 +1,11 @@
 package example.spring.boot.security.utils
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import example.spring.boot.security.utils.ContainerizedKeycloakInitializer.Companion.container
 import org.springframework.http.HttpHeaders.ACCEPT
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -38,5 +38,5 @@ private fun getToken(username: String, password: String): String {
     val response = client.send(request, ofString())
     val json = objectMapper.readTree(response.body())
 
-    return json["access_token"]?.textValue() ?: error("no access token found in response: ${response.body()}")
+    return json["access_token"]?.asString(null) ?: error("no access token found in response: ${response.body()}")
 }

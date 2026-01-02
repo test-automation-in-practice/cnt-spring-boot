@@ -1,6 +1,5 @@
 package example.spring.boot.webflux.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.validation.Validation.buildDefaultValidatorFactory
 import jakarta.validation.Validator
 import org.assertj.core.api.Assertions.assertThat
@@ -14,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
+import tools.jackson.databind.ObjectMapper
 
 
 internal class CreateBookRequestTest {

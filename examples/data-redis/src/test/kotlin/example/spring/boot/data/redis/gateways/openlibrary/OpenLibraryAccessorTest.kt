@@ -23,6 +23,7 @@ internal class OpenLibraryAccessorTest {
 
     val isbn1 = "9781680680584"
     val isbn2 = "9780132350884"
+    val isbn3 = "9781035076192"
 
     @BeforeEach
     fun resetMocks() = clearAllMocks()
@@ -74,16 +75,12 @@ internal class OpenLibraryAccessorTest {
      */
     @Nested
     @InitializeWithContainerizedRedis
-    @MockkBean(OpenLibraryClient::class)
+    @MockkBean(types = [OpenLibraryClient::class])
     @SpringBootTest(classes = [CachingTestsConfiguration::class])
     inner class CachingTests(
         @Autowired val client: OpenLibraryClient,
         @Autowired val cut: OpenLibraryAccessor
     ) {
-
-        @BeforeEach
-        fun clearCaches(@Autowired cacheManager: RedisCacheManager) =
-            cacheManager.cacheNames.mapNotNull(cacheManager::getCache).forEach(Cache::clear)
 
         @Test
         fun `caches results if there are any`() {
@@ -102,10 +99,10 @@ internal class OpenLibraryAccessorTest {
 
         @Test
         fun `does not cache if there was no result`() {
-            every { client.getNumberOfPages(any()) } returns null
+            every { client.getNumberOfPages(isbn3) } returns null
 
             repeat(10) {
-                assertThat(cut.getNumberOfPages(isbn1)).isNull()
+                assertThat(cut.getNumberOfPages(isbn3)).isNull()
             }
 
             verify(exactly = 10) { client.getNumberOfPages(any()) }

@@ -15,18 +15,23 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+
     implementation("org.springframework.modulith:spring-modulith-events-amqp")
     implementation("org.springframework.modulith:spring-modulith-starter-core")
     implementation("org.springframework.modulith:spring-modulith-starter-jdbc")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     runtimeOnly("org.postgresql:postgresql")
 
-    testImplementation("org.springframework:spring-webflux") // for WebTestClient
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-amqp-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-mongodb-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-jdbc-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+
     testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 
     testImplementation("com.ninja-squad:springmockk")
@@ -46,7 +51,7 @@ tasks {
         inputs.dir(file("build/spring-modulith-docs"))
         dependsOn(test)
         baseDirFollowsSourceDir()
-        forkOptions {
+        jvm {
             jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
         }
         options(

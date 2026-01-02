@@ -1,6 +1,6 @@
 package example.spring.boot.micrometer.scheduling
 
-import com.ninjasquad.springmockk.SpykBean
+import com.ninjasquad.springmockk.MockkSpyBean
 import example.spring.boot.micrometer.scheduling.FixedRateSelfSchedulingComponentTests.TestComponent
 import io.mockk.slot
 import io.mockk.verify
@@ -14,8 +14,8 @@ import java.time.Duration
 import java.time.Duration.ofMinutes
 import java.time.Duration.ofSeconds
 
-@SpykBean(TestComponent::class)
-@SpringBootTest(classes = [SchedulingConfiguration::class])
+@MockkSpyBean(types = [TestComponent::class])
+@SpringBootTest(classes = [SchedulingConfiguration::class, TestComponent::class])
 internal class FixedRateSelfSchedulingComponentTests(
     @Autowired private val cut: FixedRateSelfSchedulingComponent
 ) {

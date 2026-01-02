@@ -28,7 +28,7 @@ internal class InMemoryEventPublisherTest {
             BookRecordCreatedEvent(record_cleanCode),
             BookRecordDeletedEvent(id_cleanCode)
         ).map { event ->
-            dynamicTest(event::class.simpleName) {
+            dynamicTest(event::class.simpleName!!) {
                 cut.publish(event)
                 verify { delegate.publishEvent(event) }
             }

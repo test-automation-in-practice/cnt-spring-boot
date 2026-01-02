@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.security.test.context.support.WithMockUser
@@ -39,7 +39,7 @@ import java.util.UUID.fromString
  * Alternatively we would need to exclude the security autoconfiguration or provide a dummy security configuration
  * that simply allows all interactions.
  */
-@MockkBean(BookCollection::class)
+@MockkBean(types = [BookCollection::class])
 @WebMvcTest(BooksRestController::class)
 @WithMockUser(authorities = [SCOPE_BOOKS])
 @Import(WebSecurityConfiguration::class)

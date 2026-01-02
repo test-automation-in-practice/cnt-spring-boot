@@ -1,6 +1,6 @@
 package example.spring.boot.rabbitmq.messaging
 
-import com.ninjasquad.springmockk.SpykBean
+import com.ninjasquad.springmockk.MockkSpyBean
 import example.spring.boot.rabbitmq.business.Examples.cleanCode
 import example.spring.boot.rabbitmq.business.createdEvent
 import example.spring.boot.rabbitmq.business.deletedEvent
@@ -12,13 +12,14 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
-import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Import
 
 @InitializeWithContainerizedRabbitMQ
-@SpykBean(EventHandler::class, DeadLetterHandler::class)
+@MockkSpyBean(types = [EventHandler::class, DeadLetterHandler::class])
 @SpringBootTest(classes = [MessagingIntegrationTestsConfiguration::class])
 internal class MessagingIntegrationTests(
     @Autowired val eventHandler: EventHandler,
@@ -64,4 +65,5 @@ internal class MessagingIntegrationTests(
 
 @ComponentScan
 @ImportAutoConfiguration(RabbitAutoConfiguration::class)
+@Import(EventHandler::class, DeadLetterHandler::class)
 private class MessagingIntegrationTestsConfiguration

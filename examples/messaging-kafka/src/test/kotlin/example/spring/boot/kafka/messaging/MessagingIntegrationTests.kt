@@ -1,6 +1,6 @@
 package example.spring.boot.kafka.messaging
 
-import com.ninjasquad.springmockk.SpykBean
+import com.ninjasquad.springmockk.MockkSpyBean
 import example.spring.boot.kafka.business.BookEvent
 import example.spring.boot.kafka.business.Examples
 import example.spring.boot.kafka.business.createdEvent
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+import org.springframework.boot.kafka.autoconfigure.KafkaAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
@@ -24,7 +24,7 @@ import org.springframework.kafka.core.KafkaTemplate
 import java.lang.Thread.sleep
 
 @TestInstance(PER_CLASS)
-@SpykBean(EventHandler::class)
+@MockkSpyBean(types = [EventHandler::class])
 @InitializeWithContainerizedKafka
 @SpringBootTest(classes = [MessagingIntegrationTestsConfiguration::class])
 class MessagingIntegrationTests(

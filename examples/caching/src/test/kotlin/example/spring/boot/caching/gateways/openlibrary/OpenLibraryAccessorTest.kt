@@ -83,7 +83,7 @@ internal class OpenLibraryAccessorTest {
      */
     @Nested
     @Import(OpenLibraryAccessor::class)
-    @MockkBean(OpenLibraryClient::class)
+    @MockkBean(types = [OpenLibraryClient::class])
     @SpringBootTest(classes = [CacheConfiguration::class])
     inner class CachingTestsVariant1(
         @Autowired val client: OpenLibraryClient,

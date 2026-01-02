@@ -21,19 +21,20 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.test.context.ActiveProfiles
+import org.wiremock.spring.EnableWireMock
+import org.wiremock.spring.InjectWireMock
 import java.io.IOException
 
+@EnableWireMock
 @ActiveProfiles("test")
-@AutoConfigureWireMock(port = 0)
 @SpringBootTest(classes = [MediaCollectionClientTestConfiguration::class])
 internal class MediaCollectionClientTests(
     @Autowired val cut: MediaCollectionClient,
-    @Autowired val wireMock: WireMockServer
+    @InjectWireMock val wireMock: WireMockServer
 ) {
 
     @AfterEach
