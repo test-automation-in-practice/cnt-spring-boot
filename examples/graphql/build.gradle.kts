@@ -10,14 +10,20 @@ plugins {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-graphql")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+
+    implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.graphql:spring-graphql-test")
-    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
+    testImplementation("org.springframework.boot:spring-boot-restdocs")
+    testImplementation("org.springframework.boot:spring-boot-starter-graphql-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webclient-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+
+    testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient")
+
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("io.rest-assured:kotlin-extensions")
     testImplementation("io.mockk:mockk-jvm")

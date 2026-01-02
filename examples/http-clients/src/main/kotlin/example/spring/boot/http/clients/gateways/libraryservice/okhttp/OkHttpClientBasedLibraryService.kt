@@ -1,8 +1,5 @@
 package example.spring.boot.http.clients.gateways.libraryservice.okhttp
 
-import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import example.spring.boot.http.clients.gateways.libraryservice.Book
 import example.spring.boot.http.clients.gateways.libraryservice.CreatedBook
 import example.spring.boot.http.clients.gateways.libraryservice.LibraryService
@@ -14,6 +11,9 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.springframework.http.HttpHeaders.ACCEPT
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import tools.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+import tools.jackson.module.kotlin.jacksonMapperBuilder
+import tools.jackson.module.kotlin.readValue
 
 internal class OkHttpClientBasedLibraryService(
     private val client: OkHttpClient,
@@ -22,8 +22,9 @@ internal class OkHttpClientBasedLibraryService(
 
     private val jsonMediaType = APPLICATION_JSON_VALUE.toMediaType()
 
-    private val objectMapper = jacksonObjectMapper()
+    private val objectMapper = jacksonMapperBuilder()
         .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .build()
 
     override fun addBook(book: Book): CreatedBook {
 
@@ -35,7 +36,7 @@ internal class OkHttpClientBasedLibraryService(
 
         return client.newCall(request).execute()
             .use { response ->
-                val responseBody = response.body?.string() ?: ""
+                val responseBody = response.body.string()
                 when (val status = response.code) {
                     200, 201 -> objectMapper.readValue(responseBody)
                     else -> throw exception(status, responseBody)

@@ -13,20 +13,21 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.test.context.ActiveProfiles
+import org.wiremock.spring.ConfigureWireMock
+import org.wiremock.spring.EnableWireMock
+import org.wiremock.spring.InjectWireMock
 
 @ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @Import(TestTokenIntrospector::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWireMock(port = 0, stubs = ["classpath:/e2e/wiremock"])
+@EnableWireMock(ConfigureWireMock(filesUnderClasspath = "wiremock/e2e"))
 internal class ApplicationTests {
 
     @BeforeEach
@@ -35,7 +36,7 @@ internal class ApplicationTests {
     }
 
     @AfterEach
-    fun assertWireMockRequests(@Autowired wireMock: WireMockServer) {
+    fun assertWireMockRequests(@InjectWireMock wireMock: WireMockServer) {
         assertThat(wireMock.findAllUnmatchedRequests()).isEmpty()
     }
 

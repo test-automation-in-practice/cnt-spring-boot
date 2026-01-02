@@ -1,6 +1,5 @@
 package example.spring.modulith.employee
 
-import com.fasterxml.jackson.databind.JsonNode
 import example.spring.modulith.employee.internal.EmployeeRepresentation
 import example.spring.modulith.employee.internal.KnowledgeRepresentation
 import example.spring.modulith.utils.InitializeWithContainers
@@ -11,22 +10,26 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.WebTestClient.RequestHeadersSpec
+import org.springframework.test.web.servlet.client.RestTestClient
+import org.springframework.test.web.servlet.client.RestTestClient.RequestHeadersSpec
+import tools.jackson.databind.JsonNode
 import java.lang.Thread.sleep
 import java.util.UUID
+import kotlin.reflect.KClass
 
 @ActiveProfiles("test")
 @TestInstance(PER_CLASS)
 @InitializeWithContainers
+@AutoConfigureRestTestClient
 @TestMethodOrder(MethodName::class)
 @ApplicationModuleTest(extraIncludes = ["skill"], webEnvironment = RANDOM_PORT)
 class EmployeeModuleTests(
-    @Autowired private val webTestClient: WebTestClient
+    @Autowired private val testClient: RestTestClient
 ) {
 
     private lateinit var employeeId: UUID
@@ -38,7 +41,7 @@ class EmployeeModuleTests(
             post()
                 .uri("/api/employees")
                 .contentType(APPLICATION_JSON)
-                .bodyValue(
+                .body(
                     """
                     {
                       "firstName": "John",
@@ -76,7 +79,7 @@ class EmployeeModuleTests(
             put()
                 .uri("/api/employees/$employeeId")
                 .contentType(APPLICATION_JSON)
-                .bodyValue(
+                .body(
                     """
                     {
                       "firstName": "Johnathon",
@@ -99,10 +102,10 @@ class EmployeeModuleTests(
             post()
                 .uri("/api/skills")
                 .contentType(APPLICATION_JSON)
-                .bodyValue("""{ "label": "Kotlin" }""")
+                .body("""{ "label": "Kotlin" }""")
         }
 
-        skillId = skill!!["id"].asText().let(UUID::fromString)
+        skillId = skill!!["id"].asString().let(UUID::fromString)
     }
 
     @Test
@@ -111,7 +114,7 @@ class EmployeeModuleTests(
             put()
                 .uri("/api/employees/$employeeId/knowledge/$skillId")
                 .contentType(APPLICATION_JSON)
-                .bodyValue("""{ "level": 10 }""")
+                .body("""{ "level": 10 }""")
         }
 
         with(employee!!) {
@@ -125,7 +128,7 @@ class EmployeeModuleTests(
             put()
                 .uri("/api/skills/$skillId")
                 .contentType(APPLICATION_JSON)
-                .bodyValue("""{ "label": "Kotlin (JVM)" }""")
+                .body("""{ "label": "Kotlin (JVM)" }""")
         }
     }
 
@@ -170,14 +173,18 @@ class EmployeeModuleTests(
         employee shouldBe null
     }
 
-    private inline fun <reified T> executeAndReturn(block: WebTestClient.() -> RequestHeadersSpec<*>): T? =
-        execute(block)
-            .returnResult(T::class.java)
-            .getResponseBody()
-            .blockFirst()
+    private inline fun <reified T : Any> executeAndReturn(block: RestTestClient.() -> RequestHeadersSpec<*>): T? =
+        executeAndReturn(T::class, block)
 
-    private inline fun execute(block: WebTestClient.() -> RequestHeadersSpec<*>) =
-        block(webTestClient)
+    private inline fun <T : Any> executeAndReturn(
+        type: KClass<T>,
+        block: RestTestClient.() -> RequestHeadersSpec<*>
+    ): T? = execute(block)
+        .returnResult(type.java)
+        .getResponseBody()
+
+    private inline fun execute(block: RestTestClient.() -> RequestHeadersSpec<*>) =
+        block(testClient)
             .exchange()
             .expectStatus().is2xxSuccessful()
 

@@ -12,19 +12,17 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
 import io.github.resilience4j.springboot3.circuitbreaker.autoconfigure.CircuitBreakerAutoConfiguration
 import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles("test")
-@MockkBean(Tripwire::class, relaxUnitFun = true)
+@MockkBean(types = [Tripwire::class], relaxUnitFun = true)
 @SpringBootTest(classes = [DownstreamServiceWithAnnotationBasedCircuitBreakerTestsConfiguration::class])
 class DownstreamServiceWithAnnotationBasedCircuitBreakerTests(
     @Autowired val tripwire: Tripwire,

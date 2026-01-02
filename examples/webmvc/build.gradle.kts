@@ -9,16 +9,24 @@ plugins {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-hateoas")
+    implementation("org.springframework.boot:spring-boot-starter-jackson")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+
+    implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.zalando:logbook-logstash")
     implementation("org.zalando:logbook-spring-boot-starter")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-restdocs")
+    testImplementation("org.springframework.boot:spring-boot-starter-hateoas-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-jackson-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
     testImplementation("io.github.logrecorder:logrecorder-assertions")
     testImplementation("io.github.logrecorder:logrecorder-junit5")
     testImplementation("io.github.logrecorder:logrecorder-logback")
@@ -33,7 +41,7 @@ tasks {
         inputs.dir(file("build/generated-snippets"))
         dependsOn(test)
         baseDirFollowsSourceDir()
-        forkOptions {
+        jvm {
             jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
         }
         options(

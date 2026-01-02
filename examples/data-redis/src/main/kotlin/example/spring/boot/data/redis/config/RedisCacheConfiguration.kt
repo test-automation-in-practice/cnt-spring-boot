@@ -1,9 +1,9 @@
 package example.spring.boot.data.redis.config
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
-import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration
-import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+import org.springframework.boot.cache.autoconfigure.CacheAutoConfiguration
+import org.springframework.boot.cache.autoconfigure.RedisCacheManagerBuilderCustomizer
+import org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.cache.interceptor.CacheErrorHandler
 import org.springframework.cache.interceptor.LoggingCacheErrorHandler
@@ -15,7 +15,7 @@ import java.time.Duration.ofMinutes
 
 @Configuration
 @EnableCaching
-@ImportAutoConfiguration(CacheAutoConfiguration::class, RedisAutoConfiguration::class)
+@ImportAutoConfiguration(CacheAutoConfiguration::class, DataRedisAutoConfiguration::class)
 class RedisCacheConfiguration : RedisCacheManagerBuilderCustomizer {
 
     override fun customize(builder: RedisCacheManagerBuilder) {

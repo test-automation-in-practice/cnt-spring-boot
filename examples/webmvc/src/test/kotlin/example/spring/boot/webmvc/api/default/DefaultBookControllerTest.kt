@@ -17,8 +17,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.restdocs.test.autoconfigure.AutoConfigureRestDocs
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.result.ContentResultMatchersDsl
 
-@MockkBean(BookCollection::class)
+@MockkBean(types = [BookCollection::class])
 @WebMvcTest(DefaultBooksController::class)
 @AutoConfigureRestDocs("build/generated-snippets/default/books")
 internal class DefaultBookControllerTest(

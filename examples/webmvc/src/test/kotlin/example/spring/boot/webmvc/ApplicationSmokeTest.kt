@@ -58,7 +58,7 @@ internal class ApplicationSmokeTest {
             statusCode(201)
         }
         assertThat(log) containsExactly {
-            trace(startsWith("Incoming Request:"), contains("authorization: XXX"))
+            trace(startsWith("Incoming Request:"), contains("Authorization: XXX"))
             trace(startsWith("Outgoing Response:"))
         }
     }

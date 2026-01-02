@@ -4,7 +4,7 @@ import com.mongodb.MongoClientSettings.Builder
 import example.spring.boot.data.mongodb.model.Isbn
 import example.spring.boot.data.mongodb.model.Title
 import org.bson.UuidRepresentation.STANDARD
-import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer
+import org.springframework.boot.mongodb.autoconfigure.MongoClientSettingsBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter

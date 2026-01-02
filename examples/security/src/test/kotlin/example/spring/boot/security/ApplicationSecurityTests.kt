@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.http.HttpStatus
@@ -19,14 +20,15 @@ import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.UNAUTHORIZED
-import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.servlet.client.RestTestClient
 import java.util.UUID.randomUUID
 
-@MockkBean(BookRepository::class)
+@AutoConfigureRestTestClient
+@MockkBean(types = [BookRepository::class])
 @InitializeWithContainerizedKeycloak
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 internal class ApplicationSecurityTests(
-    @Autowired val webTestClient: WebTestClient
+    @Autowired val testClient: RestTestClient
 ) {
 
     @BeforeEach
@@ -97,14 +99,14 @@ internal class ApplicationSecurityTests(
     }
 
     private fun assertThatBasicAuthUserReturnsStatus(path: String, status: HttpStatus, username: String? = null) =
-        webTestClient.get()
+        testClient.get()
             .uri(path)
             .headers { if (username != null) it.setBasicAuth(username, username.reversed()) }
             .exchange()
             .expectStatus().isEqualTo(status)
 
     private fun assertThatOAuthUserReturnsStatus(path: String, status: HttpStatus, token: String? = null) =
-        webTestClient.get()
+        testClient.get()
             .uri(path)
             .headers { if (token != null) it.setBearerAuth(token) }
             .exchange()

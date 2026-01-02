@@ -4,9 +4,6 @@ server:
 spring:
   application:
     name: spring-modulith-example
-  data:
-    mongodb:
-      uuid-representation: standard
   datasource:
     url: "jdbc:postgresql://localhost:5432/database"
     username: "user"
@@ -19,10 +16,13 @@ spring:
       jdbc:
         schema-initialization:
           enabled: true
+      republish-outstanding-events-on-restart: false
     moments:
       enable-time-machine: false
       granularity: hours
       locale: de_DE
       quarter-start-month: january
       zone-id: Europe/Berlin
-    republish-outstanding-events-on-restart: false
+  mongodb:
+    representation:
+      uuid: standard

@@ -18,13 +18,13 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 
 @WebMvcTest(MediaCollectionController::class)
-@MockkBean(MediaCollection::class, relaxUnitFun = true)
+@MockkBean(types = [MediaCollection::class], relaxUnitFun = true)
 internal class MediaCollectionControllerTests(
     @Autowired val mockMvc: MockMvc,
     @Autowired val collection: MediaCollection

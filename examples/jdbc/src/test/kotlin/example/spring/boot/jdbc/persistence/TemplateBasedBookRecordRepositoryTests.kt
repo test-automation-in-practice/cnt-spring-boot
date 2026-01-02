@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
+import org.springframework.boot.jdbc.test.autoconfigure.JdbcTest
 import org.springframework.context.annotation.Import
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.test.context.ActiveProfiles
@@ -54,7 +54,7 @@ internal class TemplateBasedBookRecordRepositoryTests {
     @Nested
     @JdbcTest
     @ActiveProfiles("test", "in-memory")
-    @MockkBean(IdGenerator::class)
+    @MockkBean(types = [IdGenerator::class])
     @Import(TemplateBasedBookRecordRepository::class)
     inner class AsTechnologyIntegrationTestWithH2InMemoryDatabase(
         @Autowired override val idGenerator: IdGenerator,
@@ -70,7 +70,7 @@ internal class TemplateBasedBookRecordRepositoryTests {
     @Nested
     @JdbcTest
     @ActiveProfiles("test", "docker")
-    @MockkBean(IdGenerator::class)
+    @MockkBean(types = [IdGenerator::class])
     @Import(TemplateBasedBookRecordRepository::class)
     @InitializeWithContainerizedPostgreSQL
     inner class AsTechnologyIntegrationTestWithDockerizedDatabase(
@@ -94,98 +94,84 @@ internal class TemplateBasedBookRecordRepositoryTests {
             clearMocks(idGenerator)
         }
 
-        @Nested
-        inner class Creating {
+        // These tests were originally grouped by functionality (e.g. create, delete, etc.)
+        // but with the move to Spring Boot 4 / Junit 6 this broke the tests.
+        // @Nested no longer works in abstract classes for that particular setup.
 
-            @Test
-            fun `creating a book returns a book record`() {
-                every { idGenerator.generateId() } returns id1
-                val bookRecord = cut.create(cleanCode)
-                assertThat(bookRecord).isEqualTo(BookRecord(id1, cleanCode))
-            }
+        // TODO check with future updates if this is ever solved
 
-            @Test
-            fun `duplicated keys during creation are handled`() {
-                every { idGenerator.generateId() } returnsMany listOf(id1, id1, id2)
-
-                val bookRecord1 = cut.create(cleanArchitecture)
-                val bookRecord2 = cut.create(cleanArchitecture)
-
-                assertThat(bookRecord1.id).isEqualTo(id1)
-                assertThat(bookRecord2.id).isEqualTo(id2)
-
-                verify(exactly = 3) { idGenerator.generateId() } // there was a retry
-            }
-
+        @Test
+        fun `creating a book returns a book record`() {
+            every { idGenerator.generateId() } returns id1
+            val bookRecord = cut.create(cleanCode)
+            assertThat(bookRecord).isEqualTo(BookRecord(id1, cleanCode))
         }
 
-        @Nested
-        inner class Getting {
+        @Test
+        fun `duplicated keys during creation are handled`() {
+            every { idGenerator.generateId() } returnsMany listOf(id1, id1, id2)
 
-            @Test
-            fun `existing book records can be found by id`() {
-                every { idGenerator.generateId() } returns id1
+            val bookRecord1 = cut.create(cleanArchitecture)
+            val bookRecord2 = cut.create(cleanArchitecture)
 
-                val bookRecord = cut.create(cleanCode)
-                val foundBookRecord = cut.findBy(bookRecord.id)
+            assertThat(bookRecord1.id).isEqualTo(id1)
+            assertThat(bookRecord2.id).isEqualTo(id2)
 
-                assertThat(foundBookRecord).isEqualTo(bookRecord)
-            }
-
-            @Test
-            fun `non existing book records are returned as null when trying to find them by id`() {
-                assertThat(cut.findBy(id2)).isNull()
-            }
-
+            verify(exactly = 3) { idGenerator.generateId() } // there was a retry
         }
 
-        @Nested
-        inner class Updating {
+        @Test
+        fun `existing book records can be found by id`() {
+            every { idGenerator.generateId() } returns id1
 
-            @Test
-            fun `updating an existing book record changes all its data except the id`() {
-                every { idGenerator.generateId() } returns id1
+            val bookRecord = cut.create(cleanCode)
+            val foundBookRecord = cut.findBy(bookRecord.id)
 
-                val created = cut.create(cleanCode)
-                assertThat(cut.findBy(id1)).isEqualTo(created)
-
-                val changed = created.copy(book = cleanArchitecture)
-                val wasUpdated = cut.update(changed)
-                assertThat(wasUpdated).isTrue()
-
-                assertThat(cut.findBy(id1)).isEqualTo(changed)
-            }
-
-            @Test
-            fun `updating non existing book returns false`() {
-                val bookRecord = BookRecord(id2, cleanCode)
-                val wasUpdated = cut.update(bookRecord)
-                assertThat(wasUpdated).isFalse()
-            }
-
+            assertThat(foundBookRecord).isEqualTo(bookRecord)
         }
 
-        @Nested
-        inner class Deleting {
+        @Test
+        fun `non existing book records are returned as null when trying to find them by id`() {
+            assertThat(cut.findBy(id2)).isNull()
+        }
 
-            @Test
-            fun `existing book records can be deleted by id`() {
-                every { idGenerator.generateId() } returns id1
+        @Test
+        fun `updating an existing book record changes all its data except the id`() {
+            every { idGenerator.generateId() } returns id1
 
-                val bookRecord = cut.create(cleanCode)
-                assertThat(cut.findBy(id1)).isEqualTo(bookRecord)
+            val created = cut.create(cleanCode)
+            assertThat(cut.findBy(id1)).isEqualTo(created)
 
-                val wasDeleted = cut.deleteBy(id1)
-                assertThat(wasDeleted).isTrue()
-                assertThat(cut.findBy(bookRecord.id)).isNull()
-            }
+            val changed = created.copy(book = cleanArchitecture)
+            val wasUpdated = cut.update(changed)
+            assertThat(wasUpdated).isTrue()
 
-            @Test
-            fun `deleting non existing book record throws exception`() {
-                val wasDeleted = cut.deleteBy(id2)
-                assertThat(wasDeleted).isFalse()
-            }
+            assertThat(cut.findBy(id1)).isEqualTo(changed)
+        }
 
+        @Test
+        fun `updating non existing book returns false`() {
+            val bookRecord = BookRecord(id2, cleanCode)
+            val wasUpdated = cut.update(bookRecord)
+            assertThat(wasUpdated).isFalse()
+        }
+
+        @Test
+        fun `existing book records can be deleted by id`() {
+            every { idGenerator.generateId() } returns id1
+
+            val bookRecord = cut.create(cleanCode)
+            assertThat(cut.findBy(id1)).isEqualTo(bookRecord)
+
+            val wasDeleted = cut.deleteBy(id1)
+            assertThat(wasDeleted).isTrue()
+            assertThat(cut.findBy(bookRecord.id)).isNull()
+        }
+
+        @Test
+        fun `deleting non existing book record throws exception`() {
+            val wasDeleted = cut.deleteBy(id2)
+            assertThat(wasDeleted).isFalse()
         }
 
     }

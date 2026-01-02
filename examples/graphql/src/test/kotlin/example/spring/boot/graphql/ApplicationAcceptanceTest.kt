@@ -6,48 +6,41 @@ import example.spring.boot.graphql.business.Examples.record_projectHailMary
 import example.spring.boot.graphql.business.Examples.record_theMartian
 import example.spring.boot.graphql.persistence.BookRecordRepository
 import example.spring.boot.graphql.utils.GraphQLRequestSnippet
+import example.spring.boot.graphql.utils.RestDocsWebTestClientCustomizer
 import io.mockk.every
-import io.restassured.RestAssured
-import io.restassured.filter.Filter
-import io.restassured.module.kotlin.extensions.Extract
-import io.restassured.module.kotlin.extensions.Given
-import io.restassured.module.kotlin.extensions.Then
-import io.restassured.module.kotlin.extensions.When
-import io.restassured.specification.RequestSpecification
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import org.skyscreamer.jsonassert.JSONCompareMode.STRICT
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.restdocs.test.autoconfigure.AutoConfigureRestDocs
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.restdocs.RestDocumentationContextProvider
-import org.springframework.restdocs.RestDocumentationExtension
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
+import org.springframework.context.annotation.Import
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest
 import org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse
 import org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint
-import org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document
-import org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration
+import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document
+import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.util.IdGenerator
 import java.util.UUID
 
-@MockkBean(IdGenerator::class)
-@ExtendWith(RestDocumentationExtension::class)
+@AutoConfigureWebTestClient
+@MockkBean(types = [IdGenerator::class])
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@Import(RestDocsWebTestClientCustomizer::class)
+@AutoConfigureRestDocs("build/generated-snippets")
 internal class ApplicationAcceptanceTest(
     @Autowired val idGenerator: IdGenerator,
-    @Autowired val repository: BookRecordRepository
+    @Autowired val repository: BookRecordRepository,
+    @Autowired val client: WebTestClient
 ) {
 
-    lateinit var documentationConfiguration: Filter
-
     @BeforeEach
-    fun setup(@LocalServerPort port: Int, contextProvider: RestDocumentationContextProvider) {
-        RestAssured.port = port
-        documentationConfiguration = documentationConfiguration(contextProvider)
+    fun setup() {
         repository.deleteAll()
     }
 
@@ -216,31 +209,29 @@ internal class ApplicationAcceptanceTest(
         @Language("graphql") graphqlQuery: String,
         @Language("json") expectedResponse: String
     ) {
-        val actualResponse = Given {
-            document(documentationId)
-            header("Content-Type", "application/json")
-            body(mapOf("query" to graphqlQuery))
-        } When {
-            post("/graphql")
-        } Then {
-            statusCode(200)
-            contentType("application/json")
-        } Extract {
-            body().asString()
-        }
+        val actualResponse = client.post()
+            .uri("/graphql")
+            .header("Content-Type", "application/json")
+            .bodyValue(mapOf("query" to graphqlQuery))
+            .exchange()
+            .expectStatus().isOk
+            .expectHeader().contentType(APPLICATION_JSON)
+            .expectBody()
+            .andDocument(documentationId)
+            .returnResult()
+            .responseBody!!
+            .let(::String)
+
         assertEquals(expectedResponse, actualResponse, STRICT)
     }
 
-    private fun RequestSpecification.document(identifier: String): RequestSpecification =
-        apply {
-            filter(documentationConfiguration)
-            filter(
-                document(
-                    /* identifier = */ identifier,
-                    /* requestPreprocessor = */ preprocessRequest(prettyPrint()),
-                    /* responsePreprocessor = */ preprocessResponse(prettyPrint()),
-                    /* ...snippets = */ GraphQLRequestSnippet
-                )
+    fun WebTestClient.BodyContentSpec.andDocument(identifier: String) =
+        consumeWith(
+            document(
+                identifier,
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                GraphQLRequestSnippet,
             )
-        }
+        )
 }

@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.zalando.logbook.Logbook
 
+@AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 internal class ApplicationAcceptanceTest(
     @Autowired val webTestClient: WebTestClient
@@ -43,7 +45,7 @@ internal class ApplicationAcceptanceTest(
             .bodyValue("""{ "title": "Clean Code", "isbn": "9780132350884" }""")
             .exchange()
         assertThat(log) containsExactly {
-            trace(startsWith("Incoming Request:"), contains("authorization: XXX"))
+            trace(startsWith("Incoming Request:"), contains("Authorization: XXX"))
             trace(startsWith("Outgoing Response:"))
         }
     }

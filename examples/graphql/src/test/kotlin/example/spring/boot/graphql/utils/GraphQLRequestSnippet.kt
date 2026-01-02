@@ -1,9 +1,9 @@
 package example.spring.boot.graphql.utils
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.restdocs.operation.Operation
 import org.springframework.restdocs.operation.OperationRequest
 import org.springframework.restdocs.snippet.TemplatedSnippet
+import tools.jackson.module.kotlin.jacksonObjectMapper
 
 object GraphQLRequestSnippet : TemplatedSnippet("graphql-request", null) {
     private val objectMapper = jacksonObjectMapper()
@@ -12,5 +12,5 @@ object GraphQLRequestSnippet : TemplatedSnippet("graphql-request", null) {
         mapOf("query" to getQueryFromRequestBody(operation.request))
 
     private fun getQueryFromRequestBody(request: OperationRequest): String =
-        objectMapper.readTree(request.content).get("query").textValue().trimIndent()
+        objectMapper.readTree(request.content).get("query").asString(null).trimIndent()
 }

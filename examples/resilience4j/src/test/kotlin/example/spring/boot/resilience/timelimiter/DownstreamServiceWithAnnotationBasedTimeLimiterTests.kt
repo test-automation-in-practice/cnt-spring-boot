@@ -6,13 +6,11 @@ import example.spring.boot.resilience.Tripwire
 import io.github.resilience4j.springboot3.timelimiter.autoconfigure.TimeLimiterAutoConfiguration
 import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import java.lang.Thread.sleep
@@ -20,7 +18,7 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeoutException
 
 @ActiveProfiles("test")
-@MockkBean(Tripwire::class, relaxUnitFun = true)
+@MockkBean(types = [Tripwire::class], relaxUnitFun = true)
 @SpringBootTest(classes = [DownstreamServiceWithAnnotationBasedTimeLimiterTestsConfiguration::class])
 class DownstreamServiceWithAnnotationBasedTimeLimiterTests(
     @Autowired val tripwire: Tripwire,

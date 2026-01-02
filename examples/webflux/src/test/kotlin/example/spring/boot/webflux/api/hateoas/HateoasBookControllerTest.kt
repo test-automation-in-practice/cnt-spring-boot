@@ -14,8 +14,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.boot.restdocs.test.autoconfigure.AutoConfigureRestDocs
+import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.MediaTypes.HAL_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -27,7 +27,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.UUID
 
-@MockkBean(BookCollection::class)
+@MockkBean(types = [BookCollection::class])
 @WebFluxTest(HateoasBookController::class)
 @Import(BookRepresentationAssembler::class)
 @AutoConfigureRestDocs("build/generated-snippets/hateoas/books")

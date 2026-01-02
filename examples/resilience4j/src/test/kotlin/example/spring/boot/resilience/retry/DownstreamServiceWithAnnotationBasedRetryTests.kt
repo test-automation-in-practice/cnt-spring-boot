@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles("test")
-@MockkBean(Tripwire::class, relaxUnitFun = true)
+@MockkBean(types = [Tripwire::class], relaxUnitFun = true)
 @SpringBootTest(classes = [DownstreamServiceWithAnnotationBasedRetryTestsConfiguration::class])
 class DownstreamServiceWithAnnotationBasedRetryTests(
     @Autowired val tripwire: Tripwire,

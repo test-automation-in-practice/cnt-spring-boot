@@ -25,9 +25,9 @@ class MongoDBInitializer : ApplicationContextInitializer<ConfigurableApplication
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         val database = randomDatabaseName()
 
-        val hostProperty = "spring.data.mongodb.host=${container.host}"
-        val portProperty = "spring.data.mongodb.port=${container.firstMappedPort}"
-        val databaseProperty = "spring.data.mongodb.database=$database"
+        val hostProperty = "spring.mongodb.host=${container.host}"
+        val portProperty = "spring.mongodb.port=${container.firstMappedPort}"
+        val databaseProperty = "spring.mongodb.database=$database"
 
         addInlinedPropertiesToEnvironment(applicationContext, hostProperty, portProperty, databaseProperty)
     }
