@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 
 plugins {
-    id("org.springframework.boot") version "4.0.1" apply false
+    id("org.springframework.boot") version "4.0.2" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
     id("org.asciidoctor.jvm.convert") version "4.0.5" apply false
 
@@ -33,21 +33,21 @@ allprojects {
                 mavenBom("io.github.logrecorder:logrecorder-bom:2.10.0")
                 mavenBom("org.jetbrains.kotlin:kotlin-bom:2.2.21")
                 mavenBom("org.testcontainers:testcontainers-bom:1.21.4")
-                mavenBom("org.zalando:logbook-bom:4.0.0-RC.1")
+                mavenBom("org.zalando:logbook-bom:4.0.2")
 
-                mavenBom("org.springframework.modulith:spring-modulith-bom:2.0.1")
+                mavenBom("org.springframework.modulith:spring-modulith-bom:2.0.2")
                 mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.0")
                 mavenBom(BOM_COORDINATES)
             }
             dependencies {
                 dependency("com.github.dasniko:testcontainers-keycloak:2.6.0")
                 dependency("com.ninja-squad:springmockk:5.0.1")
-                dependency("io.kotest:kotest-assertions-core:6.0.7")
-                dependency("io.mockk:mockk-jvm:1.14.7")
-                dependency("io.rest-assured:rest-assured:5.5.6")
-                dependency("io.rest-assured:kotlin-extensions:5.5.6")
+                dependency("io.kotest:kotest-assertions-core:6.1.3")
+                dependency("io.mockk:mockk-jvm:1.14.9")
+                dependency("io.rest-assured:rest-assured:6.0.0")
+                dependency("io.rest-assured:kotlin-extensions:6.0.0")
                 dependency("com.squareup.okhttp3:okhttp:5.3.2")
-                dependency("org.wiremock.integrations:wiremock-spring-boot-standalone:4.0.8")
+                dependency("org.wiremock.integrations:wiremock-spring-boot-standalone:4.1.0")
             }
         }
     }
@@ -65,7 +65,6 @@ allprojects {
                 freeCompilerArgs.add("-Xannotation-default-target=param-property")
                 apiVersion.set(KOTLIN_2_0)
                 jvmTarget.set(JVM_21)
-                incremental = false
             }
         }
         withType<Test> {
